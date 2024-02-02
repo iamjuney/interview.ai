@@ -1,0 +1,66 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+@layer base {
+	:root {
+		--background: 173 40% 96%;
+		--foreground: 180 20% 2%;
+		--card: 173 40% 96%;
+		--card-foreground: 180 20% 2%;
+		--popover: 173 40% 96%;
+		--popover-foreground: 180 20% 2%;
+		--primary: 172 58% 55%;
+		--primary-foreground: 180 20% 2%;
+		--secondary: 180 55% 72%;
+		--secondary-foreground: 180 20% 2%;
+		--muted: 174 39% 20%;
+		--muted-foreground: 180 20% 2%;
+		--accent: 172 58% 55%;
+		--accent-foreground: 180 20% 2%;
+		--destructive: 0 84% 60%;
+		--destructive-foreground: 180 20% 2%;
+		--border: 174 39% 20%;
+		--input: 174 39% 20%;
+		--ring: 172 58% 40%;
+		--radius: 0.5rem;
+	}
+
+	.dark {
+		--background: 173 40% 4%;
+		--foreground: 180 20% 98%;
+		--card: 173 40% 4%;
+		--card-foreground: 180 20% 98%;
+		--popover: 173 40% 4%;
+		--popover-foreground: 180 20% 98%;
+		--primary: 172 58% 45%;
+		--primary-foreground: 173 40% 4%;
+		--secondary: 180 55% 28%;
+		--secondary-foreground: 180 20% 98%;
+		--muted: 174 39% 80%;
+		--muted-foreground: 180 20% 98%;
+		--accent: 172 58% 45%;
+		--accent-foreground: 173 40% 4%;
+		--destructive: 0 84% 60%;
+		--destructive-foreground: 180 20% 2%;
+		--border: 173 40% 60%;
+		--input: 174 39% 80%;
+		--ring: 172 58% 60%;
+	}
+}
+
+@layer base {
+	@font-face {
+		font-family: 'Geist';
+		font-weight: 100, 200, 300, 400, 500, 600, 700, 800, 900;
+		font-display: swap;
+		src: url('/fonts/GeistVariableVF.woff2') format('woff2');
+	}
+
+	* {
+		@apply border-border;
+	}
+	body {
+		@apply bg-background text-foreground;
+	}
+}
