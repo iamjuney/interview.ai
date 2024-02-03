@@ -92,7 +92,7 @@ export const interview = pgTable('interviews', {
 		length: 255
 	}).notNull(),
 	description: text('description').notNull(),
-	createdAt: timestamp('createdAt').defaultNow()
+	createdAt: timestamp('createdAt').defaultNow().notNull()
 });
 
 // user_interviews table
@@ -145,7 +145,7 @@ export const answer = pgTable('answers', {
 		.references(() => question.id, { onDelete: 'cascade' }),
 	answer: text('answer').notNull(),
 	videoUrl: text('video_url').default(''),
-	createdAt: timestamp('createdAt').defaultNow()
+	createdAt: timestamp('createdAt').defaultNow().notNull()
 });
 
 // assessment table

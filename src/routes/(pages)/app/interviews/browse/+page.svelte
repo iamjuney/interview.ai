@@ -5,7 +5,6 @@
 	import { fly } from 'svelte/transition';
 
 	let { data } = $props();
-	let count = $state(0);
 	let animate = $state(false);
 
 	$effect(() => {
@@ -30,7 +29,7 @@
 			</div>
 			<div class="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between">
 				<h2 class="text-3xl font-medium tracking-tight">Select Interview</h2>
-				<Button size="lg" href="/app/interviews/browse">Create Custom Interview</Button>
+				<!-- <Button size="lg" href="/app/interviews/browse">Create Custom Interview</Button> -->
 			</div>
 		</div>
 

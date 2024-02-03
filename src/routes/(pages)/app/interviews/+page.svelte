@@ -31,32 +31,50 @@
 				<Tabs.Trigger value="completed">Completed</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="all">
-				<div
-					class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
-				>
-					{#each data.all as interview}
-						<InterviewCard {interview} />
-					{/each}
-				</div>
+				{#if data.all.length > 0}
+					<div
+						class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+					>
+						{#each data.all as interview}
+							<InterviewCard {interview} />
+						{/each}
+					</div>
+				{:else}
+					<div class="mt-24 w-full">
+						<p class="text-foreground/80">No interviews found.</p>
+					</div>
+				{/if}
 			</Tabs.Content>
 			<Tabs.Content value="ongoing">
-				<div
-					class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
-				>
-					{#each data.in_progress as interview}
-						<InterviewCard {interview} />
-					{/each}
-				</div>
+				{#if data.in_progress.length > 0}
+					<div
+						class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+					>
+						{#each data.in_progress as interview}
+							<InterviewCard {interview} />
+						{/each}
+					</div>
+				{:else}
+					<div class="mt-24 w-full">
+						<p class="text-foreground/80">No interviews found.</p>
+					</div>
+				{/if}
 			</Tabs.Content>
-			<Tabs.Content value="completed"
-				><div
-					class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
-				>
-					{#each data.completed as interview}
-						<InterviewCard {interview} />
-					{/each}
-				</div></Tabs.Content
-			>
+			<Tabs.Content value="completed">
+				{#if data.completed.length > 0}
+					<div
+						class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+					>
+						{#each data.completed as interview}
+							<InterviewCard {interview} />
+						{/each}
+					</div>
+				{:else}
+					<div class="mt-24 w-full">
+						<p class="text-foreground/80">No interviews found.</p>
+					</div>
+				{/if}
+			</Tabs.Content>
 		</Tabs.Root>
 	</div>
 {/if}

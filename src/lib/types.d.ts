@@ -11,3 +11,10 @@ export type Interview = {
 		question: string;
 	}[];
 };
+
+export type Question = {
+	id: string;
+	slug: string;
+	interviewId: string;
+	question: string;
+};
