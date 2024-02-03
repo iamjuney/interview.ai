@@ -15,10 +15,11 @@
 		"db:push": "drizzle-kit push:pg --config=drizzle.config.ts",
 		"db:up": "drizzle-kit up:pg",
 		"db:studio": "drizzle-kit studio",
-		"drizzle:seed": "node --loader esbuild-register/loader -r esbuild-register ./src/db/seed/index.ts"
+		"db:seed": "node --import tsx --env-file .env.local ./src/lib/db/seed.ts",
+		"db:delete": "node --import tsx --env-file .env.local ./src/lib/db/delete.ts"
 	},
 	"devDependencies": {
-		"@playwright/test": "^1.28.1",
+		"@playwright/test": "^1.41.2",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/kit": "^2.0.0",
 		"@sveltejs/vite-plugin-svelte": "^3.0.0",
@@ -27,6 +28,7 @@
 		"dotenv": "^16.4.1",
 		"dotenv-expand": "^10.0.0",
 		"drizzle-kit": "^0.20.14",
+		"esbuild-register": "^3.5.0",
 		"postcss": "^8.4.32",
 		"postcss-load-config": "^5.0.2",
 		"prettier": "^3.2.4",
@@ -63,6 +65,7 @@
 		"radix-icons-svelte": "^1.2.1",
 		"tailwind-merge": "^2.2.1",
 		"tailwind-variants": "^0.1.20",
+		"tsx": "^4.7.0",
 		"uuid": "^9.0.1"
 	}
 }

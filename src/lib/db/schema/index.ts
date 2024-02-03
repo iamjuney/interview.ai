@@ -1,3 +1,4 @@
+import { relations } from 'drizzle-orm';
 import {
 	pgTable,
 	bigint,
@@ -6,9 +7,17 @@ import {
 	text,
 	uniqueIndex,
 	integer,
-	json
+	json,
+	pgEnum
 } from 'drizzle-orm/pg-core';
 
+/** Enums */
+
+export const statusEnum = pgEnum('status', ['in-progress', 'completed']);
+
+/** TABLES */
+
+// user table
 export const user = pgTable(
 	'users',
 	{
@@ -27,7 +36,7 @@ export const user = pgTable(
 			.notNull()
 			.unique(),
 		image: text('image').default(''),
-		createdAt: timestamp('createdAt').defaultNow().notNull()
+		createdAt: timestamp('createdAt').defaultNow()
 	},
 	(users) => {
 		return {
@@ -36,6 +45,7 @@ export const user = pgTable(
 	}
 );
 
+// user_session table
 export const session = pgTable('user_session', {
 	id: varchar('id', {
 		length: 128
@@ -53,6 +63,7 @@ export const session = pgTable('user_session', {
 	}).notNull()
 });
 
+// user_key table
 export const key = pgTable('user_key', {
 	id: varchar('id', {
 		length: 255
@@ -67,46 +78,61 @@ export const key = pgTable('user_key', {
 	})
 });
 
+// interviews table
 export const interview = pgTable('interviews', {
 	id: varchar('id', {
 		length: 36
 	}).primaryKey(),
-	title: varchar('title', {
+	slug: varchar('slug', {
+		length: 255
+	})
+		.notNull()
+		.unique(),
+	position: varchar('position', {
 		length: 255
 	}).notNull(),
 	description: text('description').notNull(),
-	company: varchar('company', {
-		length: 255
-	}).notNull(),
-	questions: varchar('questions', {
+	createdAt: timestamp('createdAt').defaultNow()
+});
+
+// user_interviews table
+export const userInterview = pgTable('user_interviews', {
+	userId: varchar('user_id', {
 		length: 36
 	})
 		.notNull()
-		.array(),
-	createdAt: timestamp('createdAt').defaultNow().notNull()
-});
-
-export const question = pgTable('questions', {
-	id: varchar('id', {
-		length: 36
-	}).primaryKey(),
-	question: text('question').notNull(),
-	duration: integer('duration').notNull(),
-	videoUrl: text('video_url').default(''),
+		.references(() => user.id, { onDelete: 'cascade' }),
 	interviewId: varchar('interview_id', {
 		length: 36
 	})
 		.notNull()
 		.references(() => interview.id, { onDelete: 'cascade' }),
-	createdAt: timestamp('createdAt').defaultNow().notNull()
+	status: statusEnum('status').default('in-progress')
 });
 
+// questions table
+export const question = pgTable('questions', {
+	id: varchar('id', {
+		length: 36
+	}).primaryKey(),
+	interviewId: varchar('interview_id', {
+		length: 36
+	})
+		.notNull()
+		.references(() => interview.id, { onDelete: 'cascade' }),
+	slug: varchar('slug', {
+		length: 255
+	})
+		.notNull()
+		.unique(),
+	question: text('question').notNull()
+});
+
+// answers table
 export const answer = pgTable('answers', {
 	id: varchar('id', {
 		length: 36
 	}).primaryKey(),
-	answer: text('answer').notNull(),
-	videoUrl: text('video_url').default(''),
 	userId: varchar('user_id', {
 		length: 36
 	})
@@ -117,29 +143,38 @@ export const answer = pgTable('answers', {
 	})
 		.notNull()
 		.references(() => question.id, { onDelete: 'cascade' }),
-	createdAt: timestamp('createdAt').defaultNow().notNull()
+	answer: text('answer').notNull(),
+	videoUrl: text('video_url').default(''),
+	createdAt: timestamp('createdAt').defaultNow()
 });
 
-export const assessment = pgTable('assessment', {
+// assessment table
+export const assessment = pgTable('assessments', {
 	id: varchar('id', {
 		length: 36
 	}).primaryKey(),
-	userId: varchar('user_id', {
+	answerId: varchar('answer_id', {
 		length: 36
 	})
 		.notNull()
-		.references(() => user.id, { onDelete: 'cascade' }),
-	questionId: varchar('question_id', {
-		length: 36
-	})
-		.notNull()
-		.references(() => question.id, { onDelete: 'cascade' }),
+		.references(() => answer.id, { onDelete: 'cascade' }),
 	feedback: text('feedback').notNull(),
 	wpm: integer('wpm').notNull(),
 	accuracy: integer('accuracy').notNull(),
 	pronunciation: integer('pronunciation').notNull(),
 	fluency: integer('fluency').notNull(),
 	mispronunciation: integer('mispronunciation').notNull(),
-	data: json('data').default({}),
-	createdAt: timestamp('createdAt').defaultNow().notNull()
+	data: json('data').default({})
 });
+
+/** Relations */
+export const interviewRelation = relations(interview, ({ many }) => ({
+	questions: many(question)
+}));
+
+export const questionRelation = relations(question, ({ one }) => ({
+	interview: one(interview, {
+		fields: [question.interviewId],
+		references: [interview.id]
+	})
+}));

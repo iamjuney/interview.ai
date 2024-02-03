@@ -1,11 +1,13 @@
 export type Interview = {
-	id: number;
-	date_added: string;
-	title: string;
-	company: string;
-	status?: string;
-	progress?: number;
-	questions: number;
-	duration: string;
+	id: string;
+	createdAt: Date | null;
+	slug: string;
+	position: string;
 	description: string;
+	questions: {
+		id: string;
+		slug: string;
+		interviewId: string;
+		question: string;
+	}[];
 };
