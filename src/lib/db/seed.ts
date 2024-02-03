@@ -2,7 +2,11 @@ import { v4 as uuidv4 } from 'uuid';
 import { interview, question } from './schema';
 import { db } from './index';
 
-const randomInterviewId = uuidv4();
+const randomInterviewIds = [
+	'9a8b5c9b-3b7a-4e9a-8f2b-2f0a3b3c4d5e',
+	'9a8b5c9b-3b7a-4e9a-8f2b-2f0a3b3c4d5f',
+	'9a8b5c9b-3b7a-4e9a-8f2b-2f0a3b3c4d5g'
+];
 
 async function seed() {
 	await insertInterviews();
@@ -12,11 +16,25 @@ async function seed() {
 async function insertInterviews() {
 	const interviews = [
 		{
-			id: randomInterviewId,
+			id: randomInterviewIds[0],
 			slug: 'intern-react-developer',
 			position: 'Intern React Developer',
 			description:
 				'An Intern React Developer is responsible for developing web applications using React.js. They will work with other developers and product managers throughout the software development life cycle.'
+		},
+		{
+			id: randomInterviewIds[1],
+			slug: 'junior-flutter-developer',
+			position: 'Junior Flutter Developer',
+			description:
+				'Flutter developers are highly skilled professionals who use analytical and programming skills in developing Android OS-compatible applications. Flutter app development includes using various tools to perform detailed analysis, design and develop applications, ensure regular maintenance and support for the mobile applications.'
+		},
+		{
+			id: randomInterviewIds[2],
+			slug: 'senior-react-developer',
+			position: 'Senior React Developer',
+			description:
+				'A Senior React Developer is responsible for developing web applications using React.js. They will work with other developers and product managers throughout the software development life cycle.'
 		}
 	];
 
@@ -39,7 +57,7 @@ async function insertQuestions() {
 
 	const questions = questionsList.map((question, index) => ({
 		id: uuidv4(),
-		interviewId: randomInterviewId,
+		interviewId: randomInterviewIds[0],
 		slug: `question-${index + 1}`,
 		question
 	}));

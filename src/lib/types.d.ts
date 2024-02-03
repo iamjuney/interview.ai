@@ -1,6 +1,6 @@
 export type Interview = {
 	id: string;
-	createdAt: Date | null;
+	createdAt: Date;
 	slug: string;
 	position: string;
 	description: string;

@@ -4,9 +4,6 @@
 	import { fly } from 'svelte/transition';
 
 	let { data } = $props();
-	let allInterviews = $derived(data.all);
-	let inProgress = $derived(data.in_progress);
-	let completed = $derived(data.completed);
 	let animate = $state(false);
 
 	$effect(() => {
@@ -19,16 +16,6 @@
 		easing: backOut
 	};
 </script>
-
-{#snippet contentCard(interviews)}
-	<div
-		class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
-	>
-		{#each interviews as interview}
-			<InterviewCard {interview} />
-		{/each}
-	</div>
-{/snippet}
 
 {#if animate}
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
@@ -44,14 +31,32 @@
 				<Tabs.Trigger value="completed">Completed</Tabs.Trigger>
 			</Tabs.List>
 			<Tabs.Content value="all">
-				{@render contentCard(allInterviews)}
+				<div
+					class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+				>
+					{#each data.all as interview}
+						<InterviewCard {interview} />
+					{/each}
+				</div>
 			</Tabs.Content>
 			<Tabs.Content value="ongoing">
-				{@render contentCard(inProgress)}
+				<div
+					class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+				>
+					{#each data.in_progress as interview}
+						<InterviewCard {interview} />
+					{/each}
+				</div>
 			</Tabs.Content>
-			<Tabs.Content value="completed">
-				{@render contentCard(completed)}
-			</Tabs.Content>
+			<Tabs.Content value="completed"
+				><div
+					class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+				>
+					{#each data.completed as interview}
+						<InterviewCard {interview} />
+					{/each}
+				</div></Tabs.Content
+			>
 		</Tabs.Root>
 	</div>
 {/if}
