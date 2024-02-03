@@ -9,7 +9,7 @@
 	let animate = $state(false);
 	let questionsIsOpen = $state(false);
 
-	let questions: Question[] = data.res?.questions ?? [];
+	const questions = data.res.questions as Question[];
 
 	$effect(() => {
 		animate = true;
@@ -43,13 +43,13 @@
 					class="mb-5 flex h-4 items-center whitespace-nowrap border-r px-4 leading-none last:border-r-0"
 				>
 					<Inbox size="16" class="text-accent" />
-					<span class="ml-2">{questions.length} questions</span>
+					<span class="ml-2">{questions?.length} questions</span>
 				</div>
 				<div
 					class="mb-5 flex h-4 items-center whitespace-nowrap border-r px-4 leading-none last:border-r-0"
 				>
 					<Timer size="16" class="text-accent" />
-					<span class="ml-2">about {questions.length * 2} minutes</span>
+					<span class="ml-2">about {questions?.length * 2} minutes</span>
 				</div>
 			</div>
 			<div class="mb-4 font-normal">
@@ -59,7 +59,7 @@
 
 		<div class="w-full md:w-7/12">
 			<div class="mb-5 mt-1">
-				<div class="text-lg font-semibold">Questions</div>
+				<div class="text-lg font-semibold">Possible Questions</div>
 			</div>
 			<Collapsible.Root
 				open={questionsIsOpen}

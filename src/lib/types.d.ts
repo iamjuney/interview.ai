@@ -4,12 +4,7 @@ export type Interview = {
 	slug: string;
 	position: string;
 	description: string;
-	questions: {
-		id: string;
-		slug: string;
-		interviewId: string;
-		question: string;
-	}[];
+	questions?: Question[];
 };
 
 export type Question = {
