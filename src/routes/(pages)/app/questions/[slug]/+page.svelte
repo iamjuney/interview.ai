@@ -1,4 +1,6 @@
 <script lang="ts">
+	import { afterNavigate } from '$app/navigation';
+	import { base } from '$app/paths';
 	import { Badge, Button, InterviewStage } from '$lib/components';
 	import { ArrowLeft, Loader2 } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
@@ -6,6 +8,11 @@
 
 	let { data } = $props();
 	let animate = $state(false);
+	let previousPage = $state<string>(base);
+
+	afterNavigate(({ from }) => {
+		previousPage = from?.url.pathname || previousPage;
+	});
 
 	$effect(() => {
 		animate = true;
@@ -24,15 +31,17 @@
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
 		<div class="flex w-full flex-col gap-3">
 			<div class="flex items-center">
-				<a href="/app/interviews/sample" class="group flex items-center gap-2">
+				<a href={previousPage} data-sveltekit-preload-data class="group flex items-center gap-2">
 					<ArrowLeft size="20" class="text-foreground/60 group-hover:text-foreground" />
-					<p class="text-foreground/60 group-hover:text-foreground">Back to all questions</p>
+					<p class="text-foreground/60 group-hover:text-foreground">Back</p>
 				</a>
 			</div>
 
 			<div class="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between">
 				<h2 class="text-3xl font-medium tracking-tight">{question}</h2>
-				<Button size="lg" href="/app/interviews/record">Record New Answer</Button>
+				<Button size="lg" href="/app/interviews/record" data-sveltekit-preload-data
+					>Record New Answer</Button
+				>
 			</div>
 		</div>
 
@@ -46,11 +55,12 @@
 				>
 					<a
 						class="relative mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg"
-						href="/app/interviews/sample"
+						href="/app/interviews/record"
+						data-sveltekit-preload-data
 					>
 						<div class="relative h-full w-full rounded-lg bg-white"></div>
 					</a>
-					<a href="/app/interviews/sample" class="flex items-center justify-between">
+					<a href="/app/interviews/record" class="flex items-center justify-between">
 						<span class="text-sm">January 25, 2024 </span>
 
 						<Badge class="flex items-center">
@@ -64,11 +74,12 @@
 				>
 					<a
 						class="relative mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg"
-						href="/app/interviews/sample"
+						href="/app/interviews/record"
+						data-sveltekit-preload-data
 					>
 						<div class="relative h-full w-full rounded-lg bg-white"></div>
 					</a>
-					<a href="/app/interviews/sample" class="text-sm"> January 27, 2024 </a>
+					<a href="/app/interviews/record" class="text-sm"> January 27, 2024 </a>
 				</div>
 			</div>
 		</div>

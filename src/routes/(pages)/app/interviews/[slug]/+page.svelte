@@ -1,7 +1,5 @@
 <script lang="ts">
-	import { afterNavigate } from '$app/navigation';
-	import { base } from '$app/paths';
-	import { Collapsible } from '$lib/components';
+	import { Collapsible, Badge } from '$lib/components';
 	import type { Question } from '$lib/types';
 	import { ArrowLeft, Inbox, PlayCircle, Timer } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
@@ -11,11 +9,6 @@
 	let questions = $derived<Question[]>(data.res.questions);
 	let animate = $state(false);
 	let questionsIsOpen = $state(false);
-	let previousPage = $state<string>(base);
-
-	afterNavigate(({ from }) => {
-		previousPage = from?.url.pathname || previousPage;
-	});
 
 	$effect(() => {
 		animate = true;
@@ -32,7 +25,7 @@
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
 		<div class="flex w-full flex-col gap-3">
 			<div class="flex items-center">
-				<a href={previousPage} class="group flex items-center gap-2" data-sveltekit-preload-data>
+				<a href="/app/interviews" class="group flex items-center gap-2" data-sveltekit-preload-data>
 					<ArrowLeft size="20" class="text-foreground/60 group-hover:text-foreground" />
 					<p class="text-foreground/60 group-hover:text-foreground">Back to all interviews</p>
 				</a>
@@ -74,7 +67,7 @@
 				{#each questions.slice(0, 5) as question}
 					<a
 						class="mb-2 flex w-full items-center justify-between rounded-md border border-border p-3 font-medium transition-all duration-200 hover:ml-3"
-						href="/app/interviews/samplequestion"
+						href="/app/questions/{question.slug}"
 						><div class="flex items-center text-left">
 							<PlayCircle size="20" class="flex-none text-accent" />
 							<div class="ml-3 grow">{question.question}</div>
@@ -85,7 +78,7 @@
 					{#each questions.slice(5) as question}
 						<a
 							class="mb-2 flex w-full items-center justify-between rounded-md border border-border p-3 font-medium transition-all duration-200 hover:ml-3"
-							href="/app/interviews/samplequestion"
+							href="/app/questions/{question.slug}"
 							><div class="flex items-center text-left">
 								<PlayCircle size="20" class="flex-none text-accent" />
 								<div class="ml-3 grow">{question.question}</div>

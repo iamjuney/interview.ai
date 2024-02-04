@@ -3,9 +3,9 @@
 	import { page } from '$app/stores';
 	import { Button, DropdownMenu, Logo } from '$lib/components';
 	import type { User } from 'lucia';
+	import { LayoutDashboard, MessageCircleQuestion, Settings, Video } from 'lucide-svelte';
 	import { resetMode, setMode } from 'mode-watcher';
 	import { Moon, Sun } from 'radix-icons-svelte';
-	import { LayoutDashboard, Settings, Video } from 'lucide-svelte';
 
 	let { user } = $props<{ user: User }>();
 	let pathName = $derived(() => {
@@ -24,6 +24,11 @@
 			name: 'Interviews',
 			icon: Video,
 			href: '/app/interviews'
+		},
+		{
+			name: 'Questions',
+			icon: MessageCircleQuestion,
+			href: '/app/questions'
 		},
 		{
 			name: 'Settings',

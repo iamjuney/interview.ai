@@ -2,12 +2,12 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import { Button, DropdownMenu, Logo } from '$lib/components';
+	import type { User } from 'lucia';
+	import { LayoutDashboard, MessageCircleQuestion, Settings, Video, X } from 'lucide-svelte';
 	import { resetMode, setMode } from 'mode-watcher';
 	import { Moon, Sun } from 'radix-icons-svelte';
-	import { LayoutDashboard, Settings, Video, X } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
-	import type { User } from 'lucia';
 
 	const flyOptions = {
 		x: -30,
@@ -36,6 +36,11 @@
 			name: 'Interviews',
 			icon: Video,
 			href: '/app/interviews'
+		},
+		{
+			name: 'Questions',
+			icon: MessageCircleQuestion,
+			href: '/app/questions'
 		},
 		{
 			name: 'Settings',
