@@ -1,15 +1,21 @@
 <script lang="ts">
-	import { Badge, Collapsible } from '$lib/components';
-	import type { Interview, Question } from '$lib/types';
-	import { ArrowLeft, Inbox, Timer, PlayCircle } from 'lucide-svelte';
+	import { afterNavigate } from '$app/navigation';
+	import { base } from '$app/paths';
+	import { Collapsible } from '$lib/components';
+	import type { Question } from '$lib/types';
+	import { ArrowLeft, Inbox, PlayCircle, Timer } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
 	let { data } = $props();
+	let questions = $derived<Question[]>(data.res.questions);
 	let animate = $state(false);
 	let questionsIsOpen = $state(false);
+	let previousPage = $state<string>(base);
 
-	const questions = data.res.questions as Question[];
+	afterNavigate(({ from }) => {
+		previousPage = from?.url.pathname || previousPage;
+	});
 
 	$effect(() => {
 		animate = true;
@@ -26,7 +32,7 @@
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
 		<div class="flex w-full flex-col gap-3">
 			<div class="flex items-center">
-				<a href="/app/interviews" class="group flex items-center gap-2">
+				<a href={previousPage} class="group flex items-center gap-2" data-sveltekit-preload-data>
 					<ArrowLeft size="20" class="text-foreground/60 group-hover:text-foreground" />
 					<p class="text-foreground/60 group-hover:text-foreground">Back to all interviews</p>
 				</a>
@@ -43,13 +49,13 @@
 					class="mb-5 flex h-4 items-center whitespace-nowrap border-r px-4 leading-none last:border-r-0"
 				>
 					<Inbox size="16" class="text-accent" />
-					<span class="ml-2">{questions?.length} questions</span>
+					<span class="ml-2">{questions.length} questions</span>
 				</div>
 				<div
 					class="mb-5 flex h-4 items-center whitespace-nowrap border-r px-4 leading-none last:border-r-0"
 				>
 					<Timer size="16" class="text-accent" />
-					<span class="ml-2">about {questions?.length * 2} minutes</span>
+					<span class="ml-2">about {questions.length * 2} minutes</span>
 				</div>
 			</div>
 			<div class="mb-4 font-normal">

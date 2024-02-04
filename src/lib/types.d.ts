@@ -6,7 +6,7 @@ export type Interview = {
 	company: string;
 	company_url: string;
 	description: string;
-	questions?: Question[];
+	questions: Question[];
 };
 
 export type Question = {

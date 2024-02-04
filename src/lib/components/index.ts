@@ -9,10 +9,12 @@ export { default as Header } from './navigation/Header.svelte';
 export { default as Logo } from './navigation/Logo.svelte';
 export { default as MobileSideBar } from './navigation/MobileSideBar.svelte';
 
-/* Single Components */
-export { default as InterviewCard } from './InterviewCard.svelte';
-export { default as InterviewStage } from './InterviewStage.svelte';
-export { default as LayoutBackground } from './LayoutBackground.svelte';
+/* Interview Components */
+export { default as InterviewCard } from './interview/InterviewCard.svelte';
+export { default as InterviewStage } from './interview/InterviewStage.svelte';
+
+/* Layout */
+export { default as LayoutBackground } from './layout/LayoutBackground.svelte';
 
 /* Shadcn UI */
 export * as Alert from './ui/alert';
