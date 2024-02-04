@@ -36,7 +36,7 @@
 		<div class="flex flex-col md:w-7/12">
 			<!-- <div class="mb-2"><Badge class="capitalize">In-Progress</Badge></div> -->
 			<h1 class="mb-2 mt-5 text-2xl font-semibold md:mt-0">
-				{data.res?.position ?? 'Interview Title'}
+				{data.res.position} at {data.res.company}
 			</h1>
 			<div class="-ml-4 flex flex-wrap items-center">
 				<div
@@ -59,7 +59,7 @@
 
 		<div class="w-full md:w-7/12">
 			<div class="mb-5 mt-1">
-				<div class="text-lg font-semibold">Possible Questions</div>
+				<div class="text-lg font-semibold">Questions</div>
 			</div>
 			<Collapsible.Root
 				open={questionsIsOpen}

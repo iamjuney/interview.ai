@@ -1,9 +1,11 @@
 <script lang="ts">
 	import { Badge, Progress, Button } from '$lib/components';
-	import type { Interview } from '$lib/types';
+	import type { Interview, Question } from '$lib/types';
 	import { Inbox, Timer } from 'lucide-svelte';
 
 	let { interview } = $props<{ interview: Interview }>();
+
+	const questions = interview.questions as Question[];
 </script>
 
 <div class="group relative cursor-pointer rounded-xl border p-4 shadow hover:bg-secondary">
@@ -18,7 +20,7 @@
 			<div class="absolute bottom-2 left-4 right-4 top-4 flex flex-col gap-3">
 				<div class="flex flex-row items-center">
 					<div class="h-4 w-[2px] bg-primary-foreground"></div>
-					<p class="ml-2 font-semibold text-primary-foreground">Trainee</p>
+					<p class="ml-2 font-semibold text-primary-foreground">{interview.company}</p>
 				</div>
 				<p class="text-2xl font-semibold text-primary-foreground">{interview.position}</p>
 				<Progress value={2} class="mt-6" />
@@ -31,11 +33,11 @@
 		<div class="mb-2 flex items-center space-x-2 font-medium">
 			<span class="flex items-center">
 				<Inbox class="mr-2 size-4 text-primary" />
-				{interview.questions.length} questions
+				{questions.length} questions
 			</span>
 			<span class="flex items-center">
 				<Timer class="mr-2 size-4 text-primary" />
-				about {interview.questions.length * 2} minutes
+				about {questions.length * 2} minutes
 			</span>
 		</div>
 		<div class="mt-4 items-center">

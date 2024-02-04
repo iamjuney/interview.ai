@@ -91,6 +91,12 @@ export const interview = pgTable('interviews', {
 	position: varchar('position', {
 		length: 255
 	}).notNull(),
+	company: varchar('company', {
+		length: 255
+	}).notNull(),
+	company_url: varchar('company_url', {
+		length: 255
+	}).notNull(),
 	description: text('description').notNull(),
 	createdAt: timestamp('createdAt').defaultNow().notNull()
 });

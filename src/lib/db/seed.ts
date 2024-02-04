@@ -19,23 +19,25 @@ async function insertInterviews() {
 			id: randomInterviewIds[0],
 			slug: 'intern-react-developer',
 			position: 'Intern React Developer',
+			company: 'Company A',
+			company_url: 'https://company-a.com',
 			description:
 				'An Intern React Developer is responsible for developing web applications using React.js. They will work with other developers and product managers throughout the software development life cycle.'
-		},
-		{
-			id: randomInterviewIds[1],
-			slug: 'junior-flutter-developer',
-			position: 'Junior Flutter Developer',
-			description:
-				'Flutter developers are highly skilled professionals who use analytical and programming skills in developing Android OS-compatible applications. Flutter app development includes using various tools to perform detailed analysis, design and develop applications, ensure regular maintenance and support for the mobile applications.'
-		},
-		{
-			id: randomInterviewIds[2],
-			slug: 'senior-react-developer',
-			position: 'Senior React Developer',
-			description:
-				'A Senior React Developer is responsible for developing web applications using React.js. They will work with other developers and product managers throughout the software development life cycle.'
 		}
+		// {
+		// 	id: randomInterviewIds[1],
+		// 	slug: 'junior-flutter-developer',
+		// 	position: 'Junior Flutter Developer',
+		// 	description:
+		// 		'Flutter developers are highly skilled professionals who use analytical and programming skills in developing Android OS-compatible applications. Flutter app development includes using various tools to perform detailed analysis, design and develop applications, ensure regular maintenance and support for the mobile applications.'
+		// },
+		// {
+		// 	id: randomInterviewIds[2],
+		// 	slug: 'senior-react-developer',
+		// 	position: 'Senior React Developer',
+		// 	description:
+		// 		'A Senior React Developer is responsible for developing web applications using React.js. They will work with other developers and product managers throughout the software development life cycle.'
+		// }
 	];
 
 	await db.insert(interview).values(interviews);
@@ -58,11 +60,15 @@ async function insertQuestions() {
 	const questions = questionsList.map((question, index) => ({
 		id: uuidv4(),
 		interviewId: randomInterviewIds[0],
-		slug: `question-${index + 1}`,
+		slug: slugGenerator(question),
 		question
 	}));
 
 	await db.insert(question).values(questions);
+}
+
+function slugGenerator(question: string) {
+	return question.toLowerCase().replace(/ /g, '-');
 }
 
 seed()
