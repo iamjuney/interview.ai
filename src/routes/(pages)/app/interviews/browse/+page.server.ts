@@ -2,7 +2,7 @@ import { db } from '$lib/db';
 import { interview, userInterview } from '$lib/db/schema';
 import type { Interview } from '$lib/types';
 import { fail } from '@sveltejs/kit';
-import { eq, ilike, not, notExists, or, notInArray, and } from 'drizzle-orm';
+import { and, eq, ilike, notInArray, or } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
@@ -19,17 +19,27 @@ export const load = (async ({ locals }) => {
 		where: eq(userInterview.userId, userId)
 	});
 
-	// Get all interviews that the user has not taken
-	const interviews = (await db.query.interview.findMany({
-		with: {
-			questions: true
-		},
-		where: (interview, { notInArray }) =>
-			notInArray(
+	let interviews = [] as Interview[];
+
+	// If userInterviews is empty, get all interviews
+	// else, get all interviews that the user has not taken
+	if (userInterviews.length === 0) {
+		interviews = (await db.query.interview.findMany({
+			with: {
+				questions: true
+			}
+		})) as Interview[];
+	} else {
+		interviews = (await db.query.interview.findMany({
+			with: {
+				questions: true
+			},
+			where: notInArray(
 				interview.id,
 				userInterviews.map((ui) => ui.interviewId)
 			)
-	})) as Interview[];
+		})) as Interview[];
+	}
 
 	return {
 		interviews
@@ -53,32 +63,48 @@ export const actions = {
 		const session = await locals.auth.validate();
 		const userId = session!.user.userId.toString();
 
-		// Get all user interviews
-		const userInterviews = await db.query.userInterview.findMany({
-			columns: {
-				interviewId: true
-			},
-			where: eq(userInterview.userId, userId)
-		});
-
 		try {
-			// Search for interviews
-			const interviews = (await db.query.interview.findMany({
-				with: {
-					questions: true
+			// Get all user interviews
+			const userInterviews = await db.query.userInterview.findMany({
+				columns: {
+					interviewId: true
 				},
-				where: and(
-					notInArray(
-						interview.id,
-						userInterviews.map((ui) => ui.interviewId)
-					),
-					or(
+				where: eq(userInterview.userId, userId)
+			});
+
+			let interviews = [] as Interview[];
+
+			// If userInterviews is empty, get all interviews
+			// else, get all interviews that the user has not taken
+			if (userInterviews.length === 0) {
+				interviews = await db.query.interview.findMany({
+					with: {
+						questions: true
+					},
+					where: or(
 						ilike(interview.company, `%${form.data.query}%`),
 						ilike(interview.position, `%${form.data.query}%`),
 						ilike(interview.description, `%${form.data.query}%`)
 					)
-				)
-			})) as Interview[];
+				});
+			} else {
+				interviews = await db.query.interview.findMany({
+					with: {
+						questions: true
+					},
+					where: and(
+						notInArray(
+							interview.id,
+							userInterviews.map((ui) => ui.interviewId)
+						),
+						or(
+							ilike(interview.company, `%${form.data.query}%`),
+							ilike(interview.position, `%${form.data.query}%`),
+							ilike(interview.description, `%${form.data.query}%`)
+						)
+					)
+				});
+			}
 
 			return {
 				interviews

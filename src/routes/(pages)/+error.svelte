@@ -8,14 +8,14 @@
 			<p class="text-sm font-semibold uppercase tracking-wide text-primary">
 				{$page.status} error
 			</p>
-			<h1 class="mt-2 text-4xl font-extrabold tracking-tight text-gray-900 sm:text-5xl">
+			<h1 class="mt-2 text-4xl font-extrabold tracking-tight text-foreground sm:text-5xl">
 				{$page.error?.message}
 			</h1>
-			<p class="mt-2 text-base text-gray-500">
+			<p class="mt-2 text-base text-foreground/80">
 				Sorry, we couldn’t find the page you’re looking for.
 			</p>
 			<div class="mt-6">
-				<a href="/" class="text-base font-medium text-primary hover:text-darker-primary"
+				<a href="/" class="hover:text-darker-primary text-base font-medium text-primary"
 					>Go back home<span aria-hidden="true"> &rarr;</span></a
 				>
 			</div>
