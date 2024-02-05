@@ -1,4 +1,4 @@
-<div class="absolute inset-0 -z-10 overflow-hidden">
+<div class="fixed -z-50 min-h-dvh w-full">
 	<!-- <div
 		class="absolute inset-0 -z-10"
 		style="background-image: url('data:image/svg+xml,%3Csvg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 32 32%22 width=%2264%22 height=%2264%22 fill=%22none%22 stroke=%22rgb(148%20163%20184%20/%200.03)%22%3E%3Cpath d=%22M0%20.5H31.5V32%22 /%3E%3C/svg%3E'); background-repeat: repeat;"

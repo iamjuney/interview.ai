@@ -13,6 +13,7 @@ export const load = (async ({locals}) => {
                 where: eq(answer.userId, user.userId)
             }
         },
+        // limit: 10
     });
 
     return {

@@ -5,7 +5,6 @@ import { db } from './index';
 const randomInterviewIds = [
 	'9a8b5c9b-3b7a-4e9a-8f2b-2f0a3b3c4d5e',
 	'9a8b5c9b-3b7a-4e9a-8f2b-2f0a3b3c4d5f',
-	'9a8b5c9b-3b7a-4e9a-8f2b-2f0a3b3c4d5g'
 ];
 
 async function seed() {
@@ -23,21 +22,16 @@ async function insertInterviews() {
 			company_url: 'https://company-a.com',
 			description:
 				'An Intern React Developer is responsible for developing web applications using React.js. They will work with other developers and product managers throughout the software development life cycle.'
-		}
-		// {
-		// 	id: randomInterviewIds[1],
-		// 	slug: 'junior-flutter-developer',
-		// 	position: 'Junior Flutter Developer',
-		// 	description:
-		// 		'Flutter developers are highly skilled professionals who use analytical and programming skills in developing Android OS-compatible applications. Flutter app development includes using various tools to perform detailed analysis, design and develop applications, ensure regular maintenance and support for the mobile applications.'
-		// },
-		// {
-		// 	id: randomInterviewIds[2],
-		// 	slug: 'senior-react-developer',
-		// 	position: 'Senior React Developer',
-		// 	description:
-		// 		'A Senior React Developer is responsible for developing web applications using React.js. They will work with other developers and product managers throughout the software development life cycle.'
-		// }
+		},
+		{
+			id: randomInterviewIds[1],
+			slug: 'junior-java-developer',
+			position: 'Junior Java Developer',
+            company: 'Company B',
+            company_url: 'https://company-b.com',
+			description:
+				'A Java developer is a highly skilled individual who can build highly efficient enterprise applications and can also work on software analysis and troubleshooting. '
+		},
 	];
 
 	await db.insert(interview).values(interviews);
@@ -65,6 +59,28 @@ async function insertQuestions() {
 	}));
 
 	await db.insert(question).values(questions);
+
+    const questionsList2 = [
+        'Give some important features of Java.',
+        'Name the types of memory allocations in Java.',
+        'As a language, Java is considered platform-independent. Why?',
+        'What is data-encapsulation in Java?',
+        'What are wrapper classes in Java?',
+        'What are constructors in Java?',
+        'Why is Java not considered to be purely object-oriented?',
+        'Does Java use pointers? If not, why?',
+        'Can you override static methods in Java?',
+        'What do you understand about ClassLoader in Java?'
+    ];
+
+    const questions2 = questionsList2.map((question, index) => ({
+        id: uuidv4(),
+        interviewId: randomInterviewIds[1],
+        slug: slugGenerator(question),
+        question
+    }));
+
+    await db.insert(question).values(questions2);
 }
 
 function slugGenerator(question: string) {

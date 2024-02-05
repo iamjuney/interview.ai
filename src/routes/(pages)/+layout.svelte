@@ -22,8 +22,11 @@
 </script>
 
 <ModeWatcher />
-{@render children()}
 <LayoutBackground />
+
+<div class="relative">
+	{@render children()}
+</div>
 
 <style>
 	:global(#nprogress .bar) {
