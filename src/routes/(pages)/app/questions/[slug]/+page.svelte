@@ -1,6 +1,5 @@
 <script lang="ts">
-	import { afterNavigate, beforeNavigate } from '$app/navigation';
-	import { base } from '$app/paths';
+	import { afterNavigate } from '$app/navigation';
 	import { Badge, Button } from '$lib/components';
 	import { ArrowLeft, Loader2 } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
@@ -8,7 +7,7 @@
 
 	let { data } = $props();
 	let animate = $state(false);
-	let previousPage = $state<string>(base);
+	let previousPage = $state<string>('/app/questions');
 
 	afterNavigate(({ from }) => {
 		previousPage = from?.url.pathname || previousPage;
@@ -23,8 +22,6 @@
 		delay: 300,
 		easing: backOut
 	};
-
-	const question = ['What is the difference between front-end and back-end development?'];
 </script>
 
 {#if animate}
@@ -38,7 +35,7 @@
 			</div>
 
 			<div class="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between">
-				<h2 class="text-3xl font-medium tracking-tight">{question}</h2>
+				<h2 class="text-3xl font-medium tracking-tight">{data.question}</h2>
 				<Button size="lg" href="/app/interviews/record" data-sveltekit-preload-data="hover"
 					>Record New Answer</Button
 				>

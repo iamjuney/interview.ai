@@ -1,6 +1,7 @@
 import { v4 as uuidv4 } from 'uuid';
 import { interview, question, userInterview } from './schema';
 import { db } from './index';
+import slugify from 'slugify';
 
 const randomInterviewIds = [
 	'9a8b5c9b-3b7a-4e9a-8f2b-2f0a3b3c4d5e',
@@ -83,8 +84,11 @@ async function insertQuestions() {
 	await db.insert(question).values(questions2);
 }
 
-function slugGenerator(question: string) {
-	return question.toLowerCase().replace(/ /g, '-');
+function slugGenerator(str: string) {
+	return slugify(str, {
+		lower: true,
+		strict: true
+	});
 }
 
 seed()

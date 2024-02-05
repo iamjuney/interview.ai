@@ -83,26 +83,26 @@
 									disabled={isLoading}
 								/>
 							</div>
-							<!-- <div class="flex items-center justify-between">
+							<div class="flex items-center justify-between">
 								<div class="flex items-center">
 									<input
 										id="remember-me"
 										name="remember-me"
 										type="checkbox"
-										class="size-4 rounded border-gray-300 text-accent focus:ring-ring"
+										class="size-4 rounded border-primary text-primary focus:ring-ring"
 									/>
 									<label for="remember-me" class="ml-2 block text-sm"> Remember me </label>
 								</div>
 
 								<div class="text-sm">
 									<a
-										href="/"
+										href="/forgot-password"
 										class="font-medium text-muted-foreground hover:text-muted-foreground/80"
 									>
 										Forgot your password?
 									</a>
 								</div>
-							</div> -->
+							</div>
 							<Button disabled={isLoading} type="submit">
 								{#if isLoading}
 									<Loader2 class="mr-2 size-4 animate-spin" />
