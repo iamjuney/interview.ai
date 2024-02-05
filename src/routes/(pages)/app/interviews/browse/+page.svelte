@@ -108,7 +108,7 @@
 				class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
 			>
 				{#if interviews.length === 0}
-					<p class="text-secondary">No interviews found</p>
+					<p class="text-secondary">No interviews found.</p>
 				{:else}
 					{#each interviews as interview}
 						<!-- <InterviewCard {interview} addToUserInterviews={true} /> -->
