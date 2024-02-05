@@ -31,9 +31,7 @@
 	<main class="relative isolate flex min-h-dvh flex-1 flex-col bg-transparent">
 		<div class="flex h-3 flex-shrink-0 bg-transparent"></div>
 
-		<div
-			class="relative isolate block w-full flex-1 flex-col overflow-y-auto rounded-tl-xl bg-transparent"
-		>
+		<div class="relative block w-full flex-1 flex-col rounded-tl-xl bg-transparent">
 			{@render children()}
 		</div>
 	</main>
