@@ -37,10 +37,10 @@
 			<div class="w-full">
 				<label for="search" class="sr-only">Search</label>
 				<div class="relative">
-					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
+					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-0">
 						<Search size="20" class="text-foreground/60" />
 					</div>
-					<Input id="search" class="pl-10 text-base" placeholder="Search" />
+					<Input id="search" class="pl-8 text-base" placeholder="Search" />
 				</div>
 			</div>
 

@@ -41,10 +41,10 @@
 			76.1% 97.7%,
 			74.1% 44.1%
 		);
-		animation: animatePolygon 5s infinite alternate;
+		/* animation: animatePolygon 5s infinite alternate; */
 	}
 
-	@keyframes animatePolygon {
+	/* @keyframes animatePolygon {
 		0% {
 			clip-path: polygon(
 				74.1% 44.1%,
@@ -107,5 +107,5 @@
 				74.1% 44.1%
 			);
 		}
-	}
+	} */
 </style>

@@ -15,3 +15,12 @@ export type Question = {
 	interviewId: string;
 	question: string;
 };
+
+export type Answer = {
+    id: string;
+    createdAt: Date;
+    userId: string;
+    answer: string;
+    questionId: string;
+    videoUrl: string | null;
+}

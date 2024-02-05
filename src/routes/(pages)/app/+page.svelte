@@ -23,7 +23,7 @@
 		<h2 class="truncate text-3xl font-medium tracking-tight">Dashboard</h2>
 
 		<div class="grid gap-4 md:grid-cols-3 lg:grid-cols-3">
-			<div class="rounded-xl border bg-card text-card-foreground shadow">
+			<div class="rounded-xl border bg-transparent shadow">
 				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
 					<h3 class="font-medium tracking-tight text-foreground/80">Completed Interviews</h3>
 					<MonitorCheck class="size-5 text-primary" />
@@ -32,7 +32,7 @@
 					<div class="text-3xl font-bold">4</div>
 				</div>
 			</div>
-			<div class="rounded-xl border bg-card text-card-foreground shadow">
+			<div class="rounded-xl border bg-transparent shadow">
 				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
 					<h3 class="font-medium tracking-tight text-foreground/80">Total Interview Time</h3>
 					<Hourglass class="size-5 text-primary" />
@@ -41,7 +41,7 @@
 					<div class="text-3xl font-bold">2 hours</div>
 				</div>
 			</div>
-			<div class="rounded-xl border bg-card text-card-foreground shadow">
+			<div class="rounded-xl border bg-transparent shadow">
 				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
 					<h3 class="font-medium tracking-tight text-foreground/80">Daily Streak</h3>
 					<TrendingUp class="size-5 text-primary" />
