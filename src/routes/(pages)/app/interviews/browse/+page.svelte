@@ -113,7 +113,7 @@
 					{#each interviews as interview}
 						<!-- <InterviewCard {interview} addToUserInterviews={true} /> -->
 						<div
-							class="group relative cursor-pointer rounded-xl border p-4 shadow hover:bg-secondary"
+							class="group relative cursor-pointer rounded-xl border p-4 shadow hover:bg-secondary hover:text-secondary-foreground"
 						>
 							<form action="/app/interviews?/add" method="post" use:enhance>
 								<input type="hidden" name="interview_id" value={interview.id} />
@@ -144,17 +144,23 @@
 								<button type="submit">
 									<div class="mb-2 flex items-center space-x-2 font-medium">
 										<span class="flex items-center">
-											<Inbox class="mr-2 size-4 text-primary" />
+											<Inbox
+												class="mr-2 size-4 text-primary group-hover:text-secondary-foreground"
+											/>
 											{interview.questions.length} questions
 										</span>
 										<span class="flex items-center">
-											<Timer class="mr-2 size-4 text-primary" />
+											<Timer
+												class="mr-2 size-4 text-primary group-hover:text-secondary-foreground"
+											/>
 											about {interview.questions.length * 2} minutes
 										</span>
 									</div>
 									<div class="mt-4 text-start">
 										<p class="w-full font-medium">Description</p>
-										<p class="mt-1 line-clamp-4 text-sm font-normal text-foreground/80">
+										<p
+											class="mt-1 line-clamp-4 text-sm font-normal text-foreground/80 group-hover:text-secondary-foreground/80"
+										>
 											{interview.description}
 										</p>
 									</div>
