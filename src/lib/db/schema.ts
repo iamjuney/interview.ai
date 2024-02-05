@@ -103,6 +103,9 @@ export const interview = pgTable('interviews', {
 
 // user_interviews table
 export const userInterview = pgTable('user_interviews', {
+	id: varchar('id', {
+		length: 36
+	}).primaryKey(),
 	userId: varchar('user_id', {
 		length: 36
 	})
@@ -174,20 +177,20 @@ export const assessment = pgTable('assessments', {
 });
 
 /** Relations */
-// export const userRelation = relations(user, ({ many }) => ({
-//     interviews: many(userInterview)
-// }));
+export const userRelation = relations(user, ({ many }) => ({
+	interviews: many(userInterview)
+}));
 
-// export const userInterviewRelation = relations(userInterview, ({ one }) => ({
-//     user: one(user, {
-//         fields: [userInterview.userId],
-//         references: [user.id]
-//     }),
-//     interview: one(interview, {
-//         fields: [userInterview.interviewId],
-//         references: [interview.id]
-//     })
-// }));
+export const userInterviewRelation = relations(userInterview, ({ one }) => ({
+	user: one(user, {
+		fields: [userInterview.userId],
+		references: [user.id]
+	}),
+	interview: one(interview, {
+		fields: [userInterview.interviewId],
+		references: [interview.id]
+	})
+}));
 
 export const interviewRelation = relations(interview, ({ many }) => ({
 	questions: many(question)
@@ -198,12 +201,12 @@ export const questionRelation = relations(question, ({ one, many }) => ({
 		fields: [question.interviewId],
 		references: [interview.id]
 	}),
-    answers: many(answer)
+	answers: many(answer)
 }));
 
 export const answerRelation = relations(answer, ({ one }) => ({
-    question: one(question, {
-        fields: [answer.questionId],
-        references: [question.id]
-    })
+	question: one(question, {
+		fields: [answer.questionId],
+		references: [question.id]
+	})
 }));

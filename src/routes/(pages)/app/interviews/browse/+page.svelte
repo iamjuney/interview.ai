@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { Input, InterviewCard } from '$lib/components';
+	import { Input, InterviewCard, Progress } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { ArrowLeft, Loader2, Search } from 'lucide-svelte';
+	import { ArrowLeft, Loader2, Search, Timer, Inbox } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -111,7 +111,56 @@
 					<p class="text-secondary">No interviews found</p>
 				{:else}
 					{#each interviews as interview}
-						<InterviewCard {interview} />
+						<!-- <InterviewCard {interview} addToUserInterviews={true} /> -->
+						<div
+							class="group relative cursor-pointer rounded-xl border p-4 shadow hover:bg-secondary"
+						>
+							<form action="/app/interviews?/add" method="post" use:enhance>
+								<input type="hidden" name="interview_id" value={interview.id} />
+								<input type="hidden" name="interview_slug" value={interview.slug} />
+
+								<button
+									type="submit"
+									class="relative mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg shadow"
+								>
+									<div class="relative h-full w-full rounded-lg bg-white">
+										<div
+											class="absolute bottom-2 left-4 right-4 top-4 flex flex-col items-start gap-3"
+										>
+											<div class="flex flex-row items-center">
+												<div class="h-4 w-[2px] bg-primary-foreground"></div>
+												<p class="ml-2 font-semibold text-primary-foreground">
+													{interview.company}
+												</p>
+											</div>
+											<p class="text-2xl font-semibold text-primary-foreground">
+												{interview.position}
+											</p>
+											<Progress value={2} class="mt-6" />
+											<p class="text-sm text-primary-foreground">Not Yet Started</p>
+										</div>
+									</div>
+								</button>
+								<button type="submit">
+									<div class="mb-2 flex items-center space-x-2 font-medium">
+										<span class="flex items-center">
+											<Inbox class="mr-2 size-4 text-primary" />
+											{interview.questions.length} questions
+										</span>
+										<span class="flex items-center">
+											<Timer class="mr-2 size-4 text-primary" />
+											about {interview.questions.length * 2} minutes
+										</span>
+									</div>
+									<div class="mt-4 text-start">
+										<p class="w-full font-medium">Description</p>
+										<p class="mt-1 line-clamp-4 text-sm font-normal text-foreground/80">
+											{interview.description}
+										</p>
+									</div>
+								</button>
+							</form>
+						</div>
 					{/each}
 				{/if}
 			</div>

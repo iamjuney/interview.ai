@@ -3,7 +3,7 @@
 	import type { Interview, Question } from '$lib/types';
 	import { Inbox, Timer } from 'lucide-svelte';
 
-	let { interview } = $props<{ interview: Interview }>();
+	let { interview, status } = $props<{ interview: Interview; status?: string | null }>();
 
 	const questions = interview.questions as Question[];
 </script>
@@ -12,12 +12,12 @@
 	<a
 		class="relative mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg shadow"
 		href="/app/interviews/{interview.slug}"
-		data-sveltekit-preload-data
+		data-sveltekit-preload-data="hover"
 	>
 		<div class="relative h-full w-full rounded-lg bg-white">
-			<!-- {#if interview.status}
-				<Badge class="absolute right-4 top-4 capitalize">{interview.status}</Badge>
-			{/if} -->
+			{#if status}
+				<Badge class="absolute right-4 top-4 capitalize">{status}</Badge>
+			{/if}
 			<div class="absolute bottom-2 left-4 right-4 top-4 flex flex-col gap-3">
 				<div class="flex flex-row items-center">
 					<div class="h-4 w-[2px] bg-primary-foreground"></div>
@@ -30,7 +30,7 @@
 			</div>
 		</div>
 	</a>
-	<a href="/app/interviews/{interview.slug}" data-sveltekit-preload-data>
+	<a href="/app/interviews/{interview.slug}" data-sveltekit-preload-data="hover">
 		<div class="mb-2 flex items-center space-x-2 font-medium">
 			<span class="flex items-center">
 				<Inbox class="mr-2 size-4 text-primary" />

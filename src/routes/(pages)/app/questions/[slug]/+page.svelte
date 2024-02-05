@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { afterNavigate } from '$app/navigation';
+	import { afterNavigate, beforeNavigate } from '$app/navigation';
 	import { base } from '$app/paths';
-	import { Badge, Button, InterviewStage } from '$lib/components';
+	import { Badge, Button } from '$lib/components';
 	import { ArrowLeft, Loader2 } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -39,7 +39,7 @@
 
 			<div class="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between">
 				<h2 class="text-3xl font-medium tracking-tight">{question}</h2>
-				<Button size="lg" href="/app/interviews/record" data-sveltekit-preload-data
+				<Button size="lg" href="/app/interviews/record" data-sveltekit-preload-data="hover"
 					>Record New Answer</Button
 				>
 			</div>

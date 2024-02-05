@@ -1,17 +1,34 @@
 import { db } from '$lib/db';
-import { interview } from '$lib/db/schema';
+import { interview, userInterview } from '$lib/db/schema';
 import type { Interview } from '$lib/types';
 import { fail } from '@sveltejs/kit';
-import { ilike, or } from 'drizzle-orm';
+import { eq, ilike, not, notExists, or, notInArray, and } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
 
-export const load = (async () => {
+export const load = (async ({ locals }) => {
+	const session = await locals.auth.validate();
+	const userId = session!.user.userId.toString();
+
+	// Get all user interviews
+	const userInterviews = await db.query.userInterview.findMany({
+		columns: {
+			interviewId: true
+		},
+		where: eq(userInterview.userId, userId)
+	});
+
+	// Get all interviews that the user has not taken
 	const interviews = (await db.query.interview.findMany({
 		with: {
 			questions: true
-		}
+		},
+		where: (interview, { notInArray }) =>
+			notInArray(
+				interview.id,
+				userInterviews.map((ui) => ui.interviewId)
+			)
 	})) as Interview[];
 
 	return {
@@ -24,7 +41,7 @@ const searchSchema = z.object({
 });
 
 export const actions = {
-	search: async ({ request }) => {
+	search: async ({ request, locals }) => {
 		const form = await superValidate(request, searchSchema);
 
 		if (!form.valid) {
@@ -33,15 +50,33 @@ export const actions = {
 			});
 		}
 
+		const session = await locals.auth.validate();
+		const userId = session!.user.userId.toString();
+
+		// Get all user interviews
+		const userInterviews = await db.query.userInterview.findMany({
+			columns: {
+				interviewId: true
+			},
+			where: eq(userInterview.userId, userId)
+		});
+
 		try {
+			// Search for interviews
 			const interviews = (await db.query.interview.findMany({
 				with: {
 					questions: true
 				},
-				where: or(
-					ilike(interview.company, `%${form.data.query}%`),
-					ilike(interview.position, `%${form.data.query}%`),
-					ilike(interview.description, `%${form.data.query}%`)
+				where: and(
+					notInArray(
+						interview.id,
+						userInterviews.map((ui) => ui.interviewId)
+					),
+					or(
+						ilike(interview.company, `%${form.data.query}%`),
+						ilike(interview.position, `%${form.data.query}%`),
+						ilike(interview.description, `%${form.data.query}%`)
+					)
 				)
 			})) as Interview[];
 

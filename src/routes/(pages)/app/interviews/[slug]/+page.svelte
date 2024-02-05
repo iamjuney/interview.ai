@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Collapsible, Badge } from '$lib/components';
+	import { Collapsible } from '$lib/components';
 	import type { Question } from '$lib/types';
 	import { ArrowLeft, Inbox, PlayCircle, Timer } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';

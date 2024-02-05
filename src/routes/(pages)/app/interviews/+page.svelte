@@ -38,11 +38,11 @@
 						class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
 					>
 						{#each data.all as interview}
-							<InterviewCard {interview} />
+							<InterviewCard interview={interview.interview} status={interview.status} />
 						{/each}
 					</div>
 				{:else}
-					<div class="mt-24 w-full">
+					<div class="mt-8 w-full">
 						<p class="text-foreground/80">No interviews found.</p>
 					</div>
 				{/if}
@@ -53,11 +53,11 @@
 						class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
 					>
 						{#each data.in_progress as interview}
-							<InterviewCard {interview} />
+							<InterviewCard interview={interview.interview} status={interview.status} />
 						{/each}
 					</div>
 				{:else}
-					<div class="mt-24 w-full">
+					<div class="mt-8 w-full">
 						<p class="text-foreground/80">No interviews found.</p>
 					</div>
 				{/if}
@@ -68,11 +68,11 @@
 						class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
 					>
 						{#each data.completed as interview}
-							<InterviewCard {interview} />
+							<InterviewCard interview={interview.interview} status={interview.status} />
 						{/each}
 					</div>
 				{:else}
-					<div class="mt-24 w-full">
+					<div class="mt-8 w-full">
 						<p class="text-foreground/80">No interviews found.</p>
 					</div>
 				{/if}
