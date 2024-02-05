@@ -23,28 +23,32 @@
 		<h2 class="truncate text-3xl font-medium tracking-tight">Dashboard</h2>
 
 		<div class="grid gap-4 md:grid-cols-3 lg:grid-cols-3">
-			<div class="rounded-xl border bg-transparent shadow">
+			<div class="rounded-xl border bg-primary text-primary-foreground shadow">
 				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-					<h3 class="font-medium tracking-tight text-foreground/80">Completed Interviews</h3>
-					<MonitorCheck class="size-5 text-primary" />
+					<h3 class="font-medium tracking-tight text-primary-foreground/80">
+						Completed Interviews
+					</h3>
+					<MonitorCheck class="size-5" />
 				</div>
 				<div class="p-6 pt-0">
 					<div class="text-3xl font-bold">4</div>
 				</div>
 			</div>
-			<div class="rounded-xl border bg-transparent shadow">
+			<div class="rounded-xl border bg-primary text-primary-foreground shadow">
 				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-					<h3 class="font-medium tracking-tight text-foreground/80">Total Interview Time</h3>
-					<Hourglass class="size-5 text-primary" />
+					<h3 class="font-medium tracking-tight text-primary-foreground/80">
+						Total Interview Time
+					</h3>
+					<Hourglass class="size-5" />
 				</div>
 				<div class="p-6 pt-0">
 					<div class="text-3xl font-bold">2 hours</div>
 				</div>
 			</div>
-			<div class="rounded-xl border bg-transparent shadow">
+			<div class="rounded-xl border bg-primary text-primary-foreground shadow">
 				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-					<h3 class="font-medium tracking-tight text-foreground/80">Daily Streak</h3>
-					<TrendingUp class="size-5 text-primary" />
+					<h3 class="font-medium tracking-tight text-primary-foreground/80">Daily Streak</h3>
+					<TrendingUp class="size-5" />
 				</div>
 				<div class="p-6 pt-0">
 					<div class="text-3xl font-bold">5 days</div>

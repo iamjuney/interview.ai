@@ -115,8 +115,7 @@
 			<form class="mt-4" action="#" method="POST">
 				<AlertDialog.Root>
 					<AlertDialog.Trigger>
-						<Button size="lg" class="bg-destructive hover:bg-destructive/80"
-							>Delete your account</Button
+						<Button size="lg" class="bg-secondary hover:bg-secondary/80">Delete your account</Button
 						>
 					</AlertDialog.Trigger>
 					<AlertDialog.Content>
@@ -129,7 +128,7 @@
 						</AlertDialog.Header>
 						<AlertDialog.Footer>
 							<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-							<AlertDialog.Action type="submit" class="bg-destructive hover:bg-destructive/80"
+							<AlertDialog.Action type="submit" class="bg-secondary hover:bg-secondary/80"
 								>Continue</AlertDialog.Action
 							>
 						</AlertDialog.Footer>

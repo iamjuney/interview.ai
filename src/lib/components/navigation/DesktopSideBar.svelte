@@ -50,6 +50,7 @@
 					{#if pathName() === link.href}
 						<a
 							href={link.href}
+							data-sveltekit-preload-data
 							class="group flex items-center border-l-4 border-foreground p-2 font-medium"
 						>
 							<svelte:component this={link.icon} class="mx-5 size-5 flex-shrink-0" />
@@ -58,6 +59,7 @@
 					{:else}
 						<a
 							href={link.href}
+							data-sveltekit-preload-data
 							class="group flex items-center rounded-md px-3 py-2 font-medium text-foreground/60 hover:text-foreground"
 						>
 							<svelte:component this={link.icon} class="mx-5 size-5 flex-shrink-0" />
@@ -126,9 +128,9 @@
 					<DropdownMenu.Content align="end">
 						<DropdownMenu.Label>Theme</DropdownMenu.Label>
 						<DropdownMenu.Separator />
-						<DropdownMenu.Item on:click={() => setMode('light')}>Light</DropdownMenu.Item>
-						<DropdownMenu.Item on:click={() => setMode('dark')}>Dark</DropdownMenu.Item>
-						<DropdownMenu.Item on:click={() => resetMode()}>System</DropdownMenu.Item>
+						<DropdownMenu.Item on:click={() => setMode('light')}>Blue</DropdownMenu.Item>
+						<DropdownMenu.Item on:click={() => setMode('dark')}>Gold</DropdownMenu.Item>
+						<DropdownMenu.Item on:click={() => resetMode()}>Default</DropdownMenu.Item>
 					</DropdownMenu.Content>
 				</DropdownMenu.Root>
 			</div>

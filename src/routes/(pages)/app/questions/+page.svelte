@@ -31,7 +31,7 @@
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-0">
 						<Search size="20" class="text-foreground/60" />
 					</div>
-					<Input id="search" class="pl-8 text-base" placeholder="Search" />
+					<Input id="search" class="border-0 pl-8 text-base" placeholder="Search" />
 				</div>
 			</div>
 

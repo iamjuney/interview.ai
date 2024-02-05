@@ -156,9 +156,9 @@
 						<DropdownMenu.Content align="end">
 							<DropdownMenu.Label>Theme</DropdownMenu.Label>
 							<DropdownMenu.Separator />
-							<DropdownMenu.Item on:click={() => setMode('light')}>Light</DropdownMenu.Item>
-							<DropdownMenu.Item on:click={() => setMode('dark')}>Dark</DropdownMenu.Item>
-							<DropdownMenu.Item on:click={() => resetMode()}>System</DropdownMenu.Item>
+							<DropdownMenu.Item on:click={() => setMode('light')}>Blue</DropdownMenu.Item>
+							<DropdownMenu.Item on:click={() => setMode('dark')}>Gold</DropdownMenu.Item>
+							<DropdownMenu.Item on:click={() => resetMode()}>Default</DropdownMenu.Item>
 						</DropdownMenu.Content>
 					</DropdownMenu.Root>
 				</div>
