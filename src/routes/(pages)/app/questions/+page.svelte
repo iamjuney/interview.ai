@@ -36,27 +36,29 @@
 			</div>
 
 			<div class="mt-3 grid w-full grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
-				{#each data.questions as question}
-					<a
-						class="group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border border-accent p-4 font-medium transition duration-100"
-						href="/app/questions"
-						><div
-							class="absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/[7.5%] group-hover:ring-zinc-900/10"
-						></div>
-						<div class="relative flex h-full flex-col overflow-hidden">
-							<div
-								class="items -center
-                            flex text-left"
-							>
-								<p>{question.question}</p>
-							</div>
-							<p class="mt-1 grow text-wrap text-sm font-normal text-foreground/80">
-								{question.question}
-							</p>
-							<div class="flex flex-row space-x-2"></div>
-						</div></a
-					>
-				{/each}
+				{#if data.questions.length === 0}
+					<p class="text-secondary">No questions found</p>
+				{:else}
+					{#each data.questions as question}
+						<a
+							class="group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border border-accent p-4 font-medium transition duration-100"
+							href="/app/questions/{question.slug}"
+							><div
+								class="absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/[7.5%] group-hover:ring-zinc-900/10"
+							></div>
+							<div class="relative flex h-full flex-col overflow-hidden">
+								<div class="flex items-center text-left">
+									<p>{question.question}</p>
+								</div>
+								<p class="mt-1 grow text-wrap text-sm font-normal text-foreground/80">
+									{question.question}
+								</p>
+								<div class="flex flex-row space-x-2"></div>
+							</div></a
+						>
+					{/each}
+				{/if}
+
 				<!-- <a
 					class="group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border border-accent p-4 font-medium transition duration-100"
 					href="/app/questions"

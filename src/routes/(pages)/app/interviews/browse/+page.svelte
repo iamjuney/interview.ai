@@ -123,7 +123,7 @@
 									type="submit"
 									class="relative mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg shadow"
 								>
-									<div class="relative h-full w-full rounded-lg bg-white">
+									<div class="relative z-10 h-full w-full rounded-lg bg-white">
 										<div
 											class="absolute bottom-2 left-4 right-4 top-4 flex flex-col items-start gap-3"
 										>

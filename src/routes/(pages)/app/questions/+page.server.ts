@@ -1,22 +1,35 @@
 import { db } from '$lib/db';
-import { answer } from '$lib/db/schema';
-import { eq } from 'drizzle-orm';
+import { question, userInterview } from '$lib/db/schema';
+import type { Question } from '$lib/types';
+import { eq, inArray } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
-export const load = (async ({locals}) => {
-    const session = await locals.auth.validate();
-    const user = session!.user;
+export const load = (async ({ locals }) => {
+	const session = await locals.auth.validate();
+	const user = session!.user;
 
-    const questions = await db.query.question.findMany({
-        with: {
-            answers: {
-                where: eq(answer.userId, user.userId)
-            }
-        },
-        // limit: 10
-    });
+	// Get all user interviews and the interview details
+	const all = await db.query.userInterview.findMany({
+		columns: {
+			interviewId: true
+		},
+		where: eq(userInterview.userId, user.userId)
+	});
 
-    return {
-        questions
-    };
+	let questions: Question[] = [];
+
+	if (all.length > 0) {
+		questions = await db.query.question.findMany({
+			where: inArray(
+				question.interviewId,
+				all.map((i) => i.interviewId)
+			)
+		});
+	} else {
+		questions = [];
+	}
+
+	return {
+		questions
+	};
 }) satisfies PageServerLoad;

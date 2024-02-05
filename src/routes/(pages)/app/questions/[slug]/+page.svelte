@@ -8,9 +8,16 @@
 	let { data } = $props();
 	let animate = $state(false);
 	let previousPage = $state<string>('/app/questions');
+	let text = $state<string>('');
 
 	afterNavigate(({ from }) => {
 		previousPage = from?.url.pathname || previousPage;
+
+		if (previousPage === '/app/questions') {
+			text = 'to questions';
+		} else {
+			text = 'to interview';
+		}
 	});
 
 	$effect(() => {
@@ -30,7 +37,7 @@
 			<div class="flex items-center">
 				<a href={previousPage} data-sveltekit-preload-data class="group flex items-center gap-2">
 					<ArrowLeft size="20" class="text-foreground/60 group-hover:text-foreground" />
-					<p class="text-foreground/60 group-hover:text-foreground">Back</p>
+					<p class="text-foreground/60 group-hover:text-foreground">Back {text}</p>
 				</a>
 			</div>
 

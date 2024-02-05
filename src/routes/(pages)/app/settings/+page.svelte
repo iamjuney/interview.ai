@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { Button, Input, Label, AlertDialog } from '$lib/components';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -112,26 +113,24 @@
 			<h2 class="truncate text-xl font-medium tracking-tight">Danger Zone</h2>
 			<p class="text-foreground/60">Manage your account and delete your account.</p>
 
-			<form class="mt-4" action="#" method="POST">
+			<form class="mt-4" action="#" use:enhance method="POST">
 				<AlertDialog.Root>
 					<AlertDialog.Trigger>
-						<Button size="lg" class="bg-secondary text-secondary-foreground hover:bg-secondary/80"
-							>Delete your account</Button
-						>
+						<Button size="lg" variant="destructive">Delete your account</Button>
 					</AlertDialog.Trigger>
 					<AlertDialog.Content>
 						<AlertDialog.Header>
 							<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
 							<AlertDialog.Description>
-								This action cannot be undone. This will permanently delete your account and remove
-								your data from our servers.
+								This action cannot be undone. This will permanently <strong>delete</strong> your account
+								and remove your data from our servers.
 							</AlertDialog.Description>
 						</AlertDialog.Header>
 						<AlertDialog.Footer>
 							<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
 							<AlertDialog.Action
 								type="submit"
-								class="bg-secondary text-secondary-foreground hover:bg-secondary/80"
+								class="bg-destructive text-destructive-foreground hover:bg-destructive/80"
 								>Continue</AlertDialog.Action
 							>
 						</AlertDialog.Footer>

@@ -1,10 +1,13 @@
 import { db } from '$lib/db';
-import { interview } from '$lib/db/schema';
+import { interview, userInterview } from '$lib/db/schema';
 import type { Interview } from '$lib/types';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
-export const load = (async ({ params }) => {
+export const load = (async ({ params, locals }) => {
+	const session = await locals.auth.validate();
+	const userId = session!.user.userId.toString();
+
 	const res = (await db.query.interview.findFirst({
 		where: eq(interview.slug, params.slug),
 		with: {
@@ -12,7 +15,17 @@ export const load = (async ({ params }) => {
 		}
 	})) as Interview;
 
+	const status = await db.query.userInterview.findFirst({
+		columns: {
+			id: true,
+			status: true
+		},
+		where: and(eq(userInterview.userId, userId), eq(userInterview.interviewId, res.id))
+	});
+
 	return {
-		res
+		res,
+		status: status?.status,
+		id: status?.id
 	};
 }) satisfies PageServerLoad;

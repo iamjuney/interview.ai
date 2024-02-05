@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Badge, Progress, Button } from '$lib/components';
+	import { Badge, Progress } from '$lib/components';
 	import type { Interview, Question } from '$lib/types';
 	import { Inbox, Timer } from 'lucide-svelte';
 
@@ -16,7 +16,7 @@
 		href="/app/interviews/{interview.slug}"
 		data-sveltekit-preload-data="hover"
 	>
-		<div class="relative h-full w-full rounded-lg bg-white">
+		<div class="relative z-10 h-full w-full rounded-lg bg-white">
 			{#if status}
 				<Badge class="absolute right-4 top-4 capitalize">{status}</Badge>
 			{/if}
