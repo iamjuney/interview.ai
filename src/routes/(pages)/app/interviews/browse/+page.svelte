@@ -35,13 +35,11 @@
 	// handle the input event
 	const handleInput = () => {
 		// debounce the input event every 300ms
-		debounce(() => {
-			// if the query is not empty, submit the form with preventDefault
-			// else, reset the interviews to the original data
-			if (query.length > 0)
+		if (query.length > 0) {
+			debounce(() => {
 				searchForm?.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
-			else interviews = data.interviews;
-		}, 300);
+			}, 300);
+		}
 	};
 
 	// handle the form submission
