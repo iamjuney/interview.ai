@@ -12,6 +12,7 @@
 	<a
 		class="relative mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg shadow"
 		href="/app/interviews/{interview.slug}"
+		data-sveltekit-preload-data
 	>
 		<div class="relative h-full w-full rounded-lg bg-white">
 			<!-- {#if interview.status}
@@ -29,7 +30,7 @@
 			</div>
 		</div>
 	</a>
-	<a href="/app/interviews/{interview.slug}">
+	<a href="/app/interviews/{interview.slug}" data-sveltekit-preload-data>
 		<div class="mb-2 flex items-center space-x-2 font-medium">
 			<span class="flex items-center">
 				<Inbox class="mr-2 size-4 text-primary" />

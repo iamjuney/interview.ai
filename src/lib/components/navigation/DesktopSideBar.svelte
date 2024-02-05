@@ -50,7 +50,7 @@
 					{#if pathName() === link.href}
 						<a
 							href={link.href}
-							data-sveltekit-preload-data
+							data-sveltekit-preload-data="hover"
 							class="group flex items-center border-l-4 border-foreground p-2 font-medium"
 						>
 							<svelte:component this={link.icon} class="mx-5 size-5 flex-shrink-0" />
@@ -59,7 +59,7 @@
 					{:else}
 						<a
 							href={link.href}
-							data-sveltekit-preload-data
+							data-sveltekit-preload-data="hover"
 							class="group flex items-center rounded-md px-3 py-2 font-medium text-foreground/60 hover:text-foreground"
 						>
 							<svelte:component this={link.icon} class="mx-5 size-5 flex-shrink-0" />

@@ -1,20 +1,61 @@
 <script lang="ts">
-	import { Button, Input, InterviewCard } from '$lib/components';
-	import { ArrowLeft, Search } from 'lucide-svelte';
+	import { enhance } from '$app/forms';
+	import { Input, InterviewCard } from '$lib/components';
+	import type { SubmitFunction } from '@sveltejs/kit';
+	import { ArrowLeft, Loader2, Search } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
 	let { data } = $props();
+	let interviews = $state(data.interviews);
 	let animate = $state(false);
+	let searchForm = $state<HTMLFormElement>();
+	let query = $state('');
+	let timeoutId = $state<NodeJS.Timeout>();
+	let isSearching = $state(false);
+	let failedSearchData = $state<Record<string, any>>();
 
 	$effect(() => {
 		animate = true;
 	});
 
+	// fly transition options
 	const flyOptions = {
 		y: 30,
 		delay: 300,
 		easing: backOut
+	};
+
+	// debounce function
+	const debounce = (func: () => void, wait: number | undefined) => {
+		clearTimeout(timeoutId);
+		timeoutId = setTimeout(func, wait);
+	};
+
+	// handle the input event
+	const handleInput = () => {
+		// debounce the input event every 300ms
+		debounce(() => {
+			// if the query is not empty, submit the form with preventDefault
+			// else, reset the interviews to the original data
+			if (query.length > 0)
+				searchForm?.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+			else interviews = data.interviews;
+		}, 300);
+	};
+
+	// handle the form submission
+	const handleSubmit: SubmitFunction = () => {
+		isSearching = true;
+
+		return ({ result }) => {
+			// if the result is a failure, set the failedSearchData to the result data
+			// else, set the interviews to the result data
+			if (result.type === 'failure') failedSearchData = result.data;
+			else if (result.type === 'success') interviews = result.data?.interviews;
+
+			isSearching = false;
+		};
 	};
 </script>
 
@@ -34,22 +75,47 @@
 		</div>
 
 		<div>
-			<div class="w-full">
-				<label for="search" class="sr-only">Search</label>
+			<form
+				bind:this={searchForm}
+				class="w-full"
+				use:enhance={handleSubmit}
+				action="?/search"
+				method="post"
+			>
+				<label for="query" class="sr-only">Search</label>
 				<div class="relative">
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-0">
-						<Search size="20" class="text-foreground/60" />
+						{#if isSearching}
+							<Loader2 size="20" class="animate-spin text-foreground/60" />
+						{:else}
+							<Search size="20" class="text-foreground/60" />
+						{/if}
 					</div>
-					<Input id="search" class="border-0 pl-8 text-base" placeholder="Search" />
+					<Input
+						bind:value={query}
+						oninput={handleInput}
+						id="query"
+						name="query"
+						class="max-w-sm border-0 pl-8 text-base"
+						placeholder="Search"
+					/>
 				</div>
-			</div>
+			</form>
+
+			{#if failedSearchData}
+				<p class="text-secondary">{failedSearchData.message}</p>
+			{/if}
 
 			<div
 				class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
 			>
-				{#each data.interviews as interview}
-					<InterviewCard {interview} />
-				{/each}
+				{#if interviews.length === 0}
+					<p class="text-secondary">No interviews found</p>
+				{:else}
+					{#each interviews as interview}
+						<InterviewCard {interview} />
+					{/each}
+				{/if}
 			</div>
 		</div>
 	</div>

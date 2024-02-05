@@ -2,7 +2,7 @@
 	import { applyAction, enhance } from '$app/forms';
 	import { Button, Input, Label, Logo } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { Github, Loader2, XCircle } from 'lucide-svelte';
+	import { Loader2, XCircle } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
