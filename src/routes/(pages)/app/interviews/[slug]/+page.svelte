@@ -1,5 +1,6 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
+	import { enhance, applyAction } from '$app/forms';
+	import { afterNavigate, goto } from '$app/navigation';
 	import { AlertDialog, Badge, Button, Collapsible } from '$lib/components';
 	import type { Question } from '$lib/types';
 	import { ArrowLeft, Inbox, PlayCircle, Timer } from 'lucide-svelte';
@@ -7,10 +8,24 @@
 	import { fly } from 'svelte/transition';
 
 	let { data } = $props();
-	let questions = $derived<Question[]>(data.res.questions);
-	let questionsCount = $derived<number>(questions.length);
 	let animate = $state(false);
+	let interview = $derived(data.interviewDetails);
+	let userInterview = $derived(data.userInterviewDetails);
+	let questions = $derived<Question[]>(interview.questions);
+	let questionsCount = $derived<number>(questions.length);
 	let questionsIsOpen = $state(false);
+
+	let previousPage = $state<string>('/app/interviews');
+	let text = $state<string>('to my interviews');
+	let isSubmitting = $state(false);
+
+	afterNavigate(({ from }) => {
+		previousPage = from?.url.pathname || previousPage;
+
+		if (previousPage === '/app/interviews/browse') {
+			text = 'to all interviews';
+		}
+	});
 
 	$effect(() => {
 		animate = true;
@@ -27,20 +42,22 @@
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
 		<div class="flex w-full flex-col gap-3">
 			<div class="flex items-center">
-				<a href="/app/interviews" class="group flex items-center gap-2" data-sveltekit-preload-data>
+				<a href={previousPage} class="group flex items-center gap-2" data-sveltekit-preload-data>
 					<ArrowLeft size="20" class="text-foreground/60 group-hover:text-foreground" />
-					<p class="text-foreground/60 group-hover:text-foreground">Back to all interviews</p>
+					<p class="text-foreground/60 group-hover:text-foreground">Back {text}</p>
 				</a>
 			</div>
 		</div>
 
 		<div class="flex w-full flex-col gap-3 md:flex-row md:justify-between">
 			<div class="flex flex-col md:w-7/12">
-				<div class="mb-2">
-					<Badge class="capitalize">{data.status}</Badge>
-				</div>
+				{#if userInterview}
+					<div class="mb-2">
+						<Badge class="capitalize">{userInterview.status}</Badge>
+					</div>
+				{/if}
 				<h1 class="mb-2 mt-5 text-2xl font-semibold md:mt-0">
-					{data.res.position} at {data.res.company}
+					{interview.position} at {interview.company}
 				</h1>
 				<div class="-ml-4 flex flex-wrap items-center">
 					<div
@@ -57,36 +74,69 @@
 					</div>
 				</div>
 				<div class="mb-4 font-normal">
-					{data.res?.description ?? 'No description provided.'}
+					{interview?.description ?? 'No description provided.'}
 				</div>
 			</div>
 
 			<div class="mt-4">
-				<AlertDialog.Root>
-					<AlertDialog.Trigger>
-						<Button size="lg" variant="destructive">Delete Interview</Button>
-					</AlertDialog.Trigger>
-					<AlertDialog.Content>
-						<AlertDialog.Header>
-							<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
-							<AlertDialog.Description>
-								This action cannot be undone. This will permanently <strong>delete</strong> this interview
-								and all your progress will be lost.
-							</AlertDialog.Description>
-						</AlertDialog.Header>
-						<AlertDialog.Footer>
-							<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-							<form action="/app/interviews?/delete" use:enhance method="post">
-								<input type="hidden" name="user_interview_id" value={data.id} />
-								<AlertDialog.Action
-									type="submit"
-									class="bg-destructive text-destructive-foreground hover:bg-destructive/80"
-									>Continue</AlertDialog.Action
+				{#if userInterview}
+					<AlertDialog.Root>
+						<AlertDialog.Trigger>
+							<Button size="lg" variant="destructive">Delete Interview</Button>
+						</AlertDialog.Trigger>
+						<AlertDialog.Content>
+							<AlertDialog.Header>
+								<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+								<AlertDialog.Description>
+									This action cannot be undone. This will permanently <strong>delete</strong> this interview
+									and all your progress will be lost.
+								</AlertDialog.Description>
+							</AlertDialog.Header>
+							<AlertDialog.Footer>
+								<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+								<form
+									action="/app/interviews?/delete"
+									use:enhance={() => {
+										isSubmitting = true;
+										return async ({ result }) => {
+											if (result.type === 'redirect') {
+												goto(result.location);
+											} else {
+												await applyAction(result);
+											}
+										};
+									}}
+									method="post"
 								>
-							</form>
-						</AlertDialog.Footer>
-					</AlertDialog.Content>
-				</AlertDialog.Root>
+									<input type="hidden" name="user_interview_id" value={userInterview.id} />
+									<AlertDialog.Action
+										type="submit"
+										class="bg-destructive text-destructive-foreground hover:bg-destructive/80"
+										bind:disabled={isSubmitting}>Continue</AlertDialog.Action
+									>
+								</form>
+							</AlertDialog.Footer>
+						</AlertDialog.Content>
+					</AlertDialog.Root>
+				{:else}
+					<form
+						action="/app/interviews?/add"
+						method="post"
+						use:enhance={() => {
+							isSubmitting = true;
+							return async ({ result }) => {
+								if (result.type === 'redirect') {
+									goto(result.location);
+								} else {
+									await applyAction(result);
+								}
+							};
+						}}
+					>
+						<input type="hidden" name="interview_id" value={interview.id} />
+						<Button size="lg" type="submit" bind:disabled={isSubmitting}>Add Interview</Button>
+					</form>
+				{/if}
 			</div>
 		</div>
 

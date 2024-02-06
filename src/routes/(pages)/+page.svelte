@@ -22,9 +22,11 @@
 
 {#if animate}
 	<main class="container mt-32" in:fly={flyOptions}>
-		<h1 class="text-center text-4xl font-bold tracking-tight sm:text-5xl lg:text-6xl">
-			<span class="block">Mastering job interviews</span>
-			<span class="block">without the pressure</span>
+		<h1
+			class="mx-auto max-w-3xl text-center text-2xl font-bold tracking-tight sm:text-3xl lg:text-6xl"
+		>
+			<span>Mastering job interviews</span>
+			<span>without the pressure</span>
 		</h1>
 		<p class="mx-auto mt-6 max-w-lg text-center text-xl text-foreground/80 sm:max-w-3xl">
 			Practice CS/IT related job interview scenarios and get instant transcriptions and feedback.

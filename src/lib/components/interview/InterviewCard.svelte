@@ -8,13 +8,13 @@
 	const questions = interview.questions as Question[];
 </script>
 
-<div
+<a
+	href="/app/interviews/{interview.slug}"
+	data-sveltekit-preload-data
 	class="group relative cursor-pointer rounded-xl border p-4 shadow hover:bg-secondary hover:text-secondary-foreground"
 >
-	<a
+	<div
 		class="relative mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg shadow"
-		href="/app/interviews/{interview.slug}"
-		data-sveltekit-preload-data="hover"
 	>
 		<div class="relative z-10 h-full w-full rounded-lg bg-white">
 			{#if status}
@@ -35,8 +35,8 @@
 				{/if}
 			</div>
 		</div>
-	</a>
-	<a href="/app/interviews/{interview.slug}" data-sveltekit-preload-data="hover">
+	</div>
+	<div>
 		<div class="mb-2 flex items-center space-x-2 font-medium">
 			<span class="flex items-center">
 				<Inbox class="mr-2 size-4 text-primary group-hover:text-secondary-foreground" />
@@ -55,5 +55,5 @@
 				{interview.description}
 			</p>
 		</div>
-	</a>
-</div>
+	</div>
+</a>

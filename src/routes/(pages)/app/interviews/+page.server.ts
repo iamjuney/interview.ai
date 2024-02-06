@@ -38,7 +38,6 @@ export const actions = {
 		// Get the interview id and slug from the form data
 		const form = await request.formData();
 		const interviewId = form.get('interview_id')!.toString();
-		const interviewSlug = form.get('interview_slug')!.toString();
 
 		try {
 			// Insert the new interview into the userInterview table
@@ -53,7 +52,7 @@ export const actions = {
 			});
 		}
 
-		redirect(302, `/app/interviews/${interviewSlug}`);
+		redirect(302, `/app/interviews`);
 	},
 	delete: async ({ request }) => {
 		const form = await request.formData();

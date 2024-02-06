@@ -8,15 +8,13 @@
 	let { data } = $props();
 	let animate = $state(false);
 	let previousPage = $state<string>('/app/questions');
-	let text = $state<string>('');
+	let text = $state<string>('to interview');
 
 	afterNavigate(({ from }) => {
 		previousPage = from?.url.pathname || previousPage;
 
 		if (previousPage === '/app/questions') {
 			text = 'to questions';
-		} else {
-			text = 'to interview';
 		}
 	});
 
