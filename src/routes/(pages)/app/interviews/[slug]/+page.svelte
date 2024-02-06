@@ -82,7 +82,9 @@
 				{#if userInterview}
 					<AlertDialog.Root>
 						<AlertDialog.Trigger>
-							<Button size="lg" variant="destructive">Delete Interview</Button>
+							<Button size="lg" variant="destructive" bind:disabled={isSubmitting}
+								>Delete Interview</Button
+							>
 						</AlertDialog.Trigger>
 						<AlertDialog.Content>
 							<AlertDialog.Header>
