@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { Input, InterviewCard, Progress } from '$lib/components';
+	import { Input, Progress } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { ArrowLeft, Loader2, Search, Timer, Inbox } from 'lucide-svelte';
+	import { ArrowLeft, Inbox, Loader2, Search, Timer } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 

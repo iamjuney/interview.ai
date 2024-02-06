@@ -1,7 +1,10 @@
 import { db } from '$lib/db';
-import { question, userInterview } from '$lib/db/schema';
-import type { Question } from '$lib/types';
-import { eq, inArray } from 'drizzle-orm';
+import { interview, userInterview, question } from '$lib/db/schema';
+import type { Interview, Question } from '$lib/types';
+import { fail } from '@sveltejs/kit';
+import { and, eq, ilike, notInArray, or, inArray } from 'drizzle-orm';
+import { superValidate } from 'sveltekit-superforms/server';
+import { z } from 'zod';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
@@ -33,3 +36,56 @@ export const load = (async ({ locals }) => {
 		questions
 	};
 }) satisfies PageServerLoad;
+
+const searchSchema = z.object({
+	query: z.string().max(255)
+});
+
+export const actions = {
+	search: async ({ request, locals }) => {
+		const form = await superValidate(request, searchSchema);
+
+		if (!form.valid) {
+			return fail(400, {
+				message: 'Invalid search query'
+			});
+		}
+
+		const session = await locals.auth.validate();
+		const userId = session!.user.userId.toString();
+
+		try {
+			// Get all user interviews and the interview details
+			const all = await db.query.userInterview.findMany({
+				columns: {
+					interviewId: true
+				},
+				where: eq(userInterview.userId, userId)
+			});
+
+			let questions: Question[] = [];
+
+			if (all.length > 0) {
+				questions = await db.query.question.findMany({
+					where: and(
+						inArray(
+							question.interviewId,
+							all.map((i) => i.interviewId)
+						),
+						ilike(question.question, `%${form.data.query}%`)
+					)
+				});
+			} else {
+				questions = [];
+			}
+
+			return {
+				questions
+			};
+		} catch (error) {
+			return fail(500, {
+				message: 'Failed to search interviews'
+			});
+		}
+	}
+};

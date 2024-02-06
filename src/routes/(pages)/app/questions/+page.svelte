@@ -1,11 +1,20 @@
 <script lang="ts">
+	import { question } from '$lib/db/schema';
+	import { enhance } from '$app/forms';
 	import { Input } from '$lib/components';
-	import { Search } from 'lucide-svelte';
+	import { ArrowLeft, Inbox, Loader2, Search, Timer } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
+	import type { SubmitFunction } from '@sveltejs/kit';
 	import { fly } from 'svelte/transition';
 
 	let { data } = $props();
+	let questions = $state(data.questions);
 	let animate = $state(false);
+	let searchForm = $state<HTMLFormElement>();
+	let query = $state('');
+	let timeoutId = $state<NodeJS.Timeout>();
+	let isSearching = $state(false);
+	let failedSearchData = $state<Record<string, any>>();
 
 	$effect(() => {
 		animate = true;
@@ -16,6 +25,36 @@
 		delay: 300,
 		easing: backOut
 	};
+
+	// debounce function
+	const debounce = (func: () => void, wait: number | undefined) => {
+		clearTimeout(timeoutId);
+		timeoutId = setTimeout(func, wait);
+	};
+
+	// handle the input event
+	const handleInput = () => {
+		// debounce the input event every 300ms
+		if (query.length > 0) {
+			debounce(() => {
+				searchForm?.dispatchEvent(new Event('submit', { bubbles: true, cancelable: true }));
+			}, 300);
+		}
+	};
+
+	// handle the form submission
+	const handleSubmit: SubmitFunction = () => {
+		isSearching = true;
+
+		return ({ result }) => {
+			// if the result is a failure, set the failedSearchData to the result data
+			// else, set the interviews to the result data
+			if (result.type === 'failure') failedSearchData = result.data;
+			else if (result.type === 'success') questions = result.data?.questions;
+
+			isSearching = false;
+		};
+	};
 </script>
 
 {#if animate}
@@ -25,21 +64,42 @@
 		</div>
 
 		<div>
-			<div class="w-full">
-				<label for="search" class="sr-only">Search</label>
+			<form
+				bind:this={searchForm}
+				class="w-full"
+				use:enhance={handleSubmit}
+				action="?/search"
+				method="post"
+			>
+				<label for="query" class="sr-only">Search</label>
 				<div class="relative">
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-0">
-						<Search size="20" class="text-foreground/60" />
+						{#if isSearching}
+							<Loader2 size="20" class="animate-spin text-foreground/60" />
+						{:else}
+							<Search size="20" class="text-foreground/60" />
+						{/if}
 					</div>
-					<Input id="search" class="border-0 pl-8 text-base" placeholder="Search" />
+					<Input
+						bind:value={query}
+						oninput={handleInput}
+						id="query"
+						name="query"
+						class="max-w-sm border-0 pl-8 text-base"
+						placeholder="Search"
+					/>
 				</div>
-			</div>
+			</form>
+
+			{#if failedSearchData}
+				<p class="text-secondary">{failedSearchData.message}</p>
+			{/if}
 
 			<div class="mt-3 grid w-full grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
-				{#if data.questions.length === 0}
-					<p class="text-secondary">No questions found</p>
+				{#if questions.length === 0}
+					<p class="text-secondary">No questions found.</p>
 				{:else}
-					{#each data.questions as question}
+					{#each questions as question}
 						<a
 							class="group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border border-accent p-4 font-medium transition duration-100"
 							href="/app/questions/{question.slug}"
