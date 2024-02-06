@@ -58,10 +58,9 @@ export const actions = {
 	delete: async ({ request }) => {
 		const form = await request.formData();
 		const userInterviewId = form.get('user_interview_id')!.toString();
-		console.log('userInterviewId', userInterviewId);
+
 		try {
 			await db.delete(userInterview).where(eq(userInterview.id, userInterviewId));
-			console.log('Deleted interview successfully');
 		} catch (error) {
 			return fail(500, {
 				message: 'Failed to delete interview'
