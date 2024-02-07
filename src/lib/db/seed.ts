@@ -1,7 +1,7 @@
-import { v4 as uuidv4 } from 'uuid';
-import { interview, question, userInterview } from './schema';
-import { db } from './index';
 import slugify from 'slugify';
+import { v4 as uuidv4 } from 'uuid';
+import { db } from './index';
+import { interview, question } from './schema';
 
 const randomInterviewIds = [
 	'9a8b5c9b-3b7a-4e9a-8f2b-2f0a3b3c4d5e',

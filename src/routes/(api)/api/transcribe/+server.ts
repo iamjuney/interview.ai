@@ -3,6 +3,10 @@ import { json } from '@sveltejs/kit';
 import OpenAI from 'openai';
 import type { RequestHandler } from './$types';
 
+export const config = {
+	runtime: 'edge'
+};
+
 // Create an OpenAI API client
 const openai = new OpenAI({
 	apiKey: OPENAI_API_KEY || ''

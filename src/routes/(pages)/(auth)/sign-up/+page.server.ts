@@ -7,6 +7,7 @@ import type { PageServerLoad } from './$types';
 const signupSchema = z.object({
 	email: z.string().max(255).email(),
 	password: z.string().min(6).max(100),
+	confirm_password: z.string().min(6).max(100),
 
 	// my custom fields
 	first_name: z.string().min(3).max(20),
@@ -28,6 +29,12 @@ export const actions = {
 		if (!form.valid) {
 			return fail(400, {
 				message: 'Invalid credentials'
+			});
+		}
+
+		if (form.data.password !== form.data.confirm_password) {
+			return fail(400, {
+				message: 'Passwords do not match'
 			});
 		}
 

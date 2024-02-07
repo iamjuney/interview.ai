@@ -7,6 +7,10 @@ const speechConfig = sdk.SpeechConfig.fromSubscription(
 	AZURE_SERVICE_REGION
 );
 
+export const config = {
+	runtime: 'edge'
+};
+
 export const GET: RequestHandler = async ({ request }) => {
 	// Get the video URL from the request
 	const { audioUrl, transcript, duration } = await request.json();

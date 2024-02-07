@@ -109,6 +109,18 @@
 									disabled={isLoading}
 								/>
 							</div>
+							<div class="grid gap-1">
+								<Label class="block text-sm font-medium" for="confirm_password"
+									>Confirm Password</Label
+								>
+								<Input
+									id="confirm_password"
+									name="confirm_password"
+									type="password"
+									required
+									disabled={isLoading}
+								/>
+							</div>
 							<!-- <div class="flex items-center justify-between">
 								<div class="flex items-center">
 									<input
