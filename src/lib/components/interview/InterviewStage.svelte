@@ -9,8 +9,6 @@
 
 	const { input, handleSubmit, messages } = useChat();
 
-	const unique_id = uuidv4();
-
 	let { question } = $props<{ question: string }>();
 
 	let ffmpeg = $state<FFmpeg | null>(null);
@@ -128,6 +126,8 @@
 
 	// function to handle the processing of the recording
 	async function handleProcessClick() {
+		const unique_id = uuidv4();
+
 		if (recordedChunks.length) {
 			isSubmitting = true;
 			status = 'Converting';
@@ -159,11 +159,11 @@
 				type: 'audio/wav'
 			});
 
-			const formData = new FormData();
-			formData.append('file', output, `${unique_id}.wav`);
-			formData.append('model', 'whisper-1');
+			// const formData = new FormData();
+			// formData.append('file', output, `${unique_id}.wav`);
+			// formData.append('model', 'whisper-1');
 
-			status = 'Transcribing';
+			// status = 'Transcribing';
 
 			// const upload = await fetch(
 			// 	`/api/v1/transcribe?question=${encodeURIComponent(questions[0])}`,

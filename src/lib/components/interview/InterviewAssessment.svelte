@@ -66,7 +66,7 @@
 										Your browser does not support the video tag.
 									</video>
 								</div>
-								<div class="grid grid-cols-4 gap-2 divide-x divide-accent">
+								<div class="grid grid-cols-4 divide-x divide-accent">
 									<div class="flex flex-col items-center justify-center">
 										<p class="text-sm text-foreground/60">WPM</p>
 										<h3 class="font-semibold">87</h3>
