@@ -72,7 +72,7 @@
 					<Logo />
 				</div>
 				<nav class="mt-24 flex-1 space-y-1">
-					<h4 class="px-8 py-2 text-sm text-muted-foreground">Overview</h4>
+					<h4 class="px-8 py-2 text-sm text-muted-foreground">Menu</h4>
 					{#each nav_links as link}
 						{#if pathName() === link.href}
 							<a

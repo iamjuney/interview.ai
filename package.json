@@ -50,6 +50,7 @@
 		"@lucia-auth/adapter-postgresql": "^2.0.2",
 		"@types/nprogress": "^0.2.3",
 		"@vercel/postgres": "^0.7.2",
+		"ai": "^2.2.33",
 		"bits-ui": "^0.16.0",
 		"clsx": "^2.1.0",
 		"drizzle-orm": "^0.29.3",

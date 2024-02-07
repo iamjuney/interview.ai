@@ -5,10 +5,13 @@
 	import { untrack } from 'svelte';
 	import { ArrowRight, Loader2, RefreshCw, ShieldQuestion } from 'lucide-svelte';
 	import { v4 as uuidv4 } from 'uuid';
+	import { useChat } from 'ai/svelte';
+
+	const { input, handleSubmit, messages } = useChat();
 
 	const unique_id = uuidv4();
 
-	let { questions } = $props<{ questions: string[] }>();
+	let { question } = $props<{ question: string }>();
 
 	let ffmpeg = $state<FFmpeg | null>(null);
 	let countdown = $state(150);
@@ -193,6 +196,19 @@
 		}
 	}
 </script>
+
+<!-- <section>
+	<h1>useChat</h1>
+	<ul>
+		{#each $messages as message}
+			<li>{message.role}: {message.content}</li>
+		{/each}
+	</ul>
+	<form on:submit={handleSubmit}>
+		<input bind:value={$input} />
+		<button type="submit">Send</button>
+	</form>
+</section> -->
 
 {#if cameraLoaded}
 	<div

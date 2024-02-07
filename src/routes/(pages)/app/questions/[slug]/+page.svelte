@@ -1,12 +1,13 @@
 <script lang="ts">
 	import { afterNavigate } from '$app/navigation';
-	import { Badge, Button } from '$lib/components';
+	import { Badge, Button, InterviewAssessment } from '$lib/components';
 	import { ArrowLeft, Loader2 } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
 	let { data } = $props();
 	let animate = $state(false);
+	let isOpen = $state(false);
 	let previousPage = $state<string>('/app/questions');
 	let text = $state<string>('to questions');
 
@@ -28,6 +29,8 @@
 		easing: backOut
 	};
 </script>
+
+<InterviewAssessment bind:isOpen />
 
 {#if animate}
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
@@ -52,13 +55,12 @@
 			<div
 				class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
 			>
-				<div
+				<button
+					onclick={() => (isOpen = true)}
 					class="group relative cursor-pointer rounded-xl border border-input p-4 hover:bg-secondary"
 				>
-					<a
+					<div
 						class="relative mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg"
-						href="/app/interviews/record"
-						data-sveltekit-preload-data
 					>
 						<div class="relative h-full w-full rounded bg-white">
 							<div
@@ -67,16 +69,16 @@
 								00:37
 							</div>
 						</div>
-					</a>
-					<a href="/app/interviews/record" class="flex items-center justify-between">
+					</div>
+					<div class="flex items-center justify-between">
 						<span class="text-sm">January 25, 2024 </span>
 
 						<Badge class="flex items-center">
 							<Loader2 class="mr-1 size-3 animate-spin" />
 							Processing...
 						</Badge>
-					</a>
-				</div>
+					</div>
+				</button>
 				<div
 					class="group relative cursor-pointer rounded-xl border border-input p-4 hover:bg-secondary"
 				>
