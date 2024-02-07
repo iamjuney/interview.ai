@@ -1,6 +1,6 @@
 import { db } from '$lib/db';
-import { interview, userInterview } from '$lib/db/schema';
-import type { Interview } from '$lib/types';
+import { answer, interview, userInterview } from '$lib/db/schema';
+import type { Interview, Question } from '$lib/types';
 import { and, eq } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
@@ -16,11 +16,33 @@ export const load = (async ({ params, locals }) => {
 	})) as Interview;
 
 	const userInterviewDetails = await db.query.userInterview.findFirst({
-		where: and(eq(userInterview.userId, userId), eq(userInterview.interviewId, interviewDetails.id))
+		where: and(
+			eq(userInterview.userId, userId),
+			eq(userInterview.interviewId, interviewDetails.id)
+		),
+		with: {
+			interview: {
+				with: {
+					questions: {
+						with: {
+							answers: {
+								where: eq(answer.userId, userId)
+							}
+						}
+					}
+				}
+			}
+		}
 	});
+
+	let questions: Question[] = [];
+
+	if (userInterviewDetails) questions = userInterviewDetails.interview.questions;
+	else questions = interviewDetails.questions;
 
 	return {
 		interviewDetails,
-		userInterviewDetails
+		userInterviewDetails,
+		questions
 	};
 }) satisfies PageServerLoad;

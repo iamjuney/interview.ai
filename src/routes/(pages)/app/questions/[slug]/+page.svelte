@@ -40,7 +40,7 @@
 			</div>
 
 			<div class="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between">
-				<h2 class="text-3xl font-medium tracking-tight">{data.question}</h2>
+				<h2 class="max-w-3xl text-3xl font-medium tracking-tight">{data.question}</h2>
 				<Button size="lg" href="/app/interviews/record" data-sveltekit-preload-data="hover"
 					>Record New Answer</Button
 				>

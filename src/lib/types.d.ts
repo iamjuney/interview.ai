@@ -14,13 +14,14 @@ export type Question = {
 	slug: string;
 	interviewId: string;
 	question: string;
+	answers?: Answer[];
 };
 
 export type Answer = {
-    id: string;
-    createdAt: Date;
-    userId: string;
-    answer: string;
-    questionId: string;
-    videoUrl: string | null;
-}
+	id: string;
+	createdAt: Date;
+	userId: string;
+	answer: string;
+	questionId: string;
+	videoUrl: string | null;
+};

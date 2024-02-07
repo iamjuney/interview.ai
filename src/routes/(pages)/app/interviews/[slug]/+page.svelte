@@ -1,9 +1,9 @@
 <script lang="ts">
-	import { enhance, applyAction } from '$app/forms';
+	import { applyAction, enhance } from '$app/forms';
 	import { afterNavigate, goto } from '$app/navigation';
 	import { AlertDialog, Badge, Button, Collapsible } from '$lib/components';
 	import type { Question } from '$lib/types';
-	import { ArrowLeft, Inbox, PlayCircle, Timer } from 'lucide-svelte';
+	import { ArrowLeft, Inbox, PlayCircle, Timer, CircleDot, CheckCircle } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -11,7 +11,7 @@
 	let animate = $state(false);
 	let interview = $derived(data.interviewDetails);
 	let userInterview = $derived(data.userInterviewDetails);
-	let questions = $derived<Question[]>(interview.questions);
+	let questions = $derived<Question[]>(data.questions);
 	let questionsCount = $derived<number>(questions.length);
 	let questionsIsOpen = $state(false);
 
@@ -37,6 +37,30 @@
 		easing: backOut
 	};
 </script>
+
+{#snippet questionCardClickable(q:Question)}
+	<a
+		class="mb-2 flex w-full items-center justify-between rounded-md border border-border p-3 font-medium transition-all duration-200 hover:ml-3"
+		href="/app/questions/{q.slug}"
+		><div class="flex items-center text-left">
+			{#if q.answers.length > 0}
+				<CheckCircle size="20" class="flex-none text-accent" />
+			{:else}
+				<PlayCircle size="20" class="flex-none text-accent" />
+			{/if}
+			<div class="ml-3 grow">{q.question}</div>
+		</div>
+	</a>
+{/snippet}
+
+{#snippet questionCardNotClickable(q:Question)}
+	<div class="flex w-full items-center justify-between p-3 font-medium transition-all duration-200">
+		<div class="flex items-center text-left">
+			<CircleDot size="20" class="flex-none text-accent" />
+			<div class="ml-3 grow">{q.question}</div>
+		</div>
+	</div>
+{/snippet}
 
 {#if animate}
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
@@ -151,25 +175,19 @@
 				onOpenChange={() => (questionsIsOpen = !questionsIsOpen)}
 			>
 				{#each questions.slice(0, questionsCount / 2) as question}
-					<a
-						class="mb-2 flex w-full items-center justify-between rounded-md border border-border p-3 font-medium transition-all duration-200 hover:ml-3"
-						href="/app/questions/{question.slug}"
-						><div class="flex items-center text-left">
-							<PlayCircle size="20" class="flex-none text-accent" />
-							<div class="ml-3 grow">{question.question}</div>
-						</div>
-					</a>
+					{#if userInterview}
+						{@render questionCardClickable(question)}
+					{:else}
+						{@render questionCardNotClickable(question)}
+					{/if}
 				{/each}
 				<Collapsible.Content>
 					{#each questions.slice(questionsCount / 2) as question}
-						<a
-							class="mb-2 flex w-full items-center justify-between rounded-md border border-border p-3 font-medium transition-all duration-200 hover:ml-3"
-							href="/app/questions/{question.slug}"
-							><div class="flex items-center text-left">
-								<PlayCircle size="20" class="flex-none text-accent" />
-								<div class="ml-3 grow">{question.question}</div>
-							</div>
-						</a>
+						{#if userInterview}
+							{@render questionCardClickable(question)}
+						{:else}
+							{@render questionCardNotClickable(question)}
+						{/if}
 					{/each}
 				</Collapsible.Content>
 				<Collapsible.Trigger class="text-sm font-semibold text-accent underline">
