@@ -43,9 +43,13 @@
 			</div>
 
 			<div class="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between">
-				<h2 class="max-w-3xl text-3xl font-medium tracking-tight">{data.question}</h2>
-				<Button size="lg" href="/app/interviews/record" data-sveltekit-preload-data="hover"
-					>Record New Answer</Button
+				<h2 class="max-w-3xl text-3xl font-medium tracking-tight">
+					{data.questionDetails?.question}
+				</h2>
+				<Button
+					size="lg"
+					href="/app/questions/{data.questionDetails?.slug}/record"
+					data-sveltekit-preload-data="hover">Record New Answer</Button
 				>
 			</div>
 		</div>
@@ -79,18 +83,18 @@
 						</Badge>
 					</div>
 				</button>
-				<div
+				<!-- <div
 					class="group relative cursor-pointer rounded-xl border border-input p-4 hover:bg-secondary"
 				>
 					<a
 						class="relative mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg"
-						href="/app/interviews/record"
+						href="/app/questions/"
 						data-sveltekit-preload-data
 					>
 						<div class="relative h-full w-full rounded-lg bg-white"></div>
 					</a>
-					<a href="/app/interviews/record" class="text-sm"> January 27, 2024 </a>
-				</div>
+					<a href="/app/questions/{data.questionDetails?.slug}/record" class="text-sm"> January 27, 2024 </a>
+				</div> -->
 			</div>
 		</div>
 	</div>

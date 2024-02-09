@@ -43,7 +43,7 @@
 		class="mb-2 flex w-full items-center justify-between rounded-md border border-border p-3 font-medium transition-all duration-200 hover:ml-3"
 		href="/app/questions/{q.slug}"
 		><div class="flex items-center text-left">
-			{#if q.answers.length > 0}
+			{#if q.answers}
 				<CheckCircle size="20" class="flex-none text-accent" />
 			{:else}
 				<PlayCircle size="20" class="flex-none text-accent" />

@@ -1,16 +1,16 @@
 <script lang="ts">
 	import { Button } from '$lib/components';
+	import type { Question } from '$lib/types';
 	import { FFmpeg } from '@ffmpeg/ffmpeg';
 	import { fetchFile, toBlobURL } from '@ffmpeg/util';
-	import { untrack } from 'svelte';
+	import { is } from 'drizzle-orm';
 	import { ArrowRight, Loader2, RefreshCw, ShieldQuestion } from 'lucide-svelte';
+	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
-	import { useChat } from 'ai/svelte';
 
-	const { input, handleSubmit, messages } = useChat();
 	const unique_id = uuidv4();
 
-	let { question } = $props<{ question: string }>();
+	let { question } = $props<{ question: Question }>();
 
 	let ffmpeg = $state<FFmpeg | null>(null);
 	let countdown = $state(150);
@@ -96,9 +96,11 @@
 		const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
 		ffmpeg = new FFmpeg();
 
-		ffmpeg.on('log', ({ message }) => {
-			console.log(message);
-		});
+		// uncomment below to see logs
+
+		// ffmpeg.on('log', ({ message }) => {
+		// 	console.log(message);
+		// });
 
 		await ffmpeg.load({
 			coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
@@ -147,43 +149,19 @@
 				type: 'video/webm'
 			});
 
-			// write the file to memory, removes the video, and converts the audio to wav
-			ffmpeg?.writeFile(`${unique_id}.webm`, await fetchFile(blob));
-			await ffmpeg?.exec([
-				'-i',
-				`${unique_id}.webm`,
-				'-vn',
-				'-acodec',
-				'pcm_s16le',
-				'-ac',
-				'1',
-				'-ar',
-				'16000',
-				`${unique_id}.wav`
-			]);
-
 			// set the status to reading
 			status = 'Reading';
 
-			// read the converted file from the file system
-			const fileData = await ffmpeg?.readFile(`${unique_id}.wav`);
-			audioFile = new File([(fileData as Uint8Array).buffer], `${unique_id}.wav`, {
-				type: 'audio/wav'
-			});
-
 			const transcribeForm = new FormData();
-			transcribeForm.append('audio', audioFile);
+			transcribeForm.append('videoFile', videoFile, `${unique_id}.webm`);
 
 			// set the status to transcribing
 			status = 'Transcribing';
 
-			const transcribeUpload = await fetch(
-				`/api/transcribe?question=${encodeURIComponent(question)}`,
-				{
-					method: 'POST',
-					body: transcribeForm
-				}
-			);
+			const transcribeUpload = await fetch(`/api/transcribe`, {
+				method: 'POST',
+				body: transcribeForm
+			});
 
 			// set the status to error if the upload status is not 200
 			if (transcribeUpload.status !== 200) {
@@ -199,7 +177,10 @@
 
 			if (transcribeResults.error) {
 				status = 'Error';
+				isSubmitting = false;
 				errorMessage = transcribeResults.error;
+				stopStream();
+				handleStopCaptureClick();
 				return;
 			}
 
