@@ -68,19 +68,19 @@
 								</div>
 								<div class="grid grid-cols-4 divide-x divide-accent">
 									<div class="flex flex-col items-center justify-center">
-										<p class="text-sm text-foreground/60">WPM</p>
+										<p class="text-xs text-foreground/60 sm:text-sm">WPM</p>
 										<h3 class="font-semibold">87</h3>
 									</div>
 									<div class="flex flex-col items-center justify-center">
-										<p class="text-sm text-foreground/60">Accuracy</p>
+										<p class="text-xs text-foreground/60 sm:text-sm">Accuracy</p>
 										<h3 class="font-semibold">96%</h3>
 									</div>
 									<div class="flex flex-col items-center justify-center">
-										<p class="text-sm text-foreground/60">Pronunciation</p>
+										<p class="text-xs text-foreground/60 sm:text-sm">Pronunciation</p>
 										<h3 class="font-semibold">95%</h3>
 									</div>
 									<div class="flex flex-col items-center justify-center">
-										<p class="text-sm text-foreground/60">Fluency</p>
+										<p class="text-xs text-foreground/60 sm:text-sm">Fluency</p>
 										<h3 class="font-semibold">95%</h3>
 									</div>
 								</div>

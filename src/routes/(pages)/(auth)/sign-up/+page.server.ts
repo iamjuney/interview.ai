@@ -14,7 +14,7 @@ const signupSchema = z.object({
 	last_name: z.string().min(3).max(20)
 });
 
-export const load = (async ({ locals }: { locals: any }) => {
+export const load = (async ({ locals }) => {
 	const session = await locals.auth.validate();
 
 	if (!session) return {};
