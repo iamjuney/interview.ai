@@ -8,6 +8,7 @@
 	import { useChat } from 'ai/svelte';
 
 	const { input, handleSubmit, messages } = useChat();
+	const unique_id = uuidv4();
 
 	let { question } = $props<{ question: string }>();
 
@@ -24,8 +25,13 @@
 	let isSubmitting = $state(false);
 	let status = $state('');
 	let completed = $state(false);
+	let errorMessage = $state('');
+
+	let videoFile = $state<File | null>(null);
+	let audioFile = $state<File | null>(null);
 	let transcript = $state('');
 	let generatedFeedback = $state('');
+	let assessmentData = $state<any>(null);
 
 	// handles the camera stream
 	$effect(() => {
@@ -126,13 +132,18 @@
 
 	// function to handle the processing of the recording
 	async function handleProcessClick() {
-		const unique_id = uuidv4();
-
 		if (recordedChunks.length) {
 			isSubmitting = true;
+
+			// set the status to converting
 			status = 'Converting';
 
 			const blob = new Blob(recordedChunks, {
+				type: 'video/webm'
+			});
+
+			// create a file from the blob
+			videoFile = new File([blob], `${unique_id}.webm`, {
 				type: 'video/webm'
 			});
 
@@ -151,43 +162,108 @@
 				`${unique_id}.wav`
 			]);
 
+			// set the status to reading
 			status = 'Reading';
 
 			// read the converted file from the file system
 			const fileData = await ffmpeg?.readFile(`${unique_id}.wav`);
-			const output = new File([(fileData as Uint8Array).buffer], `${unique_id}.wav`, {
+			audioFile = new File([(fileData as Uint8Array).buffer], `${unique_id}.wav`, {
 				type: 'audio/wav'
 			});
 
-			// const formData = new FormData();
-			// formData.append('file', output, `${unique_id}.wav`);
-			// formData.append('model', 'whisper-1');
+			const transcribeForm = new FormData();
+			transcribeForm.append('audio', audioFile);
 
-			// status = 'Transcribing';
+			// set the status to transcribing
+			status = 'Transcribing';
 
-			// const upload = await fetch(
-			// 	`/api/v1/transcribe?question=${encodeURIComponent(questions[0])}`,
-			// 	{
-			// 		method: 'POST',
-			// 		body: formData
-			// 	}
-			// );
+			const transcribeUpload = await fetch(
+				`/api/transcribe?question=${encodeURIComponent(question)}`,
+				{
+					method: 'POST',
+					body: transcribeForm
+				}
+			);
 
-			// const results = await upload.json();
+			// set the status to error if the upload status is not 200
+			if (transcribeUpload.status !== 200) {
+				status = 'Error';
+				errorMessage = 'An error occurred while transcribing the audio. Please try again.';
+				return;
+			}
 
-			// if (!upload.ok) console.error('Upload failed.');
+			const transcribeResults = await transcribeUpload.json();
 
-			// isSuccess = true;
-			// isSubmitting = false;
-			// transcript = results.transcript;
-			// generatedFeedback = results.feedback;
-			// completed = true;
+			isSuccess = true;
+			isSubmitting = false;
 
-			// if (results.error) transcript = results.error;
+			if (transcribeResults.error) {
+				status = 'Error';
+				errorMessage = transcribeResults.error;
+				return;
+			}
 
-			// transcript = results.transcript;
+			transcript = transcribeResults.transcript;
 
-			// console.log('Uploaded successfully!');
+			console.log('Transcript:', transcript);
+			console.log('Status', status);
+			console.log('Error message', errorMessage);
+
+			// const assessmentForm = new FormData();
+			// assessmentForm.append('transcript', transcript);
+
+			// // set the status to assessing
+			// status = 'Assessing';
+
+			// const assessmentUpload = await fetch(`/api/assess?question=${encodeURIComponent(question)}`, {
+			// 	method: 'POST',
+			// 	body: assessmentForm
+			// });
+
+			// // set the status to error if the upload status is not 200
+			// if (assessmentUpload.status !== 200) {
+			// 	status = 'Error';
+			// 	errorMessage = 'An error occurred while assessing the transcript. Please try again.';
+			// 	return;
+			// }
+
+			// const assessmentResults = await assessmentUpload.json();
+			// assessmentData = assessmentResults.assessment;
+
+			// const chatForm = new FormData();
+			// chatForm.append('prompt', transcript);
+
+			// // set the status to chatting
+			// status = 'Generating Feedback';
+
+			// const chatUpload = await fetch(`/api/chat`, {
+			// 	method: 'POST',
+			// 	body: chatForm
+			// });
+
+			// // set the status to error if the upload status is not 200
+			// if (chatUpload.status !== 200) {
+			// 	status = 'Error';
+			// 	errorMessage = 'An error occurred while generating feedback. Please try again.';
+			// 	return;
+			// }
+
+			// const chatResults = await chatUpload.json();
+			// generatedFeedback = chatResults.feedback;
+
+			// // set the status to completed
+			// status = 'Completed';
+
+			// const assessmentChuchu = {
+			// 	feedback: generatedFeedback,
+			// 	wpm: assessmentData.wpm,
+			// 	accuracy: assessmentData.NBest[0]?.PronunciationAssessment?.AccuracyScore,
+			// 	fluency: assessmentData.NBest[0]?.PronunciationAssessment?.FluencyScore,
+			// 	pronunciation: assessmentData.NBest[0]?.PronunciationAssessment?.PronScore,
+			// 	data: assessmentData
+			// };
+
+			// console.log(assessmentChuchu);
 
 			// // reset the recording after 1.5 seconds
 			// setTimeout(function () {

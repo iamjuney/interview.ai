@@ -14,12 +14,12 @@ const openai = new OpenAI({
 
 export const POST: RequestHandler = async ({ request }) => {
 	// Get the video URL from the request
-	const { videoUrl } = await request.json();
+	const { audioFile } = await request.json();
 
 	// Ask OpenAI to transcribe the video
 	const transcribeRes = await openai.audio.transcriptions.create({
 		model: 'whisper-1',
-		file: videoUrl,
+		file: audioFile,
 		response_format: 'text'
 	});
 
@@ -30,7 +30,7 @@ export const POST: RequestHandler = async ({ request }) => {
 	});
 
 	if (moderationRes.results[0].flagged) {
-		return json({ message: 'Inappropriate content detected. Please try again.' }, { status: 200 });
+		return json({ error: 'Inappropriate content detected. Please try again.' }, { status: 400 });
 	}
 
 	return json({ transcript }, { status: 200 });

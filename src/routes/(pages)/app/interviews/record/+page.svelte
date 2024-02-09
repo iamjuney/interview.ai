@@ -17,7 +17,7 @@
 		easing: backOut
 	};
 
-	const question = ['What is the difference between front-end and back-end development?'];
+	const question = 'What is the difference between front-end and back-end development?';
 </script>
 
 {#if animate}
@@ -36,7 +36,7 @@
 		</div>
 
 		<div class="w-full">
-			<InterviewStage questions={question} />
+			<!-- <InterviewStage {question} /> -->
 		</div>
 	</div>
 {/if}
