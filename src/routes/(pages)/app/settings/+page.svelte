@@ -93,6 +93,7 @@
 										id="mobile_user_photo"
 										name="user_photo"
 										type="file"
+										accept="image/jpeg, image/jpg, image/png, image/webp"
 										class="absolute h-full w-full cursor-pointer rounded-md border-gray-300 opacity-0"
 									/>
 								</div>
@@ -116,6 +117,7 @@
 								type="file"
 								id="desktop_user_photo"
 								name="user_photo"
+								accept="image/jpeg, image/jpg, image/png, image/webp"
 								class="absolute inset-0 h-full w-full cursor-pointer rounded-md border-gray-300 opacity-0"
 							/>
 						</label>

@@ -1,9 +1,6 @@
 <script lang="ts">
 	import { Button } from '$lib/components';
 	import type { Question } from '$lib/types';
-	import { FFmpeg } from '@ffmpeg/ffmpeg';
-	import { fetchFile, toBlobURL } from '@ffmpeg/util';
-	import { is } from 'drizzle-orm';
 	import { ArrowRight, Loader2, RefreshCw, ShieldQuestion } from 'lucide-svelte';
 	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
@@ -12,7 +9,6 @@
 
 	let { question } = $props<{ question: Question }>();
 
-	let ffmpeg = $state<FFmpeg | null>(null);
 	let countdown = $state(150);
 	let stream = $state<MediaStream | null>(null);
 	let videoRef = $state<HTMLVideoElement | null>(null);
@@ -37,7 +33,6 @@
 	$effect(() => {
 		untrack(() => {
 			(async () => {
-				await loadFfmpeg();
 				await getStream();
 			})();
 		});
@@ -91,23 +86,6 @@
 		}
 	}
 
-	// function to load ffmpeg
-	async function loadFfmpeg() {
-		const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
-		ffmpeg = new FFmpeg();
-
-		// uncomment below to see logs
-
-		// ffmpeg.on('log', ({ message }) => {
-		// 	console.log(message);
-		// });
-
-		await ffmpeg.load({
-			coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
-			wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm')
-		});
-	}
-
 	// function to handle the start of the recording
 	function handleStartCaptureClick() {
 		cameraRecording = true;
@@ -149,46 +127,50 @@
 				type: 'video/webm'
 			});
 
-			// set the status to reading
-			status = 'Reading';
+			// for now download the file
+			const url = URL.createObjectURL(videoFile);
+			const a = document.createElement('a');
+			a.href = url;
+			a.download = `${unique_id}.webm`;
+			a.click();
+			URL.revokeObjectURL(url);
 
-			const transcribeForm = new FormData();
-			transcribeForm.append('videoFile', videoFile, `${unique_id}.webm`);
+			// // set the status to reading
+			// status = 'Reading';
 
-			// set the status to transcribing
-			status = 'Transcribing';
+			// const transcribeForm = new FormData();
+			// transcribeForm.append('videoFile', videoFile, `${unique_id}.webm`);
 
-			const transcribeUpload = await fetch(`/api/transcribe`, {
-				method: 'POST',
-				body: transcribeForm
-			});
+			// // set the status to transcribing
+			// status = 'Transcribing';
 
-			// set the status to error if the upload status is not 200
-			if (transcribeUpload.status !== 200) {
-				status = 'Error';
-				errorMessage = 'An error occurred while transcribing the audio. Please try again.';
-				return;
-			}
+			// const transcribeUpload = await fetch(`/api/transcribe`, {
+			// 	method: 'POST',
+			// 	body: transcribeForm
+			// });
 
-			const transcribeResults = await transcribeUpload.json();
+			// // set the status to error if the upload status is not 200
+			// if (transcribeUpload.status !== 200) {
+			// 	status = 'Error';
+			// 	errorMessage = 'An error occurred while transcribing the audio. Please try again.';
+			// 	return;
+			// }
 
-			isSuccess = true;
-			isSubmitting = false;
+			// const transcribeResults = await transcribeUpload.json();
 
-			if (transcribeResults.error) {
-				status = 'Error';
-				isSubmitting = false;
-				errorMessage = transcribeResults.error;
-				stopStream();
-				handleStopCaptureClick();
-				return;
-			}
+			// isSuccess = true;
+			// isSubmitting = false;
 
-			transcript = transcribeResults.transcript;
+			// if (transcribeResults.error) {
+			// 	status = 'Error';
+			// 	isSubmitting = false;
+			// 	errorMessage = transcribeResults.error;
+			// 	stopStream();
+			// 	handleStopCaptureClick();
+			// 	return;
+			// }
 
-			console.log('Transcript:', transcript);
-			console.log('Status', status);
-			console.log('Error message', errorMessage);
+			// transcript = transcribeResults.transcript;
 
 			// const assessmentForm = new FormData();
 			// assessmentForm.append('transcript', transcript);
