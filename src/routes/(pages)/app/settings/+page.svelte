@@ -8,10 +8,12 @@
 	import { fly } from 'svelte/transition';
 
 	let { data } = $props();
-	let user: User = $derived(data.user);
+	let user: User = $state(data.user);
 	let animate = $state(false);
 	let isSubmitting = $state(false);
 	let failedUpdateData = $state<Record<string, any>>();
+	let mobileUserPhoto = $state<HTMLInputElement>();
+	let desktopUserPhoto = $state<HTMLInputElement>();
 
 	$effect(() => {
 		animate = true;
@@ -35,6 +37,13 @@
 			await applyAction(result);
 		};
 	};
+
+	function handleImageUpload() {
+		const file = mobileUserPhoto?.files?.[0] || desktopUserPhoto?.files?.[0];
+		if (file) {
+			user.image = URL.createObjectURL(file);
+		}
+	}
 </script>
 
 {#if animate}
@@ -65,14 +74,14 @@
 					<div class="mt-1 lg:hidden">
 						<div class="flex items-center">
 							<div
-								class="inline-block h-12 w-12 flex-shrink-0 overflow-hidden rounded-full"
+								class="relative inline-block size-12 flex-shrink-0 overflow-hidden rounded-full"
 								aria-hidden="true"
 							>
 								{#if user.image}
-									<img class="h-full w-full rounded-full" src={user.image} alt="" />
+									<img class="absolute bg-cover bg-center" src={user.image} alt="" />
 								{:else}
 									<img
-										class="h-full w-full rounded-full"
+										class="absolute bg-cover bg-center"
 										src="/poddle.webp"
 										alt="Poddle by Freepik"
 									/>
@@ -80,18 +89,17 @@
 							</div>
 							<div class="ml-5 rounded-md shadow-sm">
 								<div
-									class="group relative flex items-center justify-center rounded-md border border-gray-300 px-3 py-2 focus-within:ring-2 focus-within:ring-sky-500 focus-within:ring-offset-2 hover:bg-gray-50"
+									class="group relative flex items-center justify-center rounded-md border px-3 py-2"
 								>
-									<label
-										for="mobile_user_photo"
-										class="pointer-events-none relative text-sm font-medium leading-4 text-foreground/60"
+									<Label for="mobile_user_photo"
+										><span>Change</span>
+										<span class="sr-only"> user photo</span></Label
 									>
-										<span>Change</span>
-										<span class="sr-only"> user photo</span>
-									</label>
 									<input
+										bind:this={mobileUserPhoto}
 										id="mobile_user_photo"
-										name="user_photo"
+										name="mobile_user_photo"
+										onchange={handleImageUpload}
 										type="file"
 										accept="image/jpeg, image/jpg, image/png, image/webp"
 										class="absolute h-full w-full cursor-pointer rounded-md border-gray-300 opacity-0"
@@ -101,11 +109,11 @@
 						</div>
 					</div>
 
-					<div class="relative hidden overflow-hidden rounded-full lg:inline-block">
+					<div class="hidden size-40 overflow-hidden rounded-full lg:relative lg:inline-block">
 						{#if user.image}
-							<img class="relative size-40 rounded-full" src={user.image} alt="" />
+							<img class="bg-cover bg-center" src={user.image} alt="" />
 						{:else}
-							<img class="relative size-40 rounded-full" src="/poddle.webp" alt="" />
+							<img class="bg-cover bg-center" src="/poddle.webp" alt="" />
 						{/if}
 						<label
 							for="desktop_user_photo"
@@ -114,9 +122,11 @@
 							<span>Change</span>
 							<span class="sr-only"> user photo</span>
 							<input
+								bind:this={desktopUserPhoto}
 								type="file"
 								id="desktop_user_photo"
-								name="user_photo"
+								onchange={handleImageUpload}
+								name="desktop_user_photo"
 								accept="image/jpeg, image/jpg, image/png, image/webp"
 								class="absolute inset-0 h-full w-full cursor-pointer rounded-md border-gray-300 opacity-0"
 							/>
