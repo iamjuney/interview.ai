@@ -3,7 +3,7 @@
 	import { AlertDialog, Button, Input, Label } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { User } from 'lucia';
-	import { XCircle } from 'lucide-svelte';
+	import { XCircle, Loader2 } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -146,7 +146,16 @@
 				</div>
 
 				<div class="mt-6">
-					<Button type="submit" size="lg" bind:disabled={isSubmitting}>Save Changes</Button>
+					<Button type="submit" size="lg" bind:disabled={isSubmitting}>
+						{#if isSubmitting}
+							<span class="flex items-center space-x-2">
+								<span>Saving...</span>
+								<Loader2 class="size-4 animate-spin" />
+							</span>
+						{:else}
+							<span>Save Changes</span>
+						{/if}
+					</Button>
 				</div>
 			</form>
 		</div>
@@ -191,7 +200,7 @@
 				</div>
 
 				<div class="mt-6">
-					<Button type="submit" size="lg">Update Password</Button>
+					<Button type="submit" size="lg" bind:disabled={isSubmitting}>Update Password</Button>
 				</div>
 			</form>
 		</div>
@@ -203,7 +212,9 @@
 			<form class="mt-4" action="#" use:enhance method="POST">
 				<AlertDialog.Root>
 					<AlertDialog.Trigger>
-						<Button size="lg" variant="destructive">Delete your account</Button>
+						<Button size="lg" variant="destructive" bind:disabled={isSubmitting}
+							>Delete your account</Button
+						>
 					</AlertDialog.Trigger>
 					<AlertDialog.Content>
 						<AlertDialog.Header>
@@ -218,7 +229,7 @@
 							<AlertDialog.Action
 								type="submit"
 								class="bg-destructive text-destructive-foreground hover:bg-destructive/80"
-								>Continue</AlertDialog.Action
+								bind:disabled={isSubmitting}>Continue</AlertDialog.Action
 							>
 						</AlertDialog.Footer>
 					</AlertDialog.Content>
