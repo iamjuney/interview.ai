@@ -17,7 +17,7 @@
 	let failedUpdateData = $state<Record<string, any>>();
 	let mobileUserPhoto = $state<HTMLInputElement>();
 	let desktopUserPhoto = $state<HTMLInputElement>();
-	let imageNewUrl = $state<string>();
+	let imageFile = $state<File>();
 
 	$effect(() => {
 		animate = true;
@@ -32,8 +32,8 @@
 	const handleSubmit: SubmitFunction = async ({ formData }) => {
 		isSubmitting = true;
 
-		if (user.image) {
-			const newBlob = (await upload(uuidv4(), user.image, {
+		if (imageFile) {
+			const newBlob = (await upload(uuidv4(), imageFile, {
 				access: 'public',
 				handleUploadUrl: '/api/upload/avatar'
 			})) as PutBlobResult;
@@ -52,10 +52,8 @@
 	};
 
 	function handleImageUpload() {
-		const file = mobileUserPhoto?.files?.[0] || desktopUserPhoto?.files?.[0];
-		if (file) {
-			user.image = URL.createObjectURL(file);
-		}
+		imageFile = mobileUserPhoto?.files?.[0] || desktopUserPhoto?.files?.[0];
+		if (imageFile) user.image = URL.createObjectURL(imageFile);
 	}
 </script>
 
@@ -150,12 +148,12 @@
 				<div class="mt-6 grid grid-cols-12 gap-6">
 					<div class="col-span-12 sm:col-span-6">
 						<Label for="first_name" class="text-foreground/60">First name</Label>
-						<Input id="first_name" name="first_name" placeholder={user.first_name} required />
+						<Input id="first_name" name="first_name" value={user.first_name} required />
 					</div>
 
 					<div class="col-span-12 sm:col-span-6">
 						<Label for="last_name" class="text-foreground/60">Last name</Label>
-						<Input id="last_name" name="last_name" placeholder={user.last_name} required />
+						<Input id="last_name" name="last_name" value={user.last_name} required />
 					</div>
 				</div>
 
