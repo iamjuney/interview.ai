@@ -6,9 +6,6 @@
 	import { XCircle } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
-	import { type PutBlobResult } from '@vercel/blob';
-	import { upload } from '@vercel/blob/client';
-	import { v4 as uuidv4 } from 'uuid';
 
 	let { data } = $props();
 	let user: User = $state(data.user);
@@ -31,15 +28,6 @@
 
 	const handleSubmit: SubmitFunction = async ({ formData }) => {
 		isSubmitting = true;
-
-		if (imageFile) {
-			const newBlob = (await upload(uuidv4(), imageFile, {
-				access: 'public',
-				handleUploadUrl: '/api/upload/avatar'
-			})) as PutBlobResult;
-
-			formData.append('image', newBlob.url);
-		}
 
 		return async ({ result }) => {
 			if (result.type === 'failure') {
