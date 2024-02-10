@@ -6,6 +6,9 @@
 	import { XCircle } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
+	import { type PutBlobResult } from '@vercel/blob';
+	import { upload } from '@vercel/blob/client';
+	import { v4 as uuidv4 } from 'uuid';
 
 	let { data } = $props();
 	let user: User = $state(data.user);
@@ -14,6 +17,7 @@
 	let failedUpdateData = $state<Record<string, any>>();
 	let mobileUserPhoto = $state<HTMLInputElement>();
 	let desktopUserPhoto = $state<HTMLInputElement>();
+	let imageNewUrl = $state<string>();
 
 	$effect(() => {
 		animate = true;
@@ -25,8 +29,17 @@
 		easing: backOut
 	};
 
-	const handleSubmit: SubmitFunction = () => {
+	const handleSubmit: SubmitFunction = async ({ formData }) => {
 		isSubmitting = true;
+
+		if (user.image) {
+			const newBlob = (await upload(uuidv4(), user.image, {
+				access: 'public',
+				handleUploadUrl: '/api/upload/avatar'
+			})) as PutBlobResult;
+
+			formData.append('image', newBlob.url);
+		}
 
 		return async ({ result }) => {
 			if (result.type === 'failure') {
