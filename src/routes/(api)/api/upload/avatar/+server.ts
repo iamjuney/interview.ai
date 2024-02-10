@@ -1,6 +1,6 @@
-import type { RequestHandler } from './$types';
 import { json } from '@sveltejs/kit';
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
+import type { RequestHandler } from './$types';
 
 export const POST: RequestHandler = async ({ request, locals }) => {
 	const session = await locals.auth.validate();

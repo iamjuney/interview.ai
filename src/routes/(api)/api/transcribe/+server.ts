@@ -1,9 +1,7 @@
 import { OPENAI_API_KEY } from '$env/static/private';
 import { json } from '@sveltejs/kit';
-import fs from 'fs';
 import OpenAI from 'openai';
 import type { RequestHandler } from './$types';
-import path from 'path';
 
 export const config = {
 	runtime: 'edge'
@@ -15,14 +13,12 @@ const openai = new OpenAI({
 });
 
 export const POST: RequestHandler = async ({ request }) => {
-	const form = await request.formData();
-	const video = form.get('videoFile') as File;
-	const videoFile = path.join('/tmp', video.name);
+	const { videoURl } = await request.json();
 
 	// Ask OpenAI to transcribe the video
 	const transcribeRes = await openai.audio.transcriptions.create({
 		model: 'whisper-1',
-		file: fs.createReadStream(videoFile),
+		file: videoURl,
 		response_format: 'text'
 	});
 
