@@ -85,13 +85,14 @@
 							</div>
 							<div class="flex items-center justify-between">
 								<div class="flex items-center">
-									<input
-										id="remember-me"
-										name="remember-me"
+									<Input
+										id="remember_me"
+										name="remember_me"
 										type="checkbox"
-										class="size-4 rounded border-primary text-primary focus:ring-ring"
+										class="size-4 rounded border-gray-300 text-primary focus:ring-primary"
+										disabled={isLoading}
 									/>
-									<label for="remember-me" class="ml-2 block text-sm"> Remember me </label>
+									<Label for="remember_me" class="ml-2 block text-sm">Remember me</Label>
 								</div>
 
 								<div class="text-sm">

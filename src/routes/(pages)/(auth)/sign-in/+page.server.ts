@@ -19,7 +19,8 @@ export const load = (async ({ locals }) => {
 
 const loginSchema = z.object({
 	email: z.string().max(255).email(),
-	password: z.string().min(6).max(100)
+	password: z.string().min(6).max(100),
+	remember_me: z.boolean().optional()
 });
 
 export const actions = {
@@ -43,6 +44,10 @@ export const actions = {
 
 			// now let's set the session so we can get the session everywhere in server like this page
 			locals.auth.setSession(session);
+
+			if (form.data.remember_me) {
+				auth.createSessionCookie(session);
+			}
 		} catch (e) {
 			if (e instanceof LuciaError && e.message === 'AUTH_INVALID_KEY_ID') {
 				return fail(400, {
