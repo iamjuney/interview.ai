@@ -2,6 +2,7 @@
 	import { applyAction, enhance } from '$app/forms';
 	import { AlertDialog, Button, Input, Label } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
+	import { is } from 'drizzle-orm';
 	import type { User } from 'lucia';
 	import { XCircle, Loader2 } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
@@ -10,8 +11,11 @@
 	let { data } = $props();
 	let user: User = $state(data.user);
 	let animate = $state(false);
-	let isSubmitting = $state(false);
-	let failedUpdateData = $state<Record<string, any>>();
+	let isUpdateNameSubmitting = $state(false);
+	let isUpdatePasswordSubmitting = $state(false);
+	let isDeleteAccountSubmitting = $state(false);
+	let failedUpdateName = $state<Record<string, any>>();
+	let failedUpdatePassword = $state<Record<string, any>>();
 	let mobileUserPhoto = $state<HTMLInputElement>();
 	let desktopUserPhoto = $state<HTMLInputElement>();
 	let imageFile = $state<File>();
@@ -26,23 +30,48 @@
 		easing: backOut
 	};
 
-	const handleSubmit: SubmitFunction = async ({ formData }) => {
-		isSubmitting = true;
+	function handleImageUpload() {
+		imageFile = mobileUserPhoto?.files?.[0] || desktopUserPhoto?.files?.[0];
+		if (imageFile) user.image = URL.createObjectURL(imageFile);
+	}
+
+	const handleUpdateNameSubmit: SubmitFunction = async () => {
+		isUpdateNameSubmitting = true;
 
 		return async ({ result }) => {
 			if (result.type === 'failure') {
-				failedUpdateData = result.data;
-				isSubmitting = false;
+				failedUpdateName = result.data;
+				isUpdateNameSubmitting = false;
 				return;
 			}
 			await applyAction(result);
 		};
 	};
 
-	function handleImageUpload() {
-		imageFile = mobileUserPhoto?.files?.[0] || desktopUserPhoto?.files?.[0];
-		if (imageFile) user.image = URL.createObjectURL(imageFile);
-	}
+	const handleUpdatePasswordSubmit: SubmitFunction = async () => {
+		isUpdatePasswordSubmitting = true;
+
+		return async ({ result }) => {
+			if (result.type === 'failure') {
+				failedUpdatePassword = result.data;
+				isUpdatePasswordSubmitting = false;
+				return;
+			}
+			await applyAction(result);
+		};
+	};
+
+	const handleDeleteAccountSubmit: SubmitFunction = async () => {
+		isDeleteAccountSubmitting = true;
+
+		return async ({ result }) => {
+			if (result.type === 'failure') {
+				isDeleteAccountSubmitting = false;
+				return;
+			}
+			await applyAction(result);
+		};
+	};
 </script>
 
 {#if animate}
@@ -53,10 +82,10 @@
 			<h2 class="truncate text-xl font-medium tracking-tight">Personal information</h2>
 			<p class="text-foreground/60">Update your information and profile details.</p>
 
-			{#if failedUpdateData}
+			{#if failedUpdateName}
 				<div class="flex items-center justify-center text-destructive">
 					<XCircle class="mr-2 size-4 " />
-					<span class="text-sm">{failedUpdateData.message}</span>
+					<span class="text-sm">{failedUpdateName.message}</span>
 				</div>
 			{/if}
 
@@ -64,7 +93,7 @@
 				class="max-w-xl"
 				action="?/updateName"
 				method="post"
-				use:enhance={handleSubmit}
+				use:enhance={handleUpdateNameSubmit}
 				enctype="multipart/form-data"
 			>
 				<input type="hidden" id="user_id" name="user_id" value={user.userId} />
@@ -146,8 +175,8 @@
 				</div>
 
 				<div class="mt-6">
-					<Button type="submit" size="lg" bind:disabled={isSubmitting}>
-						{#if isSubmitting}
+					<Button type="submit" size="lg" bind:disabled={isUpdateNameSubmitting}>
+						{#if isUpdateNameSubmitting}
 							<span class="flex items-center space-x-2">
 								<span>Saving...</span>
 								<Loader2 class="size-4 animate-spin" />
@@ -159,7 +188,6 @@
 				</div>
 			</form>
 		</div>
-		<!-- <div class="mt-6 italic">Do you want to change your password?</div> -->
 
 		<div class="max-w-xl space-y-2">
 			<h2 class="truncate text-xl font-medium tracking-tight">Change Password</h2>
@@ -167,7 +195,20 @@
 				Ensure your account is using a long, random password to stay secure.
 			</p>
 
-			<form class="max-w-xl text-foreground/60" action="#" method="POST">
+			{#if failedUpdatePassword}
+				<div class="flex items-center justify-center text-destructive">
+					<XCircle class="mr-2 size-4 " />
+					<span class="text-sm">{failedUpdatePassword.message}</span>
+				</div>
+			{/if}
+
+			<form
+				class="max-w-xl text-foreground/60"
+				action="?/updatePassword"
+				use:enhance={handleUpdatePasswordSubmit}
+				method="POST"
+			>
+				<input type="hidden" id="email" name="email" value={user.email} />
 				<div class="mt-6">
 					<Label for="current_password">Current Password</Label>
 					<Input
@@ -200,7 +241,16 @@
 				</div>
 
 				<div class="mt-6">
-					<Button type="submit" size="lg" bind:disabled={isSubmitting}>Update Password</Button>
+					<Button type="submit" size="lg" bind:disabled={isUpdatePasswordSubmitting}>
+						{#if isUpdatePasswordSubmitting}
+							<span class="flex items-center space-x-2">
+								<span>Updating...</span>
+								<Loader2 class="size-4 animate-spin" />
+							</span>
+						{:else}
+							<span>Update Password</span>
+						{/if}
+					</Button>
 				</div>
 			</form>
 		</div>
@@ -209,32 +259,45 @@
 			<h2 class="truncate text-xl font-medium tracking-tight">Danger Zone</h2>
 			<p class="text-foreground/60">Manage your account and delete your account.</p>
 
-			<form class="mt-4" action="#" use:enhance method="POST">
-				<AlertDialog.Root>
-					<AlertDialog.Trigger>
-						<Button size="lg" variant="destructive" bind:disabled={isSubmitting}
-							>Delete your account</Button
+			<AlertDialog.Root>
+				<AlertDialog.Trigger>
+					<Button size="lg" variant="destructive" bind:disabled={isDeleteAccountSubmitting}>
+						{#if isDeleteAccountSubmitting}
+							<span class="flex items-center space-x-2">
+								<span>Deleting...</span>
+								<Loader2 class="size-4 animate-spin" />
+							</span>
+						{:else}
+							<span>Delete your account</span>
+						{/if}
+					</Button>
+				</AlertDialog.Trigger>
+				<AlertDialog.Content>
+					<AlertDialog.Header>
+						<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+						<AlertDialog.Description>
+							This action cannot be undone. This will permanently <strong>delete</strong> your account
+							and remove your data from our servers.
+						</AlertDialog.Description>
+					</AlertDialog.Header>
+					<AlertDialog.Footer>
+						<form
+							class="mt-4"
+							action="?/deleteAccount"
+							use:enhance={handleDeleteAccountSubmit}
+							method="POST"
 						>
-					</AlertDialog.Trigger>
-					<AlertDialog.Content>
-						<AlertDialog.Header>
-							<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
-							<AlertDialog.Description>
-								This action cannot be undone. This will permanently <strong>delete</strong> your account
-								and remove your data from our servers.
-							</AlertDialog.Description>
-						</AlertDialog.Header>
-						<AlertDialog.Footer>
+							<input type="hidden" id="user_id" name="user_id" value={user.userId} />
 							<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
 							<AlertDialog.Action
 								type="submit"
 								class="bg-destructive text-destructive-foreground hover:bg-destructive/80"
-								bind:disabled={isSubmitting}>Continue</AlertDialog.Action
+								>Continue</AlertDialog.Action
 							>
-						</AlertDialog.Footer>
-					</AlertDialog.Content>
-				</AlertDialog.Root>
-			</form>
+						</form>
+					</AlertDialog.Footer>
+				</AlertDialog.Content>
+			</AlertDialog.Root>
 		</div>
 	</div>
 {/if}

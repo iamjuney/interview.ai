@@ -1,5 +1,6 @@
 import { auth } from '$lib/server/lucia';
 import { fail, redirect, type Actions } from '@sveltejs/kit';
+import { LuciaError } from 'lucia';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
@@ -59,13 +60,14 @@ export const actions = {
 					image: ''
 				}
 			});
-			console.log('user created', { user });
-		} catch (error) {
-			console.error(error);
-			return fail(400, {
-				message: 'Invalid credentials'
-			});
+		} catch (e) {
+			if (e instanceof LuciaError && e.message === `AUTH_DUPLICATE_KEY_ID`) {
+				return fail(400, {
+					message: 'User already exists'
+				});
+			}
 		}
+
 		redirect(303, '/sign-in');
 	}
 } satisfies Actions;

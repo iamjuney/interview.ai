@@ -1,6 +1,7 @@
 import { auth } from '$lib/server/lucia';
 import type { Actions } from '@sveltejs/kit';
 import { fail, redirect } from '@sveltejs/kit';
+import { LuciaError } from 'lucia';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
@@ -33,22 +34,21 @@ export const actions = {
 		}
 		try {
 			const key = await auth.useKey('email', form.data.email, form.data.password);
-			// console.log({ key });
 
 			// to create a session we need the pass the userId which is the id of the user in the database
 			const session = await auth.createSession({
 				userId: key.userId,
 				attributes: {}
 			});
-			// console.log({ session });
 
 			// now let's set the session so we can get the session everywhere in server like this page
 			locals.auth.setSession(session);
-		} catch (error) {
-			console.log({ error });
-			return fail(400, {
-				message: 'Invalid credentials'
-			});
+		} catch (e) {
+			if (e instanceof LuciaError && e.message === 'AUTH_INVALID_KEY_ID') {
+				return fail(400, {
+					message: 'Invalid credentials'
+				});
+			}
 		}
 
 		redirect(303, '/app');
