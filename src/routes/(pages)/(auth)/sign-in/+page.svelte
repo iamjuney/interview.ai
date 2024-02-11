@@ -89,7 +89,7 @@
 										id="remember_me"
 										name="remember_me"
 										type="checkbox"
-										class="size-4 rounded border-gray-300 text-primary focus:ring-primary"
+										class="size-4 rounded border-gray-300"
 										disabled={isLoading}
 									/>
 									<Label for="remember_me" class="ml-2 block text-sm">Remember me</Label>

@@ -24,7 +24,7 @@
 <ModeWatcher />
 <LayoutBackground />
 
-<div class="relative">
+<div class="relative accent-primary">
 	{@render children()}
 </div>
 
