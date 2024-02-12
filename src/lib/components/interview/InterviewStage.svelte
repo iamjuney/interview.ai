@@ -4,6 +4,8 @@
 	import { ArrowRight, Loader2, RefreshCw, ShieldQuestion } from 'lucide-svelte';
 	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
+	import { type PutBlobResult } from '@vercel/blob';
+	import { upload } from '@vercel/blob/client';
 
 	const unique_id = uuidv4();
 
@@ -127,13 +129,14 @@
 				type: 'video/webm'
 			});
 
-			// for now download the file
-			const url = URL.createObjectURL(videoFile);
-			const a = document.createElement('a');
-			a.href = url;
-			a.download = `${unique_id}.webm`;
-			a.click();
-			URL.revokeObjectURL(url);
+			const newBlob = (await upload(`recordings/${videoFile.name}`, videoFile, {
+				access: 'public',
+				handleUploadUrl: '/api/upload'
+			})) as PutBlobResult;
+
+			console.log(newBlob.url);
+
+			// upload video to vercel blob
 
 			// // set the status to reading
 			// status = 'Reading';

@@ -3,7 +3,7 @@
 	import { afterNavigate, goto } from '$app/navigation';
 	import { AlertDialog, Badge, Button, Collapsible } from '$lib/components';
 	import type { Question } from '$lib/types';
-	import { ArrowLeft, Inbox, PlayCircle, Timer, CircleDot, CheckCircle } from 'lucide-svelte';
+	import { ArrowLeft, CheckCircle, CircleDot, Inbox, PlayCircle, Timer } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -43,7 +43,7 @@
 		class="mb-2 flex w-full items-center justify-between rounded-md border border-border p-3 font-medium transition-all duration-200 hover:ml-3"
 		href="/app/questions/{q.slug}"
 		><div class="flex items-center text-left">
-			{#if q.answers}
+			{#if q.answers!.length > 0}
 				<CheckCircle size="20" class="flex-none text-accent" />
 			{:else}
 				<PlayCircle size="20" class="flex-none text-accent" />
