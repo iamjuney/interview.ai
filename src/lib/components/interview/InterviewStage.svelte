@@ -1,18 +1,19 @@
 <script lang="ts">
 	import { Button } from '$lib/components';
 	import type { Question } from '$lib/types';
+	import { type PutBlobResult } from '@vercel/blob';
+	import { upload } from '@vercel/blob/client';
 	import { ArrowRight, Loader2, RefreshCw, ShieldQuestion } from 'lucide-svelte';
 	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
-	import { type PutBlobResult } from '@vercel/blob';
-	import { upload } from '@vercel/blob/client';
 
 	const unique_id = uuidv4();
 
 	let { question } = $props<{ question: Question }>();
 
 	let countdown = $state(150);
-	let stream = $state<MediaStream | null>(null);
+	let screenStream = $state<MediaStream>();
+	let recordStream = $state<MediaStream>();
 	let videoRef = $state<HTMLVideoElement | null>(null);
 	let mediaRecorderRef = $state<MediaRecorder | null>(null);
 	let recordedChunks = $state<Blob[]>([]);
@@ -63,13 +64,17 @@
 	async function getStream() {
 		try {
 			cameraLoading = true;
-			stream = await navigator.mediaDevices.getUserMedia({
+			screenStream = await navigator.mediaDevices.getUserMedia({
+				video: true
+			});
+
+			recordStream = await navigator.mediaDevices.getUserMedia({
 				video: true,
 				audio: true
 			});
 
 			if (videoRef) {
-				videoRef.srcObject = stream;
+				videoRef.srcObject = screenStream;
 			}
 
 			cameraLoading = false;
@@ -80,8 +85,11 @@
 
 	// function to stop the camera stream
 	function stopStream() {
-		if (stream) {
-			stream.getTracks().forEach((track) => {
+		if (screenStream && recordStream) {
+			screenStream.getTracks().forEach((track) => {
+				track.stop();
+			});
+			recordStream.getTracks().forEach((track) => {
 				track.stop();
 			});
 			if (videoRef) videoRef.srcObject = null;
@@ -91,7 +99,7 @@
 	// function to handle the start of the recording
 	function handleStartCaptureClick() {
 		cameraRecording = true;
-		mediaRecorderRef = new MediaRecorder(stream!);
+		mediaRecorderRef = new MediaRecorder(recordStream!);
 		mediaRecorderRef.ondataavailable = (e) => {
 			recordedChunks.push(e.data);
 			console.log('chunk added.');
@@ -129,14 +137,21 @@
 				type: 'video/webm'
 			});
 
+			// download the videoFile
+			// const url = URL.createObjectURL(videoFile);
+			// const a = document.createElement('a');
+			// a.href = url;
+			// a.download = `${unique_id}.webm`;
+			// a.click();
+			// URL.revokeObjectURL(url);
+
+			// upload video to vercel blob
 			const newBlob = (await upload(`recordings/${videoFile.name}`, videoFile, {
 				access: 'public',
 				handleUploadUrl: '/api/upload'
 			})) as PutBlobResult;
 
 			console.log(newBlob.url);
-
-			// upload video to vercel blob
 
 			// // set the status to reading
 			// status = 'Reading';
