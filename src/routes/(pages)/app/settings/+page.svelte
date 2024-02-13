@@ -110,7 +110,7 @@
 								{:else}
 									<img
 										class="absolute bg-cover bg-center"
-										src="/poddle.webp"
+										src="/assets/poddle.webp"
 										alt="Poddle by Freepik"
 									/>
 								{/if}
@@ -141,7 +141,7 @@
 						{#if user.image}
 							<img class="bg-cover bg-center" src={user.image} alt="" />
 						{:else}
-							<img class="bg-cover bg-center" src="/poddle.webp" alt="" />
+							<img class="bg-cover bg-center" src="/assets/poddle.webp" alt="" />
 						{/if}
 						<label
 							for="desktop_user_photo"

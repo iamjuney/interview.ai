@@ -36,7 +36,10 @@ export const POST: RequestHandler = async ({ request }) => {
 			return json({ error: 'Inappropriate content detected. Please try again.' }, { status: 400 });
 		}
 	} catch (error) {
-		return json({ error: (error as Error).message }, { status: 400 });
+		return json(
+			{ error: 'An error occurred while transcribing the audio. Please try again.' },
+			{ status: 400 }
+		);
 	}
 
 	return json({ transcript: transcript }, { status: 200 });

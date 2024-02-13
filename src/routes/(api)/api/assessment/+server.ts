@@ -11,9 +11,12 @@ export const config = {
 	runtime: 'edge'
 };
 
-export const GET: RequestHandler = async ({ request }) => {
+export const POST: RequestHandler = async ({ request }) => {
 	// Get the video URL from the request
-	const { audioUrl, transcript, duration } = await request.json();
+	const form = await request.formData();
+	const audioUrl = form.get('file') as File;
+	const duration = form.get('duration') as string;
+	const transcript = form.get('transcript') as string;
 
 	const audioConfig = sdk.AudioConfig.fromWavFileInput(audioUrl);
 	const pronunciationAssessmentConfig = new sdk.PronunciationAssessmentConfig(
@@ -39,7 +42,7 @@ export const GET: RequestHandler = async ({ request }) => {
 
 	// calculate the wpm
 	const words = transcript.split(' ').length;
-	const wpm = Math.round(words / (duration / 60));
+	const wpm = Math.round(words / (Number(duration) / 60));
 
 	return json(
 		{

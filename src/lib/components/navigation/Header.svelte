@@ -15,7 +15,7 @@
 	let isOpen = $state(false);
 </script>
 
-<header>
+<header class="absolute top-0 z-20 w-full">
 	<nav class="container flex items-center justify-between p-6" aria-label="Global">
 		<div class="flex lg:flex-1">
 			<Logo />
@@ -60,8 +60,8 @@
 				<DropdownMenu.Content align="end">
 					<DropdownMenu.Label>Theme</DropdownMenu.Label>
 					<DropdownMenu.Separator />
-					<DropdownMenu.Item on:click={() => setMode('light')}>Blue</DropdownMenu.Item>
-					<DropdownMenu.Item on:click={() => setMode('dark')}>Gold</DropdownMenu.Item>
+					<DropdownMenu.Item on:click={() => setMode('light')}>Light</DropdownMenu.Item>
+					<DropdownMenu.Item on:click={() => setMode('dark')}>Dark</DropdownMenu.Item>
 					<DropdownMenu.Item on:click={() => resetMode()}>Default</DropdownMenu.Item>
 				</DropdownMenu.Content>
 			</DropdownMenu.Root>
