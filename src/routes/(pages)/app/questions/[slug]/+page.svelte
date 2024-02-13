@@ -30,7 +30,7 @@
 	};
 </script>
 
-<InterviewAssessment bind:isOpen />
+<InterviewAssessment bind:isOpen answer={data.answers[0]} />
 
 {#if animate}
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>

@@ -208,5 +208,9 @@ export const answerRelation = relations(answer, ({ one }) => ({
 	question: one(question, {
 		fields: [answer.questionId],
 		references: [question.id]
+	}),
+	user: one(user, {
+		fields: [answer.userId],
+		references: [user.id]
 	})
 }));

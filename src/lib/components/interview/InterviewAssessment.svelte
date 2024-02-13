@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Button, Badge } from '$lib/components';
+	import type { Answer } from '$lib/types';
 	import { X, Trash2, Loader2 } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -9,7 +10,7 @@
 		easing: backOut
 	};
 
-	let { isOpen, assessment } = $props<{ isOpen: boolean; assessment?: any }>();
+	let { isOpen, answer } = $props<{ isOpen: boolean; answer?: Answer }>();
 </script>
 
 {#if isOpen}
@@ -61,7 +62,7 @@
 										crossorigin="anonymous"
 										controls
 									>
-										<source src="" type="video/mp4" />
+										<source src={answer?.videoUrl} type="video/mp4" />
 										<track kind="captions" />
 										Your browser does not support the video tag.
 									</video>
@@ -87,14 +88,7 @@
 								<div class="flex flex-col">
 									<p class="font-medium">Transcript</p>
 									<p class="mt-2 text-sm leading-6">
-										In early 2020, several small businesses were struggling with sudden, but
-										necessary, pandemic restrictions. My co-workers and I then decided to create
-										volunteer consulting teams to offer free support to these local businesses in
-										navigating the early months of lockdown. I analyzed their financials and
-										developed a robust emergency action plan to increase revenue, including the idea
-										of keeping track of recurring medicines sold by the pet store, and calling
-										clients to remind them of renewal time. Our client saw a revenue increase of 65%
-										after implementing our recommendations.
+										{answer?.answer}
 									</p>
 								</div>
 

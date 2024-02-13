@@ -7,15 +7,17 @@
 	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
 
-	const unique_id = uuidv4();
-
 	let { question } = $props<{ question: Question }>();
+	const uniqueId = uuidv4();
 
 	let countdown = $state(150);
 	let screenStream = $state<MediaStream>();
+	let audioStream = $state<MediaStream>();
 	let recordStream = $state<MediaStream>();
-	let videoRef = $state<HTMLVideoElement | null>(null);
-	let mediaRecorderRef = $state<MediaRecorder | null>(null);
+	let videoRef = $state<HTMLVideoElement>();
+	let audioRecorderRef = $state<MediaRecorder>();
+	let mediaRecorderRef = $state<MediaRecorder>();
+	let audioChunks = $state<Blob[]>([]);
 	let recordedChunks = $state<Blob[]>([]);
 	let cameraLoading = $state(true);
 	let cameraLoaded = $state(true);
@@ -26,8 +28,8 @@
 	let completed = $state(false);
 	let errorMessage = $state('');
 
-	let videoFile = $state<File | null>(null);
-	let audioFile = $state<File | null>(null);
+	let videoFile = $state<File>();
+	let audioFile = $state<File>();
 	let transcript = $state('');
 	let generatedFeedback = $state('');
 	let assessmentData = $state<any>(null);
@@ -68,6 +70,10 @@
 				video: true
 			});
 
+			audioStream = await navigator.mediaDevices.getUserMedia({
+				audio: true
+			});
+
 			recordStream = await navigator.mediaDevices.getUserMedia({
 				video: true,
 				audio: true
@@ -85,8 +91,8 @@
 
 	// function to stop the camera stream
 	function stopStream() {
-		if (screenStream && recordStream) {
-			screenStream.getTracks().forEach((track) => {
+		if (audioStream && recordStream) {
+			audioStream.getTracks().forEach((track) => {
 				track.stop();
 			});
 			recordStream.getTracks().forEach((track) => {
@@ -99,16 +105,25 @@
 	// function to handle the start of the recording
 	function handleStartCaptureClick() {
 		cameraRecording = true;
+
+		audioRecorderRef = new MediaRecorder(audioStream!);
 		mediaRecorderRef = new MediaRecorder(recordStream!);
+
+		audioRecorderRef.ondataavailable = (e) => {
+			audioChunks.push(e.data);
+		};
+
 		mediaRecorderRef.ondataavailable = (e) => {
 			recordedChunks.push(e.data);
-			console.log('chunk added.');
 		};
+
+		audioRecorderRef.start();
 		mediaRecorderRef.start();
 	}
 
 	// function to handle the stop of the recording
 	function handleStopCaptureClick() {
+		audioRecorderRef?.stop();
 		mediaRecorderRef?.stop();
 		cameraRecording = false;
 		countdown = 0;
@@ -116,79 +131,94 @@
 
 	// function to handle the restart of the recording
 	function handleRestartClick() {
+		audioChunks = [];
 		recordedChunks = [];
 		countdown = 150;
 	}
 
 	// function to handle the processing of the recording
+	function convertingProcess() {
+		// set the status to converting
+		status = 'Converting';
+
+		const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
+		const recordBlob = new Blob(recordedChunks, { type: 'video/webm' });
+
+		// create files from the blobs
+		audioFile = new File([audioBlob], `${uniqueId}.webm`, { type: 'audio/webm' });
+		videoFile = new File([recordBlob], `video.webm`, { type: 'video/webm' });
+	}
+
+	// function to handle the processing of the recording
 	async function handleProcessClick() {
-		if (recordedChunks.length) {
+		if (audioChunks.length && recordedChunks.length) {
 			isSubmitting = true;
 
-			// set the status to converting
-			status = 'Converting';
+			convertingProcess();
 
-			const blob = new Blob(recordedChunks, {
-				type: 'video/webm'
-			});
-
-			// create a file from the blob
-			videoFile = new File([blob], `${unique_id}.webm`, {
-				type: 'video/webm'
-			});
-
-			// download the videoFile
-			// const url = URL.createObjectURL(videoFile);
-			// const a = document.createElement('a');
-			// a.href = url;
-			// a.download = `${unique_id}.webm`;
-			// a.click();
-			// URL.revokeObjectURL(url);
+			// set the status to uploading
+			// status = 'Uploading';
 
 			// upload video to vercel blob
-			const newBlob = (await upload(`recordings/${videoFile.name}`, videoFile, {
-				access: 'public',
-				handleUploadUrl: '/api/upload'
-			})) as PutBlobResult;
+			// const newBlob = (await upload(`recordings/${videoFile.name}`, videoFile, {
+			// 	access: 'public',
+			// 	handleUploadUrl: '/api/upload'
+			// })) as PutBlobResult;
 
-			console.log(newBlob.url);
+			// set the status to transcribing
+			status = 'Transcribing';
 
-			// // set the status to reading
-			// status = 'Reading';
+			const transcribeForm = new FormData();
+			if (audioFile) {
+				transcribeForm.append('file', audioFile, audioFile.name);
+				transcribeForm.append('model', 'whisper-1');
+			}
 
-			// const transcribeForm = new FormData();
-			// transcribeForm.append('videoFile', videoFile, `${unique_id}.webm`);
+			const transcribeUpload = await fetch('/api/transcribe', {
+				method: 'POST',
+				body: transcribeForm
+			});
 
-			// // set the status to transcribing
-			// status = 'Transcribing';
+			// set the status to error if the upload status is not 200
+			if (transcribeUpload.status !== 200) {
+				status = 'Error';
+				errorMessage = 'An error occurred while transcribing the audio. Please try again.';
+				return;
+			}
 
-			// const transcribeUpload = await fetch(`/api/transcribe`, {
-			// 	method: 'POST',
-			// 	body: transcribeForm
-			// });
+			const transcribeResults = await transcribeUpload.json();
 
-			// // set the status to error if the upload status is not 200
-			// if (transcribeUpload.status !== 200) {
-			// 	status = 'Error';
-			// 	errorMessage = 'An error occurred while transcribing the audio. Please try again.';
-			// 	return;
-			// }
+			if (transcribeResults.error) {
+				status = 'Error';
+				isSubmitting = false;
+				errorMessage = transcribeResults.error;
+				return;
+			}
 
-			// const transcribeResults = await transcribeUpload.json();
+			transcript = transcribeResults.transcript;
 
-			// isSuccess = true;
-			// isSubmitting = false;
+			const prompt = `Please give feedback on the following interview question: ${question} given the following transcript: ${transcript}`;
 
-			// if (transcribeResults.error) {
-			// 	status = 'Error';
-			// 	isSubmitting = false;
-			// 	errorMessage = transcribeResults.error;
-			// 	stopStream();
-			// 	handleStopCaptureClick();
-			// 	return;
-			// }
+			// set the status to chatting
+			status = 'Generating Feedback';
 
-			// transcript = transcribeResults.transcript;
+			const chatUpload = await fetch(`/api/chat`, {
+				method: 'POST',
+				body: JSON.stringify({ prompt }),
+				headers: {
+					'Content-Type': 'application/json'
+				}
+			});
+
+			// set the status to error if the upload status is not 200
+			if (chatUpload.status !== 200) {
+				status = 'Error';
+				errorMessage = 'An error occurred while generating feedback. Please try again.';
+				return;
+			}
+
+			const chatResults = await chatUpload.json();
+			generatedFeedback = chatResults.feedback;
 
 			// const assessmentForm = new FormData();
 			// assessmentForm.append('transcript', transcript);
@@ -211,30 +241,6 @@
 			// const assessmentResults = await assessmentUpload.json();
 			// assessmentData = assessmentResults.assessment;
 
-			// const chatForm = new FormData();
-			// chatForm.append('prompt', transcript);
-
-			// // set the status to chatting
-			// status = 'Generating Feedback';
-
-			// const chatUpload = await fetch(`/api/chat`, {
-			// 	method: 'POST',
-			// 	body: chatForm
-			// });
-
-			// // set the status to error if the upload status is not 200
-			// if (chatUpload.status !== 200) {
-			// 	status = 'Error';
-			// 	errorMessage = 'An error occurred while generating feedback. Please try again.';
-			// 	return;
-			// }
-
-			// const chatResults = await chatUpload.json();
-			// generatedFeedback = chatResults.feedback;
-
-			// // set the status to completed
-			// status = 'Completed';
-
 			// const assessmentChuchu = {
 			// 	feedback: generatedFeedback,
 			// 	wpm: assessmentData.wpm,
@@ -245,6 +251,13 @@
 			// };
 
 			// console.log(assessmentChuchu);
+
+			// status = 'Completed';
+
+			// isSuccess = true;
+			// isSubmitting = false;
+
+			// // set the status to completed
 
 			// // reset the recording after 1.5 seconds
 			// setTimeout(function () {

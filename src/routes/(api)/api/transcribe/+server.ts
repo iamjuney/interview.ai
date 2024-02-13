@@ -1,7 +1,8 @@
-import { OPENAI_API_KEY } from '$env/static/private';
+import { OPENAI_API_KEY, OPENAI_API_ORG } from '$env/static/private';
 import { json } from '@sveltejs/kit';
-import OpenAI from 'openai';
+import OpenAI, { toFile } from 'openai';
 import type { RequestHandler } from './$types';
+import axios from 'axios';
 
 export const config = {
 	runtime: 'edge'
@@ -9,28 +10,34 @@ export const config = {
 
 // Create an OpenAI API client
 const openai = new OpenAI({
-	apiKey: OPENAI_API_KEY || ''
+	apiKey: OPENAI_API_KEY,
+	organization: OPENAI_API_ORG
 });
 
 export const POST: RequestHandler = async ({ request }) => {
-	const { videoURl } = await request.json();
+	const form = await request.formData();
+	let transcript = '';
 
-	// Ask OpenAI to transcribe the video
-	const transcribeRes = await openai.audio.transcriptions.create({
-		model: 'whisper-1',
-		file: videoURl,
-		response_format: 'text'
-	});
+	try {
+		const transcribeRes = await axios.post('https://api.openai.com/v1/audio/transcriptions', form, {
+			headers: {
+				'Content-Type': 'multipart/form-data',
+				Authorization: `Bearer ${OPENAI_API_KEY}`
+			}
+		});
 
-	const transcript = transcribeRes.text;
+		transcript = transcribeRes.data.text;
 
-	const moderationRes = await openai.moderations.create({
-		input: transcript
-	});
+		const moderationRes = await openai.moderations.create({
+			input: transcript
+		});
 
-	if (moderationRes.results[0].flagged) {
-		return json({ error: 'Inappropriate content detected. Please try again.' }, { status: 400 });
+		if (moderationRes.results[0].flagged) {
+			return json({ error: 'Inappropriate content detected. Please try again.' }, { status: 400 });
+		}
+	} catch (error) {
+		return json({ error: (error as Error).message }, { status: 400 });
 	}
 
-	return json({ transcript }, { status: 200 });
+	return json({ transcript: transcript }, { status: 200 });
 };

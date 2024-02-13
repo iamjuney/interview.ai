@@ -2,6 +2,7 @@ import { OPENAI_API_KEY } from '$env/static/private';
 import { OpenAIStream, StreamingTextResponse } from 'ai';
 import OpenAI from 'openai';
 import type { RequestHandler } from './$types';
+import { json } from '@sveltejs/kit';
 
 export const config = {
 	runtime: 'edge'
@@ -13,13 +14,12 @@ const openai = new OpenAI({
 });
 
 export const POST = (async ({ request }) => {
-	// Extract the `prompt` from the body of the request
 	const { prompt } = await request.json();
 
 	// Ask OpenAI for a streaming chat completion given the prompt
 	const response = await openai.chat.completions.create({
-		model: 'gpt-3.5-turbo',
-		stream: true,
+		model: 'gpt-3.5-turbo-0125',
+		stream: false,
 		messages: [
 			{
 				role: 'system',
@@ -30,8 +30,6 @@ export const POST = (async ({ request }) => {
 		]
 	});
 
-	// Convert the response into a friendly text-stream
-	const stream = OpenAIStream(response);
-	// Respond with the stream
-	return new StreamingTextResponse(stream);
+	// Return the response from OpenAI
+	return json({ feedback: response.choices[0].message.content }, { status: 200 });
 }) satisfies RequestHandler;

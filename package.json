@@ -51,6 +51,7 @@
 		"@vercel/blob": "^0.21.0",
 		"@vercel/postgres": "^0.7.2",
 		"ai": "^2.2.33",
+		"axios": "^1.6.7",
 		"bits-ui": "^0.16.0",
 		"clsx": "^2.1.0",
 		"drizzle-orm": "^0.29.3",
