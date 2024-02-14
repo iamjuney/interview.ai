@@ -1,21 +1,20 @@
 <script lang="ts">
 	import { Button } from '$lib/components';
 	import type { Question } from '$lib/types';
+	import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
 	import { ArrowRight, Loader2, RefreshCw, ShieldQuestion } from 'lucide-svelte';
 	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
-	import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
-
-	const ffmpeg = createFFmpeg({
-		corePath: `/ffmpeg/dist/ffmpeg-core.js`
-		// I've included a default import above (and files in the public directory), but you can also use a CDN like this:
-		// corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js'
-		// corePath: 'https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js'
-		// log: true,
-	});
 
 	let { question } = $props<{ question: Question }>();
 	const uniqueId = uuidv4();
+
+	const ffmpeg = createFFmpeg({
+		// corePath: `/ffmpeg/dist/ffmpeg-core.js`
+		// I've included a default import above (and files in the public directory), but you can also use a CDN like this:
+		corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js'
+		// log: true,
+	});
 
 	let countdown = $state(150);
 	let screenStream = $state<MediaStream>();
@@ -41,25 +40,11 @@
 	let generatedFeedback = $state('');
 	let assessmentData = $state<any>(null);
 
-	async function loadFFmpeg() {
-		if (!ffmpeg.isLoaded()) {
-			await ffmpeg.load();
-		}
-	}
-
-	async function convertToWav(file: File) {
-		await loadFFmpeg();
-		ffmpeg.FS('writeFile', file.name, await fetchFile(file));
-		await ffmpeg.run('-i', file.name, '-ac', '1', '-ar', '16000', 'output.wav');
-		const data = ffmpeg.FS('readFile', 'output.wav');
-		return new File([data.buffer], 'output.wav', { type: 'audio/wav' });
-	}
-
 	// handles the camera stream
 	$effect(() => {
 		untrack(async () => {
 			await getStream();
-			await loadFFmpeg();
+			await ffmpeg?.load();
 		});
 
 		return () => {
@@ -243,13 +228,16 @@
 		const words = transcript.split(' ').length;
 		const wpm = Math.round(words / (Number(duration) / 60));
 
-		if (audioFile) {
-			const wavFile = await convertToWav(audioFile);
+		const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
 
-			form.append('file', wavFile, wavFile.name);
-			form.append('transcript', transcript);
-			form.append('duration', duration.toString());
-		}
+		ffmpeg.FS('writeFile', `${uniqueId}.webm`, await fetchFile(audioBlob));
+		await ffmpeg.run('-i', `${uniqueId}.webm`, 'output.wav');
+		const data = ffmpeg.FS('readFile', 'output.wav');
+		const wavFile = new File([data.buffer], 'output.wav', { type: 'audio/wav' });
+
+		form.append('file', wavFile, wavFile.name);
+		form.append('transcript', transcript);
+		form.append('duration', duration.toString());
 
 		const upload = await fetch(`/api/assessment`, {
 			method: 'POST',
