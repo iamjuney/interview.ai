@@ -37,7 +37,7 @@
 		</div>
 	</div>
 	<div>
-		<div class="mb-2 flex items-center space-x-2 font-medium">
+		<div class="mb-2 flex items-center space-x-2 text-sm font-medium md:text-base">
 			<span class="flex items-center">
 				<Inbox class="mr-2 size-4 text-primary group-hover:text-secondary-foreground" />
 				{questions.length} questions

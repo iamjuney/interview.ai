@@ -32,11 +32,6 @@
 				<Menu class="size-6" />
 			</Button>
 		</div>
-		<div class="hidden lg:flex lg:gap-x-12">
-			<a href="/" class="text-sm font-semibold leading-6">Features</a>
-			<a href="/" class="text-sm font-semibold leading-6">Use Cases</a>
-			<a href="/" class="text-sm font-semibold leading-6">About</a>
-		</div>
 		<div class="hidden space-x-2 lg:flex lg:flex-1 lg:items-center lg:justify-end">
 			{#if session}
 				<Button href="/app">Go to Dashboard</Button>
@@ -84,23 +79,6 @@
 				</div>
 				<div class="mt-6 flow-root">
 					<div class="-my-6 divide-y divide-gray-500/10">
-						<div class="space-y-2 py-6">
-							<a
-								href="/"
-								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 hover:bg-gray-50"
-								>Features</a
-							>
-							<a
-								href="/"
-								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 hover:bg-gray-50"
-								>Use Cases</a
-							>
-							<a
-								href="/"
-								class="-mx-3 block rounded-lg px-3 py-2 text-base font-semibold leading-7 hover:bg-gray-50"
-								>About</a
-							>
-						</div>
 						<div class="py-6">
 							<a
 								href="/sign-in"
