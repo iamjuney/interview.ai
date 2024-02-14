@@ -4,6 +4,15 @@
 	import { ArrowRight, Loader2, RefreshCw, ShieldQuestion } from 'lucide-svelte';
 	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
+	import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
+
+	const ffmpeg = createFFmpeg({
+		corePath: `/ffmpeg/dist/ffmpeg-core.js`
+		// I've included a default import above (and files in the public directory), but you can also use a CDN like this:
+		// corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js'
+		// corePath: 'https://unpkg.com/@ffmpeg/core@0.10.0/dist/ffmpeg-core.js'
+		// log: true,
+	});
 
 	let { question } = $props<{ question: Question }>();
 	const uniqueId = uuidv4();
@@ -32,12 +41,25 @@
 	let generatedFeedback = $state('');
 	let assessmentData = $state<any>(null);
 
+	async function loadFFmpeg() {
+		if (!ffmpeg.isLoaded()) {
+			await ffmpeg.load();
+		}
+	}
+
+	async function convertToWav(file: File) {
+		await loadFFmpeg();
+		ffmpeg.FS('writeFile', file.name, await fetchFile(file));
+		await ffmpeg.run('-i', file.name, '-ac', '1', '-ar', '16000', 'output.wav');
+		const data = ffmpeg.FS('readFile', 'output.wav');
+		return new File([data.buffer], 'output.wav', { type: 'audio/wav' });
+	}
+
 	// handles the camera stream
 	$effect(() => {
-		untrack(() => {
-			(async () => {
-				await getStream();
-			})();
+		untrack(async () => {
+			await getStream();
+			await loadFFmpeg();
 		});
 
 		return () => {
@@ -89,7 +111,10 @@
 
 	// function to stop the camera stream
 	function stopStream() {
-		if (audioStream && recordStream) {
+		if (screenStream && audioStream && recordStream) {
+			screenStream.getTracks().forEach((track) => {
+				track.stop();
+			});
 			audioStream.getTracks().forEach((track) => {
 				track.stop();
 			});
@@ -123,6 +148,7 @@
 	function handleStopCaptureClick() {
 		audioRecorderRef?.stop();
 		mediaRecorderRef?.stop();
+
 		cameraRecording = false;
 		countdown = 0;
 	}
@@ -213,8 +239,14 @@
 		const form = new FormData();
 		const duration = audioChunks.length / 44100;
 
+		// calculate the wpm
+		const words = transcript.split(' ').length;
+		const wpm = Math.round(words / (Number(duration) / 60));
+
 		if (audioFile) {
-			form.append('file', audioFile, audioFile.name);
+			const wavFile = await convertToWav(audioFile);
+
+			form.append('file', wavFile, wavFile.name);
 			form.append('transcript', transcript);
 			form.append('duration', duration.toString());
 		}
@@ -239,7 +271,7 @@
 
 		const assessmentChuchu = {
 			feedback: generatedFeedback,
-			wpm: assessmentData.wpm,
+			wpm: wpm,
 			accuracy: assessmentData.NBest[0]?.PronunciationAssessment?.AccuracyScore,
 			fluency: assessmentData.NBest[0]?.PronunciationAssessment?.FluencyScore,
 			pronunciation: assessmentData.NBest[0]?.PronunciationAssessment?.PronScore,
@@ -283,6 +315,12 @@
 		}
 	}
 </script>
+
+<svelte:window
+	on:beforeunload={() => {
+		stopStream();
+	}}
+/>
 
 {#if cameraLoaded}
 	<div
