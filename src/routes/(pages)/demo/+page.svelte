@@ -96,7 +96,7 @@
 			<h2 class="mb-4 text-left text-2xl font-semibold">
 				{questions[0]}
 			</h2>
-			<InterviewStage {questions} />
+			<!-- <InterviewStage user={data.user} {questions} /> -->
 		</div>
 	{/if}
 {/if}
