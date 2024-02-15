@@ -4,13 +4,18 @@ settings:
   autoInstallPeers: true
   excludeLinksFromLockfile: false
 
+patchedDependencies:
+  '@ffmpeg/util@0.12.1':
+    hash: jmvtu6rmnhxvos2ceaap65unle
+    path: patches/@ffmpeg__util@0.12.1.patch
+
 dependencies:
-  '@ffmpeg/core':
-    specifier: ^0.11.0
-    version: 0.11.0
   '@ffmpeg/ffmpeg':
-    specifier: ^0.11.6
-    version: 0.11.6
+    specifier: '*'
+    version: 0.12.10
+  '@ffmpeg/util':
+    specifier: '*'
+    version: 0.12.1(patch_hash=jmvtu6rmnhxvos2ceaap65unle)
   '@lucia-auth/adapter-postgresql':
     specifier: ^2.0.2
     version: 2.0.2(lucia@2.7.7)(pg@8.11.3)
@@ -44,6 +49,9 @@ dependencies:
   install:
     specifier: ^0.13.0
     version: 0.13.0
+  lodash:
+    specifier: ^4.17.21
+    version: 4.17.21
   lucia:
     specifier: ^2.7.6
     version: 2.7.7
@@ -106,6 +114,9 @@ devDependencies:
   '@types/formidable':
     specifier: ^3.4.5
     version: 3.4.5
+  '@types/lodash':
+    specifier: ^4.14.202
+    version: 4.14.202
   '@types/uuid':
     specifier: ^9.0.8
     version: 9.0.8
@@ -648,21 +659,23 @@ packages:
     engines: {node: '>=14'}
     dev: false
 
-  /@ffmpeg/core@0.11.0:
-    resolution: {integrity: sha512-9Tt/+2PMpkGPXUK8n6He9G8Y+qR6qmCPSCw9iEKZxHHOvJ9BE/r0Fccj+YgDZTlyu6rXxc9x6EqCaFBIt7qzjA==}
+  /@ffmpeg/ffmpeg@0.12.10:
+    resolution: {integrity: sha512-lVtk8PW8e+NUzGZhPTWj2P1J4/NyuCrbDD3O9IGpSeLYtUZKBqZO8CNj1WYGghep/MXoM8e1qVY1GztTkf8YYQ==}
+    engines: {node: '>=18.x'}
+    dependencies:
+      '@ffmpeg/types': 0.12.2
     dev: false
 
-  /@ffmpeg/ffmpeg@0.11.6:
-    resolution: {integrity: sha512-uN8J8KDjADEavPhNva6tYO9Fj0lWs9z82swF3YXnTxWMBoFLGq3LZ6FLlIldRKEzhOBKnkVfA8UnFJuvGvNxcA==}
-    engines: {node: '>=12.16.1'}
-    dependencies:
-      is-url: 1.2.4
-      node-fetch: 2.7.0
-      regenerator-runtime: 0.13.11
-      resolve-url: 0.2.1
-    transitivePeerDependencies:
-      - encoding
+  /@ffmpeg/types@0.12.2:
+    resolution: {integrity: sha512-NJtxwPoLb60/z1Klv0ueshguWQ/7mNm106qdHkB4HL49LXszjhjCCiL+ldHJGQ9ai2Igx0s4F24ghigy//ERdA==}
+    engines: {node: '>=16.x'}
     dev: false
+
+  /@ffmpeg/util@0.12.1(patch_hash=jmvtu6rmnhxvos2ceaap65unle):
+    resolution: {integrity: sha512-10jjfAKWaDyb8+nAkijcsi9wgz/y26LOc1NKJradNMyCIl6usQcBbhkjX5qhALrSBcOy6TOeksunTYa+a03qNQ==}
+    engines: {node: '>=18.x'}
+    dev: false
+    patched: true
 
   /@floating-ui/core@1.6.0:
     resolution: {integrity: sha512-PcF++MykgmTj3CIyOQbKA/hDzOAiqI3mhuoN44WRCopIs1sgoDoU4oty4Jtqaj/y3oDU6fnVSm4QG0a3t5i0+g==}
@@ -1335,6 +1348,10 @@ packages:
     resolution: {integrity: sha512-s7YPsNVfnsng5L8sKnG/Gbb2tiwwJTY1conOkJzTMRvJAlLFW1nEua+ADsJQu8N1c0oTHx9+d5nqg10WuT9gHQ==}
     dependencies:
       '@types/node': 20.11.16
+    dev: true
+
+  /@types/lodash@4.14.202:
+    resolution: {integrity: sha512-OvlIYQK9tNneDlS0VN54LLd5uiPCBOp7gS5Z0f1mjoJYBrtStzgmJBxONW3U6OZqdtNzZPmn9BS/7WI7BFFcFQ==}
     dev: true
 
   /@types/node-fetch@2.6.11:
@@ -2615,10 +2632,6 @@ packages:
     engines: {node: '>=8'}
     dev: false
 
-  /is-url@1.2.4:
-    resolution: {integrity: sha512-ITvGim8FhRiYe4IQ5uHSkj7pVaPDrCTkNd3yq3cV7iZAcJdHTUMPMEHcqSOy9xZ9qFenQCvi+2wjH9a1nXqHww==}
-    dev: false
-
   /is-what@4.1.16:
     resolution: {integrity: sha512-ZhMwEosbFJkA0YhFnNDgTM4ZxDRsS6HqTo7qsZM08fehyRYIYa0yHu5R6mgo1n/8MgaPBXiPimPD77baVFYg+A==}
     engines: {node: '>=12.13'}
@@ -2687,6 +2700,10 @@ packages:
   /lodash.throttle@4.1.1:
     resolution: {integrity: sha512-wIkUCfVKpVsWo3JSZlc+8MB5it+2AN5W8J7YVMST30UrvcQNZ1Okbj+rbVniijTWE6FGYy4XJq/rHkas8qJMLQ==}
     dev: true
+
+  /lodash@4.17.21:
+    resolution: {integrity: sha512-v2kDEe57lecTulaDIuNTPy3Ry4gLGJ6Z1O3vE1krgXZNrsQ+LFTGHVxVjcXPs17LhbZVGedAJv8XZ1tvj5FvSg==}
+    dev: false
 
   /loose-envify@1.4.0:
     resolution: {integrity: sha512-lyuxPGr/Wfhrlem2CL/UcnUc1zcqKAImBDzukY7Y5F/yQiNdko6+fRLevlw1HgMySw7f611UIY408EtxRSoK3Q==}
@@ -3366,10 +3383,6 @@ packages:
     dependencies:
       picomatch: 2.3.1
 
-  /regenerator-runtime@0.13.11:
-    resolution: {integrity: sha512-kY1AZVr2Ra+t+piVaJ4gxaFaReZVH40AKNo7UCX6W+dEwBo/2oZJzqfuN1qLq1oL45o56cPaTXELwrTh8Fpggg==}
-    dev: false
-
   /regenerator-runtime@0.14.1:
     resolution: {integrity: sha512-dYnhHh0nJoMfnkZs6GmmhFknAGRrLznOu5nc9ML+EJxGvrx6H7teuevqVqCuPcPK//3eDrrjQhehXVx9cnkGdw==}
     dev: false
@@ -3386,11 +3399,6 @@ packages:
 
   /resolve-pkg-maps@1.0.0:
     resolution: {integrity: sha512-seS2Tj26TBVOC2NIc2rOe2y2ZO7efxITtLZcGSOnHHNOQ7CkiUBfw0Iw2ck6xkIhPwLhKNLS8BO+hEpngQlqzw==}
-
-  /resolve-url@0.2.1:
-    resolution: {integrity: sha512-ZuF55hVUQaaczgOIwqWzkEcEidmlD/xl44x1UZnhOXcYuFN2S6+rcxpG+C1N3So0wvNI3DmJICUFfu2SxhBmvg==}
-    deprecated: https://github.com/lydell/resolve-url#deprecated
-    dev: false
 
   /resolve@1.22.8:
     resolution: {integrity: sha512-oKWePCxqpd6FlLvGV1VU0x7bkPmmCNolxzjMf4NczoDnQcIWrAF+cPtZn5i6n+RfD2d9i0tzpKnG6Yk168yIyw==}

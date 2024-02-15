@@ -7,6 +7,7 @@ import {
 	text,
 	uniqueIndex,
 	integer,
+    real,
 	json,
 	pgEnum
 } from 'drizzle-orm/pg-core';
@@ -168,11 +169,12 @@ export const assessment = pgTable('assessments', {
 		.notNull()
 		.references(() => answer.id, { onDelete: 'cascade' }),
 	feedback: text('feedback').notNull(),
-	wpm: integer('wpm').notNull(),
-	accuracy: integer('accuracy').notNull(),
-	pronunciation: integer('pronunciation').notNull(),
-	fluency: integer('fluency').notNull(),
-	mispronunciation: integer('mispronunciation').notNull(),
+	wpm: real('wpm').notNull(),
+	accuracy_score: real('accuracy').notNull(),
+	pronunciation_score: real('pronunciation').notNull(),
+	fluency_score: real('fluency').notNull(),
+    prosody_score: real('prosody').notNull(),
+    mispronunciations: integer('mispronunciations').notNull(),
 	data: json('data').default({})
 });
 

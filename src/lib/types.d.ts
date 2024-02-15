@@ -1,3 +1,12 @@
+export type PronunciationAssessmentResult = {
+	mispronunciations: number;
+	accuracyScore: number;
+	pronunciationScore: number;
+	fluencyScore: number;
+	prosodyScore: number;
+	detailResult: Word[];
+};
+
 export type Interview = {
 	id: string;
 	createdAt: Date;

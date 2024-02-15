@@ -1,21 +1,18 @@
 <script lang="ts">
 	import { Button } from '$lib/components';
-	import type { Question } from '$lib/types';
-	import { createFFmpeg, fetchFile } from '@ffmpeg/ffmpeg';
-	import { ArrowRight, Loader2, RefreshCw, ShieldQuestion } from 'lucide-svelte';
+	import type { PronunciationAssessmentResult, Question } from '$lib/types';
+	import { FFmpeg } from '@ffmpeg/ffmpeg';
+	import { fetchFile, toBlobURL } from '@ffmpeg/util';
+	import type { PutBlobResult } from '@vercel/blob';
+	import { upload } from '@vercel/blob/client';
+	import { ArrowRight, Loader2, RefreshCw, ShieldQuestion, Check } from 'lucide-svelte';
 	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
 
 	let { question } = $props<{ question: Question }>();
 	const uniqueId = uuidv4();
 
-	const ffmpeg = createFFmpeg({
-		// corePath: `/ffmpeg/dist/ffmpeg-core.js`
-		// I've included a default import above (and files in the public directory), but you can also use a CDN like this:
-		corePath: 'https://unpkg.com/@ffmpeg/core@0.11.0/dist/ffmpeg-core.js'
-		// log: true,
-	});
-
+	let ffmpeg = $state(new FFmpeg());
 	let countdown = $state(150);
 	let screenStream = $state<MediaStream>();
 	let audioStream = $state<MediaStream>();
@@ -38,13 +35,13 @@
 	let audioFile = $state<File>();
 	let transcript = $state('');
 	let generatedFeedback = $state('');
-	let assessmentData = $state<any>(null);
+	let assessmentData = $state<PronunciationAssessmentResult>();
 
 	// handles the camera stream
 	$effect(() => {
 		untrack(async () => {
 			await getStream();
-			await ffmpeg?.load();
+			await loadFFmpeg();
 		});
 
 		return () => {
@@ -110,6 +107,34 @@
 		}
 	}
 
+	// function to load ffmpeg
+	async function loadFFmpeg() {
+		const baseURL = 'https://unpkg.com/@ffmpeg/core@0.12.6/dist/esm';
+
+		await ffmpeg.load({
+			coreURL: await toBlobURL(`${baseURL}/ffmpeg-core.js`, 'text/javascript'),
+			wasmURL: await toBlobURL(`${baseURL}/ffmpeg-core.wasm`, 'application/wasm')
+		});
+	}
+
+	async function convertToWav(file: File) {
+		await ffmpeg.writeFile('input.webm', await fetchFile(file));
+		await ffmpeg.exec([
+			'-i',
+			'input.webm',
+			'-c:a',
+			'pcm_s16le',
+			'-ar',
+			'16000',
+			'-ac',
+			'1',
+			'output.wav'
+		]);
+
+		const data = (await ffmpeg.readFile('output.wav')) as Uint8Array;
+		return new File([data.buffer], 'output.wav', { type: 'audio/wav' });
+	}
+
 	// function to handle the start of the recording
 	function handleStartCaptureClick() {
 		cameraRecording = true;
@@ -147,9 +172,6 @@
 
 	// function to handle the processing of the recording
 	function convertProcess() {
-		// set the status to converting
-		status = 'Converting';
-
 		const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
 		const recordBlob = new Blob(recordedChunks, { type: 'video/webm' });
 
@@ -158,10 +180,8 @@
 		videoFile = new File([recordBlob], `video.webm`, { type: 'video/webm' });
 	}
 
+	// function to handle the processing of the recording
 	async function transcribeProcess() {
-		// set the status to transcribing
-		status = 'Transcribing';
-
 		const form = new FormData();
 
 		if (audioFile) {
@@ -170,7 +190,7 @@
 			form.append('model', 'whisper-1');
 		}
 
-		const upload = await fetch('/api/transcribe', {
+		const upload = await fetch('/api/services/openai_whisper', {
 			method: 'POST',
 			body: form
 		});
@@ -189,13 +209,11 @@
 		transcript = results.transcript;
 	}
 
+	// function to handle the processing of the recording
 	async function feedbackProcess() {
-		// set the status to chatting
-		status = 'Generating Feedback';
+		const prompt = `Please give feedback on the following interview question: ${question.question} given the following transcript: ${transcript}`;
 
-		const prompt = `Please give feedback on the following interview question: ${question} given the following transcript: ${transcript}`;
-
-		const upload = await fetch(`/api/chat`, {
+		const upload = await fetch(`/api/services/openai_chatgpt`, {
 			method: 'POST',
 			body: JSON.stringify({ prompt }),
 			headers: {
@@ -217,29 +235,16 @@
 		generatedFeedback = results.feedback;
 	}
 
+	// function to handle the processing of the recording
 	async function assessmentProcess() {
-		// set the status to assessing
-		status = 'Assessing';
+		const wavFile = await convertToWav(audioFile!);
 
 		const form = new FormData();
-		const duration = audioChunks.length / 44100;
-
-		// calculate the wpm
-		const words = transcript.split(' ').length;
-		const wpm = Math.round(words / (Number(duration) / 60));
-
-		const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
-
-		ffmpeg.FS('writeFile', `${uniqueId}.webm`, await fetchFile(audioBlob));
-		await ffmpeg.run('-i', `${uniqueId}.webm`, 'output.wav');
-		const data = ffmpeg.FS('readFile', 'output.wav');
-		const wavFile = new File([data.buffer], 'output.wav', { type: 'audio/wav' });
 
 		form.append('file', wavFile, wavFile.name);
 		form.append('transcript', transcript);
-		form.append('duration', duration.toString());
 
-		const upload = await fetch(`/api/assessment`, {
+		const upload = await fetch(`/api/services/azure_speech`, {
 			method: 'POST',
 			body: form
 		});
@@ -255,18 +260,76 @@
 			return;
 		}
 
-		assessmentData = results.assessment;
+		assessmentData = results;
+	}
 
-		const assessmentChuchu = {
-			feedback: generatedFeedback,
-			wpm: wpm,
-			accuracy: assessmentData.NBest[0]?.PronunciationAssessment?.AccuracyScore,
-			fluency: assessmentData.NBest[0]?.PronunciationAssessment?.FluencyScore,
-			pronunciation: assessmentData.NBest[0]?.PronunciationAssessment?.PronScore,
-			data: assessmentData
-		};
+	// function to handle the processing of the recording
+	async function uploadVideo() {
+		if (!videoFile) return;
 
-		console.log(assessmentChuchu);
+		const newBlob = (await upload(`recordings/${videoFile.name}`, videoFile, {
+			access: 'public',
+			handleUploadUrl: '/api/services/vercel_blob'
+		})) as PutBlobResult;
+
+		return newBlob.url;
+	}
+
+	async function uploadAnswer(newAnswerID: string) {
+		const videoURL = await uploadVideo();
+
+		const upload = await fetch('/api/db/answers', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				id: newAnswerID,
+				questionId: question.id,
+				answer: transcript,
+				videoUrl: videoURL
+			})
+		});
+
+		const response = await upload.json();
+
+		if (response.status !== 200) {
+			isSubmitting = false;
+			errorMessage = response.error;
+			audioChunks = [];
+			recordedChunks = [];
+			return;
+		}
+	}
+
+	async function uploadAssessment(newAnswerID: string) {
+		const upload = await fetch('/api/db/assessments', {
+			method: 'POST',
+			headers: {
+				'Content-Type': 'application/json'
+			},
+			body: JSON.stringify({
+				id: uuidv4(),
+				answerId: newAnswerID,
+				feedback: generatedFeedback,
+				mispronunciations: assessmentData?.mispronunciations,
+				accuracy_score: assessmentData?.accuracyScore,
+				pronunciation_score: assessmentData?.pronunciationScore,
+				fluency_score: assessmentData?.fluencyScore,
+				prosody_score: assessmentData?.prosodyScore,
+				data: assessmentData?.detailResult
+			})
+		});
+
+		const response = await upload.json();
+
+		if (response.status !== 200) {
+			isSubmitting = false;
+			errorMessage = response.error;
+			audioChunks = [];
+			recordedChunks = [];
+			return;
+		}
 	}
 
 	// function to handle the processing of the recording
@@ -274,27 +337,32 @@
 		if (audioChunks.length && recordedChunks.length) {
 			isSubmitting = true;
 
+			// set the status to converting
+			status = 'Converting';
 			convertProcess();
 
-			// set the status to uploading
-			// status = 'Uploading';
-
-			// upload video to vercel blob
-			// const newBlob = (await upload(`recordings/${videoFile.name}`, videoFile, {
-			// 	access: 'public',
-			// 	handleUploadUrl: '/api/upload'
-			// })) as PutBlobResult;
-
+			// set the status to transcribing
+			status = 'Transcribing';
 			await transcribeProcess();
-			await feedbackProcess();
-			await assessmentProcess();
 
-			// status = 'Completed';
+			// set the status to assessing
+			status = 'Generating Feedback';
+			await Promise.all([feedbackProcess(), assessmentProcess()]);
 
-			// isSuccess = true;
-			// isSubmitting = false;
+			const newAnswerID = uuidv4();
+			// set the status to uploading
+			status = 'Saving';
+			await uploadAnswer(newAnswerID);
+			await uploadAssessment(newAnswerID);
 
-			// // set the status to completed
+			// set the status to completed
+			status = 'Completed';
+
+			isSuccess = true;
+			isSubmitting = false;
+			completed = true;
+			audioChunks = [];
+			recordedChunks = [];
 
 			// // reset the recording after 1.5 seconds
 			// setTimeout(function () {
@@ -304,19 +372,22 @@
 	}
 </script>
 
-<svelte:window
-	on:beforeunload={() => {
-		stopStream();
-	}}
-/>
-
 {#if cameraLoaded}
 	<div
 		class="relative aspect-[16/9] w-full max-w-[1080px] overflow-hidden rounded-lg bg-muted shadow-md ring-1 ring-gray-900/5"
 		style="transform: none;"
 	>
 		<div class="relative z-10 h-full w-full rounded-lg">
-			{#if completed}{:else}
+			{#if completed}
+				<!-- svelte-ignore a11y-media-has-caption -->
+				<video
+					autoplay
+					playsinline
+					class="absolute z-10 h-full w-full -scale-x-100 object-cover"
+					src={videoFile ? URL.createObjectURL(videoFile) : ''}
+				>
+				</video>
+			{:else}
 				<div class="absolute left-5 top-5 z-20 lg:left-10 lg:top-10">
 					<span
 						class="inline-flex items-center rounded-md bg-primary px-2.5 py-0.5 text-sm font-medium text-primary-foreground"
@@ -342,7 +413,12 @@
 			<div class="absolute bottom-[6px] left-5 right-5 md:bottom-5">
 				<div class="flex flex-col items-center justify-center gap-2 lg:mt-4">
 					{#if recordedChunks.length > 0}
-						{#if isSuccess}{:else}
+						{#if isSuccess}
+							<Button>
+								{status}
+								<Check class="size-4 transition group-hover:translate-x-2" />
+							</Button>
+						{:else}
 							<div class="flex flex-row gap-2">
 								{#if isSubmitting}
 									<Button variant="secondary">
@@ -374,10 +450,6 @@
 				</div>
 			</div>
 		</div>
-		<div
-			class="absolute left-1/2 top-1/2 z-20 -translate-x-1/2 -translate-y-1/2 transform text-center text-5xl font-semibold text-white"
-			id="countdown"
-		></div>
 	</div>
 	<div class="mt-4 flex flex-row items-center space-x-1" style="opacity: 1; transform: none;">
 		<ShieldQuestion class="size-4 text-muted-foreground" />
@@ -385,6 +457,73 @@
 			Video is not stored on our servers, it is solely used for transcription.
 		</p>
 	</div>
+	{#if errorMessage}
+		<div class="mt-4 flex flex-row items-center space-x-1" style="opacity: 1; transform: none;">
+			<ShieldQuestion class="size-4 text-muted-foreground" />
+			<p class="text-sm font-normal leading-[20px] text-red-500">{errorMessage}</p>
+		</div>
+	{/if}
+	{#if completed}
+		<div class="mt-8 flex flex-col gap-6">
+			<div>
+				<h2 class="mb-2 text-left text-xl font-semibold text-gray-900">Insights</h2>
+				<div class="flex w-full items-center justify-center gap-4">
+					<div
+						class="flex flex-1 flex-col items-center justify-center rounded border bg-slate-200 p-6"
+					>
+						<h4 class="text-4xl">{assessmentData?.prosodyScore}</h4>
+						<p class="text-lg">Prosody Score</p>
+					</div>
+					<div
+						class="flex flex-1 flex-col items-center justify-center rounded border bg-slate-200 p-6"
+					>
+						<h4 class="text-4xl">{assessmentData?.accuracyScore}</h4>
+						<p class="text-lg">Accuracy Score</p>
+					</div>
+					<div
+						class="flex flex-1 flex-col items-center justify-center rounded border bg-slate-200 p-6"
+					>
+						<h4 class="text-4xl">{assessmentData?.pronunciationScore}</h4>
+						<p class="text-lg">Pronunciation Score</p>
+					</div>
+					<div
+						class="flex flex-1 flex-col items-center justify-center rounded border bg-slate-200 p-6"
+					>
+						<h4 class="text-4xl">{assessmentData?.fluencyScore}</h4>
+						<p class="text-lg">Fluency Score</p>
+					</div>
+				</div>
+				<div class="mt-8 flex w-full justify-center gap-6 text-gray-900">
+					<div class="flex items-center gap-2">
+						<div class="h-8 w-8 rounded bg-yellow-500"></div>
+						<p>Mispronunciations: {assessmentData?.mispronunciations}</p>
+					</div>
+				</div>
+			</div>
+			<div>
+				<h2 class="mb-2 text-left text-xl font-semibold text-gray-900">Transcript</h2>
+				<div
+					class="mt-4 flex min-h-[100px] gap-2.5 rounded-lg border border-[#EEEEEE] bg-[#FAFAFA] p-4 text-base leading-6 text-gray-900"
+				>
+					<p class="prose prose-sm max-w-none">
+						{transcript.length > 0
+							? transcript
+							: "Don't think you said anything. Want to try again?"}
+					</p>
+				</div>
+			</div>
+			<div>
+				<h2 class="mb-2 text-left text-xl font-semibold text-gray-900">Feedback</h2>
+				<div
+					class="mt-4 flex min-h-[100px] gap-2.5 rounded-lg border border-[#EEEEEE] bg-[#FAFAFA] p-4 text-base leading-6 text-gray-900"
+				>
+					<p class="prose prose-sm max-w-none">
+						{generatedFeedback}
+					</p>
+				</div>
+			</div>
+		</div>
+	{/if}
 {:else}
 	<div
 		class="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-muted p-6 shadow-md ring-1 ring-gray-900/5 md:aspect-[16/9]"

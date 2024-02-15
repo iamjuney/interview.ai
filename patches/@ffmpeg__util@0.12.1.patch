@@ -1,0 +1,12 @@
+diff --git a/package.json b/package.json
+index 3afedb4c0fd279eef1c4330bff7b9325c7dc94c1..50f2e6e22fc857a372f60e95d198882139ce87e6 100644
+--- a/package.json
++++ b/package.json
+@@ -4,6 +4,7 @@
+   "description": "browser utils for @ffmpeg/*",
+   "main": "./dist/cjs/index.js",
+   "types": "./dist/cjs/index.d.ts",
++  "type": "module",
+   "exports": {
+     ".": {
+       "types": "./dist/cjs/index.d.ts",

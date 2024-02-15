@@ -35,12 +35,12 @@ export const POST: RequestHandler = async ({ request }) => {
 		if (moderationRes.results[0].flagged) {
 			return json({ error: 'Inappropriate content detected. Please try again.' }, { status: 400 });
 		}
+
+		return json({ transcript: transcript }, { status: 200 });
 	} catch (error) {
 		return json(
 			{ error: 'An error occurred while transcribing the audio. Please try again.' },
 			{ status: 400 }
 		);
 	}
-
-	return json({ transcript: transcript }, { status: 200 });
 };
