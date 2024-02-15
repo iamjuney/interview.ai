@@ -5,11 +5,12 @@
 	import { fetchFile, toBlobURL } from '@ffmpeg/util';
 	import type { PutBlobResult } from '@vercel/blob';
 	import { upload } from '@vercel/blob/client';
-	import { ArrowRight, Loader2, RefreshCw, ShieldQuestion, Check } from 'lucide-svelte';
+	import type { User } from 'lucia';
+	import { ArrowRight, Check, Loader2, RefreshCw, ShieldQuestion } from 'lucide-svelte';
 	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
 
-	let { question } = $props<{ question: Question }>();
+	let { question, user } = $props<{ question: Question; user: User }>();
 	const uniqueId = uuidv4();
 
 	let ffmpeg = $state(new FFmpeg());
@@ -285,6 +286,7 @@
 			},
 			body: JSON.stringify({
 				id: newAnswerID,
+				userId: user.userId,
 				questionId: question.id,
 				answer: transcript,
 				videoUrl: videoURL
@@ -381,7 +383,6 @@
 			{#if completed}
 				<!-- svelte-ignore a11y-media-has-caption -->
 				<video
-					autoplay
 					playsinline
 					class="absolute z-10 h-full w-full -scale-x-100 object-cover"
 					src={videoFile ? URL.createObjectURL(videoFile) : ''}

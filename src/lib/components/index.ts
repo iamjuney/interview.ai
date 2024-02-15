@@ -10,9 +10,9 @@ export { default as Logo } from './navigation/Logo.svelte';
 export { default as MobileSideBar } from './navigation/MobileSideBar.svelte';
 
 /* Interview Components */
+export { default as InterviewAssessment } from './interview/InterviewAssessment.svelte';
 export { default as InterviewCard } from './interview/InterviewCard.svelte';
 export { default as InterviewStage } from './interview/InterviewStage.svelte';
-export { default as InterviewAssessment } from './interview/InterviewAssessment.svelte';
 
 /* Layout */
 export { default as LayoutBackground } from './layout/LayoutBackground.svelte';
@@ -23,6 +23,7 @@ export * as AlertDialog from './ui/alert-dialog';
 export { Badge } from './ui/badge';
 export { Button } from './ui/button';
 export * as Collapsible from './ui/collapsible';
+export * as Dialog from './ui/dialog';
 export * as DropdownMenu from './ui/dropdown-menu';
 export { Input } from './ui/input';
 export { Label } from './ui/label';
@@ -30,3 +31,4 @@ export { Progress } from './ui/progress';
 export * as RadioGroup from './ui/radio-group';
 export * as Tabs from './ui/tabs';
 export * as ToggleGroup from './ui/toggle-group';
+export * as Tooltip from './ui/tooltip';
