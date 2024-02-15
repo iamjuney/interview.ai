@@ -2,6 +2,10 @@ import { json } from '@sveltejs/kit';
 import { handleUpload, type HandleUploadBody } from '@vercel/blob/client';
 import type { RequestHandler } from './$types';
 
+export const config = {
+	runtime: 'edge'
+};
+
 export const POST: RequestHandler = async ({ request, locals }) => {
 	const session = await locals.auth.validate();
 	const userId = session!.user.userId.toString();

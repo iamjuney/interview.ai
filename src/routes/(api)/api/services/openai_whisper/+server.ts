@@ -1,8 +1,8 @@
 import { OPENAI_API_KEY, OPENAI_API_ORG } from '$env/static/private';
 import { json } from '@sveltejs/kit';
-import OpenAI, { toFile } from 'openai';
-import type { RequestHandler } from './$types';
 import axios from 'axios';
+import OpenAI from 'openai';
+import type { RequestHandler } from './$types';
 
 export const config = {
 	runtime: 'edge'

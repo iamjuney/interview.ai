@@ -1,17 +1,13 @@
 import { AZURE_SERVICE_REGION, AZURE_SUBSCRIPTION_KEY } from '$env/static/private';
 import { json, type RequestHandler } from '@sveltejs/kit';
+import fs from 'fs';
+import _ from 'lodash';
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
-import _, { result } from 'lodash';
-import * as fs from 'node:fs';
 
 const speechConfig = sdk.SpeechConfig.fromSubscription(
 	AZURE_SUBSCRIPTION_KEY,
 	AZURE_SERVICE_REGION
 );
-
-export const config = {
-	runtime: 'edge'
-};
 
 async function writeWavFileAsync(filename: string, buffer: ArrayBuffer) {
 	return new Promise<void>((resolve, reject) => {
