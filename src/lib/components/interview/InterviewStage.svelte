@@ -363,8 +363,7 @@
 			isSuccess = true;
 			isSubmitting = false;
 			completed = true;
-			audioChunks = [];
-			recordedChunks = [];
+			stopStream();
 
 			// // reset the recording after 1.5 seconds
 			// setTimeout(function () {
@@ -452,12 +451,12 @@
 			</div>
 		</div>
 	</div>
-	<div class="mt-4 flex flex-row items-center space-x-1" style="opacity: 1; transform: none;">
+	<!-- <div class="mt-4 flex flex-row items-center space-x-1" style="opacity: 1; transform: none;">
 		<ShieldQuestion class="size-4 text-muted-foreground" />
 		<p class="text-sm font-normal leading-[20px]">
 			Video is not stored on our servers, it is solely used for transcription.
 		</p>
-	</div>
+	</div> -->
 	{#if errorMessage}
 		<div class="mt-4 flex flex-row items-center space-x-1" style="opacity: 1; transform: none;">
 			<ShieldQuestion class="size-4 text-muted-foreground" />

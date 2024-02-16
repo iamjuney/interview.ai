@@ -42,6 +42,7 @@ export const POST: RequestHandler = async ({ request }) => {
 			sdk.PronunciationAssessmentGranularity.Phoneme,
 			true
 		);
+
 		pronunciationAssessmentConfig.enableProsodyAssessment = true;
 
 		// setting the recognition language to English.
@@ -50,40 +51,51 @@ export const POST: RequestHandler = async ({ request }) => {
 		const reco = new sdk.SpeechRecognizer(speechConfig, audioConfig);
 		pronunciationAssessmentConfig.applyTo(reco);
 
-		let result = new sdk.SpeechRecognitionResult();
+		let accuracyScore = 0;
+		let pronunciationScore = 0;
+		let fluencyScore = 0;
+		let prosodyScore = 0;
+		let detailResult = null;
 
-		await new Promise<void>((resolve) => {
-			reco.recognizeOnceAsync((successfulResult: sdk.SpeechRecognitionResult) => {
-				// onRecognizedResult(successfulResult);
+		await new Promise((resolve, reject) => {
+			reco.recognizeOnceAsync(
+				(successfulResult) => {
+					const result = sdk.PronunciationAssessmentResult.fromResult(successfulResult);
 
-				result = successfulResult;
-				reco.close();
-			});
+					accuracyScore = result.accuracyScore;
+					pronunciationScore = result.pronunciationScore;
+					fluencyScore = result.fluencyScore;
+					prosodyScore = result.prosodyScore;
+					detailResult = result.detailResult.Words;
 
-			resolve();
-		});
-
-		const pronunciation_result = sdk.PronunciationAssessmentResult.fromResult(result);
-
-		// count the number of mispronunciations
-		_.forEach(pronunciation_result.detailResult.Words, (word) => {
-			if (word.PronunciationAssessment?.ErrorType === 'Mispronunciation') {
-				mispronunciations++;
-			}
+					// count the number of mispronunciations
+					_.forEach(result.detailResult.Words, (word) => {
+						if (word.PronunciationAssessment?.ErrorType === 'Mispronunciation') {
+							mispronunciations++;
+						}
+					});
+					reco.close();
+					resolve(successfulResult);
+				},
+				(error) => {
+					reject(error);
+				}
+			);
 		});
 
 		return json(
 			{
 				mispronunciations: mispronunciations,
-				accuracyScore: pronunciation_result.accuracyScore,
-				pronunciationScore: pronunciation_result.pronunciationScore,
-				fluencyScore: pronunciation_result.fluencyScore,
-				prosodyScore: pronunciation_result.prosodyScore,
-				detailResult: pronunciation_result.detailResult.Words
+				accuracyScore: accuracyScore,
+				pronunciationScore: pronunciationScore,
+				fluencyScore: fluencyScore,
+				prosodyScore: prosodyScore,
+				detailResult: detailResult
 			},
 			{ status: 200 }
 		);
 	} catch (error) {
+		console.log(error);
 		return json(
 			{ error: 'An error occurred while assessing the pronunciation. Please try again.' },
 			{ status: 500 }
