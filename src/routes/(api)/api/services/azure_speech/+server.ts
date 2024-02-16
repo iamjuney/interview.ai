@@ -2,7 +2,6 @@ import { AZURE_SERVICE_REGION, AZURE_SUBSCRIPTION_KEY } from '$env/static/privat
 import type { DetailResult } from '$lib/types';
 import { json, type RequestHandler } from '@sveltejs/kit';
 import fs from 'fs';
-import _ from 'lodash';
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
 
 const speechConfig = sdk.SpeechConfig.fromSubscription(
@@ -50,45 +49,48 @@ export const POST: RequestHandler = async ({ request }) => {
 		const reco = new sdk.SpeechRecognizer(speechConfig, audioConfig);
 		pronunciationAssessmentConfig.applyTo(reco);
 
-		let accuracyScore = 0;
-		let pronunciationScore = 0;
-		let fluencyScore = 0;
-		let prosodyScore = 0;
-		let data: DetailResult[] = [];
-
-		await new Promise((resolve, reject) => {
-			reco.recognizeOnceAsync(
-				(successfulResult) => {
-					const result = sdk.PronunciationAssessmentResult.fromResult(successfulResult);
-
-					accuracyScore = result.accuracyScore;
-					pronunciationScore = result.pronunciationScore;
-					fluencyScore = result.fluencyScore;
-					prosodyScore = result.prosodyScore;
-
-					// count the number of mispronunciations
-					_.forEach(result.detailResult.Words, (word) => {
-						data.push({
-							word: word.Word,
-							errorType: word.PronunciationAssessment?.ErrorType
-						});
-					});
-					reco.close();
-					resolve(successfulResult);
-				},
-				(error) => {
-					reject(error);
-				}
-			);
+		let newResult = await new Promise((resolve) => {
+			reco.recognizeOnceAsync((result) => {
+				resolve(result);
+				reco.close();
+			});
 		});
 
+		// close the recognizer
+
+		const pronunciationAssessmentResult = sdk.PronunciationAssessmentResult.fromResult(
+			newResult as any
+		);
+
+		// const accuracyScore = pronunciationAssessmentResult.accuracyScore;
+		// const pronunciationScore = pronunciationAssessmentResult.pronunciationScore;
+		// const fluencyScore = pronunciationAssessmentResult.fluencyScore;
+		// const prosodyScore = pronunciationAssessmentResult.prosodyScore;
+		// let data: DetailResult[] = [];
+
+		// var words = pronunciationAssessmentResult.detailResult.Words;
+		// for (var i = 0; i < words.length; i++) {
+		// 	var word = words[i];
+		// 	data.push({
+		// 		word: word.Word,
+		// 		errorType: word.PronunciationAssessment?.ErrorType
+		// 	});
+		// }
+
+		// return json(
+		// 	{
+		// 		accuracyScore,
+		// 		pronunciationScore,
+		// 		fluencyScore,
+		// 		prosodyScore,
+		// 		data
+		// 	},
+		// 	{ status: 200 }
+		// );
 		return json(
 			{
-				accuracyScore,
-				pronunciationScore,
-				fluencyScore,
-				prosodyScore,
-				data
+				scores: pronunciationAssessmentResult.detailResult.PronunciationAssessment,
+				data: pronunciationAssessmentResult.detailResult.Words
 			},
 			{ status: 200 }
 		);

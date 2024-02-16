@@ -1,12 +1,19 @@
 <script lang="ts">
 	import { Button, Progress } from '$lib/components';
-	import type { PronunciationAssessmentResult, Question } from '$lib/types';
+	import type { DetailResult, PronunciationAssessmentResult, Question } from '$lib/types';
 	import { FFmpeg } from '@ffmpeg/ffmpeg';
 	import { fetchFile, toBlobURL } from '@ffmpeg/util';
 	import type { PutBlobResult } from '@vercel/blob';
 	import { upload } from '@vercel/blob/client';
 	import type { User } from 'lucia';
-	import { ArrowRight, Check, Loader2, RefreshCw, ShieldQuestion } from 'lucide-svelte';
+	import {
+		ArrowRight,
+		Check,
+		Loader2,
+		RefreshCw,
+		ShieldQuestion,
+		AlertTriangle
+	} from 'lucide-svelte';
 	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
 	import DoughnutChart from './DoughnutChart.svelte';
@@ -27,7 +34,6 @@
 	let cameraLoading = $state(true);
 	let cameraLoaded = $state(true);
 	let cameraRecording = $state(false);
-	let isSuccess = $state(false);
 	let isSubmitting = $state(false);
 	let status = $state('');
 	let completed = $state(false);
@@ -262,7 +268,28 @@
 			return;
 		}
 
-		assessmentData = results;
+		const accuracyScore = results.scores.AccuracyScore;
+		const pronunciationScore = results.scores.PronScore;
+		const fluencyScore = results.scores.FluencyScore;
+		const prosodyScore = results.scores.ProsodyScore;
+		let data: DetailResult[] = [];
+
+		let words = results.data;
+		for (var i = 0; i < words.length; i++) {
+			var word = words[i];
+			data.push({
+				word: word.Word,
+				errorType: word.PronunciationAssessment?.ErrorType
+			});
+		}
+
+		assessmentData = {
+			accuracyScore,
+			pronunciationScore,
+			fluencyScore,
+			prosodyScore,
+			data
+		};
 	}
 
 	// function to handle the processing of the recording
@@ -360,7 +387,6 @@
 			// set the status to completed
 			status = 'Completed';
 
-			isSuccess = true;
 			isSubmitting = false;
 			completed = true;
 			stopStream();
@@ -382,7 +408,8 @@
 			{#if completed}
 				<!-- svelte-ignore a11y-media-has-caption -->
 				<video
-					class="absolute z-10 h-full w-full -scale-x-100 object-cover"
+					controls
+					class="absolute z-10 h-full w-full object-cover"
 					src={videoFile ? URL.createObjectURL(videoFile) : ''}
 				>
 				</video>
@@ -412,12 +439,7 @@
 			<div class="absolute bottom-[6px] left-5 right-5 md:bottom-5">
 				<div class="flex flex-col items-center justify-center gap-2 lg:mt-4">
 					{#if recordedChunks.length > 0}
-						{#if isSuccess}
-							<Button>
-								{status}
-								<Check class="size-4 transition group-hover:translate-x-2" />
-							</Button>
-						{:else}
+						{#if !completed}
 							<div class="flex flex-row gap-2">
 								{#if isSubmitting}
 									<Button variant="secondary">
@@ -458,7 +480,7 @@
 	</div> -->
 	{#if errorMessage}
 		<div class="mt-4 flex flex-row items-center space-x-1" style="opacity: 1; transform: none;">
-			<ShieldQuestion class="size-4 text-muted-foreground" />
+			<AlertTriangle class="size-4 text-red-500" />
 			<p class="text-sm font-normal leading-[20px] text-red-500">{errorMessage}</p>
 		</div>
 	{/if}
@@ -468,7 +490,7 @@
 			<div class="mx-auto flex w-full max-w-2xl flex-col md:flex-row md:space-x-12">
 				<div class="flex flex-none flex-col">
 					<h2 class="mb-3 text-left text-lg font-semibold">Pronunciation Score</h2>
-					<DoughnutChart />
+					<DoughnutChart score={assessmentData!.pronunciationScore} />
 				</div>
 
 				<div class="mt-12 grow md:mt-0">
@@ -476,31 +498,31 @@
 					<div class="mt-3 flex flex-col space-y-6 text-sm font-medium">
 						<div class="flex flex-col gap-1">
 							<p class="flex items-center justify-between">
-								<span> Accuracy score </span>
-								<span> 92 / 100</span>
+								<span> WPM </span>
+								<span> 96 / 100</span>
 							</p>
-							<Progress class="w-full bg-gray-200" value={92} />
+							<Progress class="w-full bg-gray-200" value={96} />
 						</div>
 						<div class="flex flex-col gap-1">
 							<p class="flex items-center justify-between">
-								<span> Completeness score </span>
-								<span> 93 / 100</span>
+								<span> Accuracy score </span>
+								<span> {assessmentData?.accuracyScore} / 100</span>
 							</p>
-							<Progress class="w-full bg-gray-200" value={93} />
+							<Progress class="w-full bg-gray-200" value={assessmentData?.accuracyScore} />
 						</div>
 						<div class="flex flex-col gap-1">
 							<p class="flex items-center justify-between">
 								<span> Fluency score </span>
-								<span> 84 / 100</span>
+								<span> {assessmentData?.fluencyScore} / 100</span>
 							</p>
-							<Progress class="w-full bg-gray-200" value={84} />
+							<Progress class="w-full bg-gray-200" value={assessmentData?.fluencyScore} />
 						</div>
 						<div class="flex flex-col gap-1">
 							<p class="flex items-center justify-between">
 								<span> Prosody score </span>
-								<span> 87 / 100</span>
+								<span> {assessmentData?.prosodyScore} / 100</span>
 							</p>
-							<Progress class="w-full bg-gray-200" value={87} />
+							<Progress class="w-full bg-gray-200" value={assessmentData?.prosodyScore} />
 						</div>
 					</div>
 				</div>
@@ -523,7 +545,7 @@
 				<div
 					class="mt-4 flex min-h-[100px] gap-2.5 rounded-lg bg-foreground p-4 text-base leading-6 text-background"
 				>
-					<p class="prose prose-sm max-w-none">Don't think you said anything. Want to try again?</p>
+					<p class="prose prose-sm max-w-none">{transcript}</p>
 				</div>
 			</div>
 			<div>
@@ -531,7 +553,7 @@
 				<div
 					class="mt-4 flex min-h-[100px] gap-2.5 rounded-lg bg-foreground p-4 text-base leading-6 text-background"
 				>
-					<p class="prose prose-sm max-w-none">Don't think you said anything. Want to try again?</p>
+					<p class="prose prose-sm max-w-none">{generatedFeedback}</p>
 				</div>
 			</div>
 		</div>
