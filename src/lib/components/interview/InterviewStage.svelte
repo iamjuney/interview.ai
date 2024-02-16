@@ -382,7 +382,6 @@
 			{#if completed}
 				<!-- svelte-ignore a11y-media-has-caption -->
 				<video
-					playsinline
 					class="absolute z-10 h-full w-full -scale-x-100 object-cover"
 					src={videoFile ? URL.createObjectURL(videoFile) : ''}
 				>

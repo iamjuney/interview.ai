@@ -90,7 +90,7 @@ export const POST: RequestHandler = async ({ request }) => {
 				pronunciationScore: pronunciationScore,
 				fluencyScore: fluencyScore,
 				prosodyScore: prosodyScore,
-				detailResult: detailResult
+				detailResult: JSON.stringify(detailResult)
 			},
 			{ status: 200 }
 		);

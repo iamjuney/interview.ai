@@ -4,7 +4,7 @@ export type PronunciationAssessmentResult = {
 	pronunciationScore: number;
 	fluencyScore: number;
 	prosodyScore: number;
-	detailResult: [];
+	detailResult: JSON;
 };
 
 export type Interview = {
