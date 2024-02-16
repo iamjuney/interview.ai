@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button } from '$lib/components';
+	import { Button, Progress } from '$lib/components';
 	import type { PronunciationAssessmentResult, Question } from '$lib/types';
 	import { FFmpeg } from '@ffmpeg/ffmpeg';
 	import { fetchFile, toBlobURL } from '@ffmpeg/util';
@@ -9,6 +9,7 @@
 	import { ArrowRight, Check, Loader2, RefreshCw, ShieldQuestion } from 'lucide-svelte';
 	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
+	import DoughnutChart from './DoughnutChart.svelte';
 
 	let { question, user } = $props<{ question: Question; user: User }>();
 	const uniqueId = uuidv4();
@@ -314,12 +315,11 @@
 				id: uuidv4(),
 				answerId: newAnswerID,
 				feedback: generatedFeedback,
-				mispronunciations: assessmentData?.mispronunciations,
 				accuracy_score: assessmentData?.accuracyScore,
 				pronunciation_score: assessmentData?.pronunciationScore,
 				fluency_score: assessmentData?.fluencyScore,
 				prosody_score: assessmentData?.prosodyScore,
-				data: assessmentData?.detailResult
+				data: assessmentData?.data
 			})
 		});
 
@@ -462,63 +462,76 @@
 			<p class="text-sm font-normal leading-[20px] text-red-500">{errorMessage}</p>
 		</div>
 	{/if}
+
 	{#if completed}
-		<div class="mt-8 flex flex-col gap-6">
-			<div>
-				<h2 class="mb-2 text-left text-xl font-semibold text-gray-900">Insights</h2>
-				<div class="flex w-full items-center justify-center gap-4">
-					<div
-						class="flex flex-1 flex-col items-center justify-center rounded border bg-slate-200 p-6"
-					>
-						<h4 class="text-4xl">{assessmentData?.prosodyScore}</h4>
-						<p class="text-lg">Prosody Score</p>
-					</div>
-					<div
-						class="flex flex-1 flex-col items-center justify-center rounded border bg-slate-200 p-6"
-					>
-						<h4 class="text-4xl">{assessmentData?.accuracyScore}</h4>
-						<p class="text-lg">Accuracy Score</p>
-					</div>
-					<div
-						class="flex flex-1 flex-col items-center justify-center rounded border bg-slate-200 p-6"
-					>
-						<h4 class="text-4xl">{assessmentData?.pronunciationScore}</h4>
-						<p class="text-lg">Pronunciation Score</p>
-					</div>
-					<div
-						class="flex flex-1 flex-col items-center justify-center rounded border bg-slate-200 p-6"
-					>
-						<h4 class="text-4xl">{assessmentData?.fluencyScore}</h4>
-						<p class="text-lg">Fluency Score</p>
-					</div>
+		<div class="mt-12 flex max-w-[1080px] flex-col gap-12">
+			<div class="mx-auto flex w-full max-w-2xl flex-col md:flex-row md:space-x-12">
+				<div class="flex flex-none flex-col">
+					<h2 class="mb-3 text-left text-lg font-semibold">Pronunciation Score</h2>
+					<DoughnutChart />
 				</div>
-				<div class="mt-8 flex w-full justify-center gap-6 text-gray-900">
-					<div class="flex items-center gap-2">
-						<div class="h-8 w-8 rounded bg-yellow-500"></div>
-						<p>Mispronunciations: {assessmentData?.mispronunciations}</p>
+
+				<div class="mt-12 grow md:mt-0">
+					<h2 class="text-lg font-semibold">Score breakdown</h2>
+					<div class="mt-3 flex flex-col space-y-6 text-sm font-medium">
+						<div class="flex flex-col gap-1">
+							<p class="flex items-center justify-between">
+								<span> Accuracy score </span>
+								<span> 92 / 100</span>
+							</p>
+							<Progress class="w-full bg-gray-200" value={92} />
+						</div>
+						<div class="flex flex-col gap-1">
+							<p class="flex items-center justify-between">
+								<span> Completeness score </span>
+								<span> 93 / 100</span>
+							</p>
+							<Progress class="w-full bg-gray-200" value={93} />
+						</div>
+						<div class="flex flex-col gap-1">
+							<p class="flex items-center justify-between">
+								<span> Fluency score </span>
+								<span> 84 / 100</span>
+							</p>
+							<Progress class="w-full bg-gray-200" value={84} />
+						</div>
+						<div class="flex flex-col gap-1">
+							<p class="flex items-center justify-between">
+								<span> Prosody score </span>
+								<span> 87 / 100</span>
+							</p>
+							<Progress class="w-full bg-gray-200" value={87} />
+						</div>
 					</div>
-				</div>
-			</div>
-			<div>
-				<h2 class="mb-2 text-left text-xl font-semibold text-gray-900">Transcript</h2>
-				<div
-					class="mt-4 flex min-h-[100px] gap-2.5 rounded-lg border border-[#EEEEEE] bg-[#FAFAFA] p-4 text-base leading-6 text-gray-900"
-				>
-					<p class="prose prose-sm max-w-none">
-						{transcript.length > 0
-							? transcript
-							: "Don't think you said anything. Want to try again?"}
-					</p>
 				</div>
 			</div>
 			<div>
-				<h2 class="mb-2 text-left text-xl font-semibold text-gray-900">Feedback</h2>
+				<div class="flex flex-col items-start justify-between md:flex-row">
+					<h2 class="mb-2 text-left text-lg font-semibold">Transcript</h2>
+
+					<div class="flex gap-6 text-xs text-foreground/60 sm:text-sm">
+						<div class="flex items-center gap-2">
+							<div class="size-4 rounded bg-primary"></div>
+							<p>Mispronunciations: <span class="font-semibold text-foreground">0</span></p>
+						</div>
+						<div class="flex items-center gap-2">
+							<div class="size-4 rounded bg-violet-500"></div>
+							<p>Monotone: <span class="font-semibold text-foreground">0</span></p>
+						</div>
+					</div>
+				</div>
 				<div
-					class="mt-4 flex min-h-[100px] gap-2.5 rounded-lg border border-[#EEEEEE] bg-[#FAFAFA] p-4 text-base leading-6 text-gray-900"
+					class="mt-4 flex min-h-[100px] gap-2.5 rounded-lg bg-foreground p-4 text-base leading-6 text-background"
 				>
-					<p class="prose prose-sm max-w-none">
-						{generatedFeedback}
-					</p>
+					<p class="prose prose-sm max-w-none">Don't think you said anything. Want to try again?</p>
+				</div>
+			</div>
+			<div>
+				<h2 class="mb-2 text-left text-lg font-semibold">Feedback</h2>
+				<div
+					class="mt-4 flex min-h-[100px] gap-2.5 rounded-lg bg-foreground p-4 text-base leading-6 text-background"
+				>
+					<p class="prose prose-sm max-w-none">Don't think you said anything. Want to try again?</p>
 				</div>
 			</div>
 		</div>

@@ -13,6 +13,7 @@ export { default as MobileSideBar } from './navigation/MobileSideBar.svelte';
 export { default as InterviewAssessment } from './interview/InterviewAssessment.svelte';
 export { default as InterviewCard } from './interview/InterviewCard.svelte';
 export { default as InterviewStage } from './interview/InterviewStage.svelte';
+export { default as DoughnutChart } from './interview/DoughnutChart.svelte';
 
 /* Layout */
 export { default as LayoutBackground } from './layout/LayoutBackground.svelte';

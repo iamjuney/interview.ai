@@ -1,15 +1,14 @@
 import { relations } from 'drizzle-orm';
 import {
-	pgTable,
 	bigint,
-	varchar,
-	timestamp,
+	jsonb,
+	pgEnum,
+	pgTable,
+	real,
 	text,
+	timestamp,
 	uniqueIndex,
-	integer,
-    real,
-	json,
-	pgEnum
+	varchar
 } from 'drizzle-orm/pg-core';
 
 /** Enums */
@@ -169,13 +168,11 @@ export const assessment = pgTable('assessments', {
 		.notNull()
 		.references(() => answer.id, { onDelete: 'cascade' }),
 	feedback: text('feedback').notNull(),
-	wpm: real('wpm').notNull(),
 	accuracy_score: real('accuracy').notNull(),
 	pronunciation_score: real('pronunciation').notNull(),
 	fluency_score: real('fluency').notNull(),
-    prosody_score: real('prosody').notNull(),
-    mispronunciations: integer('mispronunciations').notNull(),
-	data: json('data').default({})
+	prosody_score: real('prosody').notNull(),
+	data: jsonb('data').default({})
 });
 
 /** Relations */

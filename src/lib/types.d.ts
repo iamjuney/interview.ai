@@ -1,10 +1,14 @@
+export type DetailResult = {
+	word: string;
+	errorType?: string;
+};
+
 export type PronunciationAssessmentResult = {
-	mispronunciations: number;
 	accuracyScore: number;
 	pronunciationScore: number;
 	fluencyScore: number;
 	prosodyScore: number;
-	detailResult: JSON;
+	data: DetailResult[];
 };
 
 export type Interview = {

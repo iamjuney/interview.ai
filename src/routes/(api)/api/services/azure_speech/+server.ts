@@ -1,4 +1,5 @@
 import { AZURE_SERVICE_REGION, AZURE_SUBSCRIPTION_KEY } from '$env/static/private';
+import type { DetailResult } from '$lib/types';
 import { json, type RequestHandler } from '@sveltejs/kit';
 import fs from 'fs';
 import _ from 'lodash';
@@ -32,8 +33,6 @@ export const POST: RequestHandler = async ({ request }) => {
 	const filePath = `/tmp/${audioUrl.name}`;
 	await writeWavFileAsync(filePath, wavData);
 
-	let mispronunciations = 0;
-
 	try {
 		const audioConfig = sdk.AudioConfig.fromWavFileInput(fs.readFileSync(`/tmp/${audioUrl.name}`));
 		const pronunciationAssessmentConfig = new sdk.PronunciationAssessmentConfig(
@@ -55,7 +54,7 @@ export const POST: RequestHandler = async ({ request }) => {
 		let pronunciationScore = 0;
 		let fluencyScore = 0;
 		let prosodyScore = 0;
-		let detailResult = null;
+		let data: DetailResult[] = [];
 
 		await new Promise((resolve, reject) => {
 			reco.recognizeOnceAsync(
@@ -66,13 +65,13 @@ export const POST: RequestHandler = async ({ request }) => {
 					pronunciationScore = result.pronunciationScore;
 					fluencyScore = result.fluencyScore;
 					prosodyScore = result.prosodyScore;
-					detailResult = result.detailResult.Words;
 
 					// count the number of mispronunciations
 					_.forEach(result.detailResult.Words, (word) => {
-						if (word.PronunciationAssessment?.ErrorType === 'Mispronunciation') {
-							mispronunciations++;
-						}
+						data.push({
+							word: word.Word,
+							errorType: word.PronunciationAssessment?.ErrorType
+						});
 					});
 					reco.close();
 					resolve(successfulResult);
@@ -85,20 +84,18 @@ export const POST: RequestHandler = async ({ request }) => {
 
 		return json(
 			{
-				mispronunciations: mispronunciations,
-				accuracyScore: accuracyScore,
-				pronunciationScore: pronunciationScore,
-				fluencyScore: fluencyScore,
-				prosodyScore: prosodyScore,
-				detailResult: JSON.stringify(detailResult)
+				accuracyScore,
+				pronunciationScore,
+				fluencyScore,
+				prosodyScore,
+				data
 			},
 			{ status: 200 }
 		);
 	} catch (error) {
-		console.log(error);
 		return json(
 			{ error: 'An error occurred while assessing the pronunciation. Please try again.' },
-			{ status: 500 }
+			{ status: 400 }
 		);
 	}
 };
