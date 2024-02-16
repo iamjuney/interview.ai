@@ -5,6 +5,10 @@ import fs from 'fs';
 import _ from 'lodash';
 import * as sdk from 'microsoft-cognitiveservices-speech-sdk';
 
+export const config = {
+	runtime: 'edge'
+};
+
 const speechConfig = sdk.SpeechConfig.fromSubscription(
 	AZURE_SUBSCRIPTION_KEY,
 	AZURE_SERVICE_REGION
