@@ -6,14 +6,7 @@
 	import type { PutBlobResult } from '@vercel/blob';
 	import { upload } from '@vercel/blob/client';
 	import type { User } from 'lucia';
-	import {
-		ArrowRight,
-		Check,
-		Loader2,
-		RefreshCw,
-		ShieldQuestion,
-		AlertTriangle
-	} from 'lucide-svelte';
+	import { AlertTriangle, ArrowRight, Loader2, RefreshCw } from 'lucide-svelte';
 	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
 	import DoughnutChart from './DoughnutChart.svelte';

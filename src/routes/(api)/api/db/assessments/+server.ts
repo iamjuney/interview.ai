@@ -2,7 +2,6 @@ import { db } from '$lib/db';
 import { assessment } from '$lib/db/schema';
 import { json } from '@sveltejs/kit';
 import type { RequestHandler } from './$types';
-import { sql } from 'drizzle-orm';
 
 export const config = {
 	runtime: 'edge'
