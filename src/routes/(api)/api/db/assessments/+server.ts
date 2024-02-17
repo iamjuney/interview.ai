@@ -9,28 +9,10 @@ export const config = {
 };
 
 export const POST: RequestHandler = async ({ request }) => {
-	const {
-		id,
-		answerId,
-		feedback,
-		accuracy_score,
-		pronunciation_score,
-		fluency_score,
-		prosody_score,
-		data
-	} = await request.json();
+	const form = await request.json();
 
 	try {
-		await db.insert(assessment).values({
-			id: id,
-			answerId: answerId,
-			feedback: feedback,
-			accuracy_score: accuracy_score,
-			pronunciation_score: pronunciation_score,
-			fluency_score: fluency_score,
-			prosody_score: prosody_score,
-			data: sql`${data}::jsonb`
-		});
+		await db.insert(assessment).values(form);
 	} catch (error) {
 		return json({ error: 'Error saving assessments to database' }, { status: 400 });
 	}
