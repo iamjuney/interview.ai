@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { Button, Badge } from '$lib/components';
+	import { Badge, Button, DoughnutChart, Progress } from '$lib/components';
 	import type { Answer } from '$lib/types';
-	import { X, Trash2, Loader2 } from 'lucide-svelte';
+	import { Loader2, X, Trash } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -11,6 +11,8 @@
 	};
 
 	let { isOpen, answer } = $props<{ isOpen: boolean; answer?: Answer }>();
+
+	let assessment = $derived(answer?.assessment);
 </script>
 
 {#if isOpen}
@@ -29,7 +31,7 @@
 				aria-hidden="true"
 			></div>
 			<div class="fixed inset-y-0 right-0 flex max-w-full">
-				<div class="relative w-screen max-w-lg">
+				<div class="relative w-screen max-w-2xl">
 					<div class="absolute left-0 top-0 -ml-12 hidden pr-2 pt-6 sm:-ml-12 sm:flex sm:pr-4">
 						<Button size="icon" on:click={() => (isOpen = !isOpen)}>
 							<span class="sr-only">Close menu</span>
@@ -45,10 +47,9 @@
 							</Button>
 							<div class="flex items-center justify-between border-b border-accent pb-6">
 								<h3 class="text-lg font-semibold">Interview Assessment</h3>
-								<Badge class="flex items-center">
-									<Loader2 class="mr-1 size-3 animate-spin" />
-									Processing...
-								</Badge>
+								<Button size="icon" variant="ghost">
+									<Trash class="size-6 text-destructive" />
+								</Button>
 							</div>
 							<div class="flex flex-col space-y-6">
 								<div class="flex flex-col">
@@ -67,22 +68,44 @@
 										Your browser does not support the video tag.
 									</video>
 								</div>
-								<div class="grid grid-cols-4 divide-x divide-accent">
-									<div class="flex flex-col items-center justify-center">
-										<p class="text-xs text-foreground/60 sm:text-sm">WPM</p>
-										<h3 class="font-semibold">87</h3>
+								<div class="mx-auto flex w-full flex-col md:flex-row md:space-x-12">
+									<div class="flex flex-none flex-col">
+										<h2 class="mb-3 text-left text-lg font-semibold">Pronunciation Score</h2>
+										<DoughnutChart score={assessment!.pronunciation_score} />
 									</div>
-									<div class="flex flex-col items-center justify-center">
-										<p class="text-xs text-foreground/60 sm:text-sm">Accuracy</p>
-										<h3 class="font-semibold">96%</h3>
-									</div>
-									<div class="flex flex-col items-center justify-center">
-										<p class="text-xs text-foreground/60 sm:text-sm">Pronunciation</p>
-										<h3 class="font-semibold">95%</h3>
-									</div>
-									<div class="flex flex-col items-center justify-center">
-										<p class="text-xs text-foreground/60 sm:text-sm">Fluency</p>
-										<h3 class="font-semibold">95%</h3>
+
+									<div class="mt-12 grow md:mt-0">
+										<h2 class="text-lg font-semibold">Score breakdown</h2>
+										<div class="mt-3 flex flex-col space-y-6 text-sm font-medium">
+											<div class="flex flex-col gap-1">
+												<p class="flex items-center justify-between">
+													<span> WPM </span>
+													<span> 96 / 100</span>
+												</p>
+												<Progress class="w-full bg-gray-200" value={96} />
+											</div>
+											<div class="flex flex-col gap-1">
+												<p class="flex items-center justify-between">
+													<span> Accuracy score </span>
+													<span> {assessment?.accuracy_score} / 100</span>
+												</p>
+												<Progress class="w-full bg-gray-200" value={assessment?.accuracy_score} />
+											</div>
+											<div class="flex flex-col gap-1">
+												<p class="flex items-center justify-between">
+													<span> Fluency score </span>
+													<span> {assessment?.fluency_score} / 100</span>
+												</p>
+												<Progress class="w-full bg-gray-200" value={assessment?.fluency_score} />
+											</div>
+											<div class="flex flex-col gap-1">
+												<p class="flex items-center justify-between">
+													<span> Prosody score </span>
+													<span> {assessment?.prosody_score} / 100</span>
+												</p>
+												<Progress class="w-full bg-gray-200" value={assessment?.prosody_score} />
+											</div>
+										</div>
 									</div>
 								</div>
 								<div class="flex flex-col">
@@ -95,14 +118,7 @@
 								<div class="flex flex-col">
 									<p class="font-medium">Feedback</p>
 									<p class="mt-2 text-sm leading-6">
-										This is a great response! It provides a clear example of a problem that you had
-										to solve under unexpected circumstances, with a successful outcome. You could
-										further improve the response by providing more details of the solutions you
-										implemented, such as what strategies you used to call clients or how you tracked
-										recurring medicines. You could also add details about the impact of your
-										solutions, such as how many customers you contacted, or how long it took for the
-										business to see an increase in revenues. Overall, this is a strong response that
-										paints a vivid picture of the problem-solving process.
+										{assessment?.feedback}
 									</p>
 								</div>
 							</div>

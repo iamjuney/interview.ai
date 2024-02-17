@@ -177,7 +177,8 @@ export const assessment = pgTable('assessments', {
 
 /** Relations */
 export const userRelation = relations(user, ({ many }) => ({
-	interviews: many(userInterview)
+	interviews: many(userInterview),
+	answers: many(answer)
 }));
 
 export const userInterviewRelation = relations(userInterview, ({ one }) => ({
@@ -211,5 +212,16 @@ export const answerRelation = relations(answer, ({ one }) => ({
 	user: one(user, {
 		fields: [answer.userId],
 		references: [user.id]
+	}),
+	assessment: one(assessment, {
+		fields: [answer.id],
+		references: [assessment.answerId]
+	})
+}));
+
+export const assessmentRelation = relations(assessment, ({ one }) => ({
+	answer: one(answer, {
+		fields: [assessment.answerId],
+		references: [answer.id]
 	})
 }));
