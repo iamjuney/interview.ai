@@ -1,6 +1,14 @@
 <script lang="ts">
-	import { Button, Footer, Header } from '$lib/components';
-	import { ArrowRight, Check } from 'lucide-svelte';
+	import {
+		Button,
+		FeaturesSection,
+		Footer,
+		GetStartedSection,
+		Header,
+		SecondaryFeaturesSection,
+		TestimonialsSection
+	} from '$lib/components';
+	import { Play } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -21,212 +29,98 @@
 <Header session={data.hasSession} />
 
 {#if animate}
-	<section class="relative overflow-hidden" in:fly={flyOptions}>
-		<div class="container relative">
-			<div class="mb-16 mt-32 grid grid-cols-8 gap-6 md:grid-cols-12">
-				<div
-					class="col-span-8 flex flex-col items-center gap-10 text-center sm:col-span-6 sm:col-start-2 md:col-span-8 md:col-start-3"
+	<main in:fly={flyOptions}>
+		<div class="container pb-16 pt-20 text-center lg:pt-32">
+			<h1 class="font-display mx-auto max-w-4xl text-5xl font-medium tracking-tight sm:text-7xl">
+				Mastering
+				<span class="relative whitespace-nowrap text-primary"
+					><svg
+						aria-hidden="true"
+						viewBox="0 0 418 42"
+						class="absolute left-0 top-2/3 h-[0.58em] w-full fill-primary/50"
+						preserveAspectRatio="none"
+						><path
+							d="M203.371.916c-26.013-2.078-76.686 1.963-124.73 9.946L67.3 12.749C35.421 18.062 18.2 21.766 6.004 25.934 1.244 27.561.828 27.778.874 28.61c.07 1.214.828 1.121 9.595-1.176 9.072-2.377 17.15-3.92 39.246-7.496C123.565 7.986 157.869 4.492 195.942 5.046c7.461.108 19.25 1.696 19.17 2.582-.107 1.183-7.874 4.31-25.75 10.366-21.992 7.45-35.43 12.534-36.701 13.884-2.173 2.308-.202 4.407 4.442 4.734 2.654.187 3.263.157 15.593-.78 35.401-2.686 57.944-3.488 88.365-3.143 46.327.526 75.721 2.23 130.788 7.584 19.787 1.924 20.814 1.98 24.557 1.332l.066-.011c1.201-.203 1.53-1.825.399-2.335-2.911-1.31-4.893-1.604-22.048-3.261-57.509-5.556-87.871-7.36-132.059-7.842-23.239-.254-33.617-.116-50.627.674-11.629.54-42.371 2.494-46.696 2.967-2.359.259 8.133-3.625 26.504-9.81 23.239-7.825 27.934-10.149 28.304-14.005.417-4.348-3.529-6-16.878-7.066Z"
+						></path></svg
+					><span class="relative">job interviews</span></span
 				>
-					<div>
-						<h1
-							class="mb-6 text-4xl font-semibold md:text-5xl"
-							id="heading-1-overview"
-							aria-label="Mastering job interviews without the pressure"
+				without the pressure.
+			</h1>
+			<p class="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-muted-foreground">
+				Practice CS/IT related job interview scenarios and get instant feedback and speech
+				assessment. Your practice, your privacy.
+			</p>
+			<div class="mt-10 flex justify-center gap-x-6">
+				<Button size="lg" variant="solid" href="/sign-up">Get Started</Button>
+				<Button size="lg" variant="outline" href="/demo">
+					<Play class="mr-2 size-4" />
+					Watch demo
+				</Button>
+			</div>
+			<div class="mt-36 lg:mt-44">
+				<p class="text-base font-medium text-muted-foreground">
+					<span
+						>This is a thesis project of
+						<a class="underline" href="https://www.linkedin.com/in/aljon-lerios/">Aljon Lerios</a> for
+						the degree of BSCS.
+					</span>
+				</p>
+				<ul role="list" class="mt-8 flex items-center justify-center">
+					<li>
+						<ul
+							role="list"
+							class="flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0"
 						>
-							Mastering job interviews without the pressure
-						</h1>
-						<p class="text-base md:text-lg">
-							Practice CS/IT related job interview scenarios and get instant feedback and speech
-							assessment. Your practice, your privacy.
-						</p>
-					</div>
-					<div class="flex flex-col justify-center gap-4 sm:flex-row sm:flex-wrap">
-						<Button size="lg" href="/sign-up">Get Started</Button>
-						<Button class="group" size="lg" variant="outline" href="/demo"
-							>Try it Out
-							<ArrowRight class="ml-2 size-4 transition group-hover:translate-x-2" />
-						</Button>
-					</div>
-					<div class="inline-flex items-center gap-2 text-left">
-						<span class="text-sm font-medium"
-							>This is a thesis project of
-							<a
-								class="hover:text-slate-11 underline"
-								href="https://www.linkedin.com/in/aljon-lerios/">Aljon Lerios</a
-							>.
-						</span>
-					</div>
-				</div>
+							<li class="flex">
+								<img
+									alt="Mirage"
+									loading="lazy"
+									width="138"
+									height="48"
+									decoding="async"
+									data-nimg="1"
+									style="color:transparent"
+									src="/assets/vsu.png"
+								/>
+							</li>
+							<li class="flex">
+								<img
+									alt="Laravel"
+									loading="lazy"
+									width="136"
+									height="48"
+									decoding="async"
+									data-nimg="1"
+									style="color:transparent"
+									src="/assets/vsu.png"
+								/>
+							</li>
+							<li class="flex">
+								<img
+									alt="Statamic"
+									loading="lazy"
+									width="147"
+									height="48"
+									decoding="async"
+									data-nimg="1"
+									style="color:transparent"
+									src="/assets/vsu.png"
+								/>
+							</li>
+						</ul>
+					</li>
+				</ul>
 			</div>
 		</div>
-		<div class="container relative">
-			<div
-				class="relative h-[75vh] max-h-[36rem] min-h-[28rem] sm:max-h-[42rem] md:aspect-[16/7] md:h-auto md:max-h-none md:min-h-0"
-			>
-				<div class="absolute left-0 top-0 grid h-full w-full grid-cols-8 gap-6 md:grid-cols-12">
-					<div
-						class="col-span-6 col-start-2 min-w-[40rem] overflow-hidden rounded-lg border sm:col-start-3 sm:min-w-[48rem] md:col-span-8 md:mb-12 md:min-w-0"
-					>
-						<img src="/assets/hero_1.webp" alt="" width="884" height="619" class="w-full" />
-					</div>
-				</div>
-				<div class="absolute left-0 top-0 grid h-full w-full grid-cols-8 gap-6 md:grid-cols-12">
-					<div
-						class="col-span-6 col-start-1 mt-52 min-w-[40rem] overflow-hidden rounded-lg border sm:col-start-2 sm:min-w-[48rem] md:col-span-8 md:col-start-5 md:mt-12 md:min-w-0"
-					>
-						<img src="/assets/hero_2.webp" alt="" width="784" height="549" class="w-full" />
-					</div>
-				</div>
-			</div>
-		</div>
-	</section>
 
-	<div class="my-16 w-full bg-primary bg-opacity-25 px-5 md:px-0">
-		<div class="mx-auto max-w-xl py-8 text-center">
-			<p class="mb-4 text-base text-foreground/80 md:text-lg">Made for Computer Science Students</p>
-			<div
-				class="grid grid-cols-3 items-center gap-x-6 md:flex md:flex-row md:justify-between md:gap-x-0"
-			>
-				<img
-					src="/assets/vsu.png"
-					alt=""
-					class="relative top-[1px] mx-auto w-[140px] place-items-center items-center md:h-full md:w-[120px]"
-				/><img
-					src="/assets/vsu.png"
-					alt=""
-					class="relative top-[2px] mx-auto w-[140px] place-items-center items-center md:h-full md:w-[120px]"
-				/><img
-					src="/assets/vsu.png"
-					alt=""
-					class="relative top-[-1px] mx-auto w-[140px] place-items-center items-center md:h-full md:w-[120px]"
-				/>
-			</div>
-		</div>
-	</div>
+		<!-- <FeaturesSection />
 
-	<div class="relative overflow-hidden">
-		<div class="container relative">
-			<div class="relative lg:grid lg:grid-cols-2 lg:items-center lg:gap-12">
-				<div class="relative">
-					<h3 class="text-3xl font-semibold">High Quality Feedback</h3>
-					<p class="mt-3">
-						Practice is the key to success. We’ve designed the practice process to be as simple as
-						possible, and built custom transcription and AI integrations to provide you with helpful
-						feedback.
-					</p>
+		<SecondaryFeaturesSection />
 
-					<dl class="mt-10 space-y-10">
-						<div class="relative">
-							<dt>
-								<div
-									class="absolute flex h-12 w-12 items-center justify-center rounded-md bg-primary text-primary-foreground"
-								>
-									<Check class="size-6" />
-								</div>
-								<p class="ml-16 text-lg font-semibold leading-6">User Friendly Interface</p>
-							</dt>
-							<dd class="ml-16 mt-2 text-base text-foreground/80">
-								An environment that mimics real-life.
-							</dd>
-						</div>
+		<GetStartedSection />
 
-						<div class="relative">
-							<dt>
-								<div
-									class="absolute flex h-12 w-12 items-center justify-center rounded-md bg-primary text-primary-foreground"
-								>
-									<Check class="size-6" />
-								</div>
-								<p class="ml-16 text-lg font-semibold leading-6">Smart-AI feedback</p>
-							</dt>
-							<dd class="ml-16 mt-2 text-base text-foreground/80">
-								Receive relevant improvement tips.
-							</dd>
-						</div>
-
-						<div class="relative">
-							<dt>
-								<div
-									class="absolute flex h-12 w-12 items-center justify-center rounded-md bg-primary text-primary-foreground"
-								>
-									<Check class="size-6" />
-								</div>
-								<p class="ml-16 text-lg font-semibold leading-6">Progress tracking</p>
-							</dt>
-							<dd class="ml-16 mt-2 text-base text-foreground/80">
-								Monitor your performance over time.
-							</dd>
-						</div>
-					</dl>
-				</div>
-
-				<div class="relative -mx-4 mt-10 lg:mt-0" aria-hidden="true">
-					<img class="relative mx-auto w-full" src="/assets/hero_1.webp" alt="" />
-				</div>
-			</div>
-
-			<div class="relative mt-12 sm:mt-16 lg:mt-24">
-				<div class="lg:grid lg:grid-flow-row-dense lg:grid-cols-2 lg:items-center lg:gap-12">
-					<div class="lg:col-start-2">
-						<h3 class="text-2xl font-semibold">Integrated Speech Assessment</h3>
-						<p class="mt-3">
-							Practice is the key to success. We’ve designed the practice process to be as simple as
-							possible, and built custom transcription and AI integrations to provide you with
-							helpful feedback.
-						</p>
-
-						<dl class="mt-10 space-y-10">
-							<div class="relative">
-								<dt>
-									<div
-										class="absolute flex h-12 w-12 items-center justify-center rounded-md bg-primary text-primary-foreground"
-									>
-										<Check class="size-6" />
-									</div>
-									<p class="ml-16 text-lg font-semibold leading-6">User Friendly Interface</p>
-								</dt>
-								<dd class="ml-16 mt-2 text-base text-foreground/80">
-									An environment that mimics real-life.
-								</dd>
-							</div>
-
-							<div class="relative">
-								<dt>
-									<div
-										class="absolute flex h-12 w-12 items-center justify-center rounded-md bg-primary text-primary-foreground"
-									>
-										<Check class="size-6" />
-									</div>
-									<p class="ml-16 text-lg font-semibold leading-6">Smart-AI feedback</p>
-								</dt>
-								<dd class="ml-16 mt-2 text-base text-foreground/80">
-									Receive relevant improvement tips.
-								</dd>
-							</div>
-
-							<div class="relative">
-								<dt>
-									<div
-										class="absolute flex h-12 w-12 items-center justify-center rounded-md bg-primary text-primary-foreground"
-									>
-										<Check class="size-6" />
-									</div>
-									<p class="ml-16 text-lg font-semibold leading-6">Progress tracking</p>
-								</dt>
-								<dd class="ml-16 mt-2 text-base text-foreground/80">
-									Monitor your performance over time.
-								</dd>
-							</div>
-						</dl>
-					</div>
-
-					<div class="relative -mx-4 mt-10 lg:col-start-1 lg:mt-0">
-						<img class="relative mx-auto w-full" src="/assets/hero_1.webp" alt="" />
-					</div>
-				</div>
-			</div>
-		</div>
-	</div>
+		<TestimonialsSection /> -->
+	</main>
 
 	<Footer />
 {/if}

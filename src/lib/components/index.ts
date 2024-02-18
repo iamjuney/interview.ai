@@ -10,13 +10,19 @@ export { default as Logo } from './navigation/Logo.svelte';
 export { default as MobileSideBar } from './navigation/MobileSideBar.svelte';
 
 /* Interview Components */
+export { default as DoughnutChart } from './interview/DoughnutChart.svelte';
 export { default as InterviewAssessment } from './interview/InterviewAssessment.svelte';
 export { default as InterviewCard } from './interview/InterviewCard.svelte';
 export { default as InterviewStage } from './interview/InterviewStage.svelte';
-export { default as DoughnutChart } from './interview/DoughnutChart.svelte';
 
 /* Layout */
 export { default as LayoutBackground } from './layout/LayoutBackground.svelte';
+
+/* Section */
+export { default as FeaturesSection } from './section/FeaturesSection.svelte';
+export { default as GetStartedSection } from './section/GetStartedSection.svelte';
+export { default as SecondaryFeaturesSection } from './section/SecondaryFeaturesSection.svelte';
+export { default as TestimonialsSection } from './section/TestimonialsSection.svelte';
 
 /* Shadcn UI */
 export * as Alert from './ui/alert';

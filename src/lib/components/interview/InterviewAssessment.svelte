@@ -47,8 +47,18 @@
 							</Button>
 							<div class="flex items-center justify-between border-b border-accent pb-6">
 								<h3 class="text-lg font-semibold">Interview Assessment</h3>
-								<Button size="icon" variant="ghost">
-									<Trash class="size-6 text-destructive" />
+								<Button size="lg" variant="destructive">
+									<!-- {#if isDeleteAccountSubmitting}
+							<span class="flex items-center space-x-2">
+								<span>Deleting...</span>
+								<Loader2 class="size-4 animate-spin" />
+							</span>
+						{:else} -->
+									<div class="flex items-center">
+										<span>Delete</span>
+										<Trash class="ml-2 size-4" />
+									</div>
+									<!-- {/if} -->
 								</Button>
 							</div>
 							<div class="flex flex-col space-y-6">
