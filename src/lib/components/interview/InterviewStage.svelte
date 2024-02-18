@@ -524,7 +524,7 @@
 				<div class="flex flex-col items-start justify-between md:flex-row">
 					<h2 class="mb-2 text-left text-lg font-semibold">Transcript</h2>
 
-					<div class="flex gap-6 text-xs text-foreground/60 sm:text-sm">
+					<div class="flex gap-6 text-xs text-muted-foreground sm:text-sm">
 						<div class="flex items-center gap-2">
 							<div class="size-4 rounded bg-primary"></div>
 							<p>Mispronunciations: <span class="font-semibold text-foreground">0</span></p>

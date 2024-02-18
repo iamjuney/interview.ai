@@ -16,22 +16,22 @@
 	<div
 		class="relative mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg shadow"
 	>
-		<div class="relative z-10 h-full w-full rounded-lg bg-white">
+		<div class="relative z-10 h-full w-full rounded-lg bg-secondary text-secondary-foreground">
 			{#if status}
 				<Badge class="absolute right-4 top-4 capitalize">{status}</Badge>
 			{/if}
 			<div class="absolute bottom-2 left-4 right-4 top-4 flex flex-col gap-3">
 				<div class="flex flex-row items-center">
-					<div class="h-4 w-[2px] bg-primary-foreground"></div>
-					<p class="ml-2 font-semibold text-primary-foreground">{interview.company}</p>
+					<div class="h-4 w-[2px] bg-primary"></div>
+					<p class="ml-2 font-semibold">{interview.company}</p>
 				</div>
-				<p class="text-2xl font-semibold text-primary-foreground">{interview.position}</p>
+				<p class="text-2xl font-semibold">{interview.position}</p>
 				{#if status === 'completed'}
 					<Progress value={100} class="mt-6" />
-					<p class="text-sm text-primary-foreground">100% completed</p>
+					<p class="text-sm">100% completed</p>
 				{:else}
 					<Progress value={2} class="mt-6" />
-					<p class="text-sm text-primary-foreground">Not Yet Started</p>
+					<p class="text-sm">Not Yet Started</p>
 				{/if}
 			</div>
 		</div>

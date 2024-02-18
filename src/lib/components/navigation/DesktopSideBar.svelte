@@ -51,7 +51,7 @@
 						<a
 							href={link.href}
 							data-sveltekit-preload-data="hover"
-							class="group flex items-center border-l-4 border-foreground p-2 font-medium"
+							class="group flex items-center border-l-4 border-primary p-2 font-medium"
 						>
 							<svelte:component this={link.icon} class="mx-5 size-5 flex-shrink-0" />
 							{link.name}
@@ -60,7 +60,7 @@
 						<a
 							href={link.href}
 							data-sveltekit-preload-data="hover"
-							class="group flex items-center rounded-md px-3 py-2 font-medium text-foreground/60 hover:text-foreground"
+							class="group flex items-center rounded-md px-3 py-2 font-medium text-muted-foreground hover:text-foreground"
 						>
 							<svelte:component this={link.icon} class="mx-5 size-5 flex-shrink-0" />
 							{link.name}
@@ -89,11 +89,11 @@
 							{/if}
 						</div>
 						<div class="ml-3 flex flex-col items-start">
-							<p class="text-sm font-medium group-hover:text-foreground/60">
+							<p class="text-sm font-medium group-hover:text-muted-foreground">
 								{user.first_name}
 								{user.last_name}
 							</p>
-							<p class="text-xs font-medium group-hover:text-foreground/60">View profile</p>
+							<p class="text-xs font-medium group-hover:text-muted-foreground">View profile</p>
 						</div>
 					</div>
 				</DropdownMenu.Trigger>
