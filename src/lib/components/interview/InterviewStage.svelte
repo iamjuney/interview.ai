@@ -1,12 +1,13 @@
 <script lang="ts">
-	import { Button, Progress } from '$lib/components';
+	import { Button, Progress, Tooltip } from '$lib/components';
 	import type { DetailResult, PronunciationAssessmentResult, Question } from '$lib/types';
+	import { getWPM } from '$lib/utils';
 	import { FFmpeg } from '@ffmpeg/ffmpeg';
 	import { fetchFile, toBlobURL } from '@ffmpeg/util';
 	import type { PutBlobResult } from '@vercel/blob';
 	import { upload } from '@vercel/blob/client';
 	import type { User } from 'lucia';
-	import { AlertTriangle, ArrowRight, Loader2, RefreshCw } from 'lucide-svelte';
+	import { AlertTriangle, ArrowRight, HelpCircle, Loader2, RefreshCw } from 'lucide-svelte';
 	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
 	import DoughnutChart from './DoughnutChart.svelte';
@@ -36,6 +37,7 @@
 	let audioFile = $state<File>();
 	let transcript = $state('');
 	let generatedFeedback = $state('');
+	let duration = $state(0);
 	let assessmentData = $state<PronunciationAssessmentResult>();
 
 	// handles the camera stream
@@ -172,13 +174,23 @@
 	}
 
 	// function to handle the processing of the recording
-	function convertProcess() {
+	async function convertProcess() {
 		const audioBlob = new Blob(audioChunks, { type: 'audio/webm' });
 		const recordBlob = new Blob(recordedChunks, { type: 'video/webm' });
 
 		// create files from the blobs
 		audioFile = new File([audioBlob], `${uniqueId}.webm`, { type: 'audio/webm' });
 		videoFile = new File([recordBlob], `video.webm`, { type: 'video/webm' });
+
+		// get the duration of the video
+		const video = document.createElement('video');
+		video.src = URL.createObjectURL(videoFile);
+		await new Promise<void>((resolve) => {
+			video.onloadedmetadata = () => {
+				duration = video.duration;
+				resolve();
+			};
+		});
 	}
 
 	// function to handle the processing of the recording
@@ -310,6 +322,7 @@
 				userId: user.userId,
 				questionId: question.id,
 				answer: transcript,
+				duration: duration,
 				videoUrl: videoURL
 			})
 		});
@@ -361,7 +374,7 @@
 
 			// set the status to converting
 			status = 'Converting';
-			convertProcess();
+			await convertProcess();
 
 			// set the status to transcribing
 			status = 'Transcribing';
@@ -482,7 +495,18 @@
 		<div class="mt-12 flex max-w-[1080px] flex-col gap-12">
 			<div class="mx-auto flex w-full max-w-2xl flex-col md:flex-row md:space-x-12">
 				<div class="flex flex-none flex-col">
-					<h2 class="mb-3 text-left text-lg font-semibold">Pronunciation Score</h2>
+					<h2 class="mb-3 text-left text-lg font-semibold">
+						Pronunciation Score
+						<Tooltip.Root>
+							<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
+							<Tooltip.Content class="max-w-sm">
+								<p>
+									Overall score indicating the pronunciation quality of the given speech. This is
+									aggregated from AccuracyScore, FluencyScore, and ProsodyScore.
+								</p>
+							</Tooltip.Content>
+						</Tooltip.Root>
+					</h2>
 					<DoughnutChart score={assessmentData!.pronunciationScore} />
 				</div>
 
@@ -491,43 +515,87 @@
 					<div class="mt-3 flex flex-col space-y-6 text-sm font-medium">
 						<div class="flex flex-col gap-1">
 							<p class="flex items-center justify-between">
-								<span> WPM </span>
-								<span> 96 / 100</span>
-							</p>
-							<Progress class="w-full bg-gray-200" value={96} />
-						</div>
-						<div class="flex flex-col gap-1">
-							<p class="flex items-center justify-between">
-								<span> Accuracy score </span>
+								<span>
+									Accuracy score
+									<Tooltip.Root>
+										<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
+										<Tooltip.Content class="max-w-sm">
+											<p>
+												Accuracy indicates how closely the phonemes match a native speaker's
+												pronunciation. Word and full text accuracy scores are aggregated from
+												phoneme-level accuracy score.
+											</p>
+										</Tooltip.Content>
+									</Tooltip.Root>
+								</span>
+
 								<span> {assessmentData?.accuracyScore} / 100</span>
 							</p>
 							<Progress class="w-full bg-gray-200" value={assessmentData?.accuracyScore} />
 						</div>
 						<div class="flex flex-col gap-1">
 							<p class="flex items-center justify-between">
-								<span> Fluency score </span>
+								<span>
+									Fluency score
+									<Tooltip.Root>
+										<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
+										<Tooltip.Content class="max-w-sm">
+											<p>
+												Fluency indicates how closely the speech matches a native speaker's use of
+												silent breaks between words.
+											</p>
+										</Tooltip.Content>
+									</Tooltip.Root>
+								</span>
 								<span> {assessmentData?.fluencyScore} / 100</span>
 							</p>
 							<Progress class="w-full bg-gray-200" value={assessmentData?.fluencyScore} />
 						</div>
 						<div class="flex flex-col gap-1">
 							<p class="flex items-center justify-between">
-								<span> Prosody score </span>
+								<span>
+									Prosody score
+									<Tooltip.Root>
+										<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
+										<Tooltip.Content class="max-w-sm">
+											<p>
+												Prosody indicates how nature of the given speech, including stress,
+												intonation, speaking speed and rhythm.
+											</p>
+										</Tooltip.Content>
+									</Tooltip.Root>
+								</span>
 								<span> {assessmentData?.prosodyScore} / 100</span>
 							</p>
 							<Progress class="w-full bg-gray-200" value={assessmentData?.prosodyScore} />
+						</div>
+						<div class="flex flex-col gap-1">
+							<p class="flex items-center justify-between">
+								<span>
+									WPM
+									<Tooltip.Root>
+										<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
+										<Tooltip.Content class="max-w-sm">
+											<p>WPM indicates the number of words spoken per minute.</p>
+										</Tooltip.Content>
+									</Tooltip.Root>
+								</span>
+								<span> {getWPM(transcript, duration)}</span>
+							</p>
 						</div>
 					</div>
 				</div>
 			</div>
 			<div>
 				<div class="flex flex-col items-start justify-between md:flex-row">
-					<h2 class="mb-2 text-left text-lg font-semibold">Transcript</h2>
+					<h2 class="text-left text-lg font-semibold">Transcript</h2>
 
 					<div class="flex gap-6 text-xs text-muted-foreground sm:text-sm">
 						<div class="flex items-center gap-2">
 							<div class="size-4 rounded bg-primary"></div>
-							<p>Mispronunciations: <span class="font-semibold text-foreground">0</span></p>
+							<p>
+								Mispronunciations: <span class="font-semibold text-foreground">0</span>
+							</p>
 						</div>
 						<div class="flex items-center gap-2">
 							<div class="size-4 rounded bg-violet-500"></div>
@@ -536,15 +604,16 @@
 					</div>
 				</div>
 				<div
-					class="mt-4 flex min-h-[100px] gap-2.5 rounded-lg bg-foreground p-4 text-base leading-6 text-background"
+					class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-base leading-6 text-secondary-foreground"
 				>
 					<p class="prose prose-sm max-w-none">{transcript}</p>
 				</div>
 			</div>
+
 			<div>
-				<h2 class="mb-2 text-left text-lg font-semibold">Feedback</h2>
+				<h2 class="text-left text-lg font-semibold">Feedback</h2>
 				<div
-					class="mt-4 flex min-h-[100px] gap-2.5 rounded-lg bg-foreground p-4 text-base leading-6 text-background"
+					class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-base leading-6 text-secondary-foreground"
 				>
 					<p class="prose prose-sm max-w-none">{generatedFeedback}</p>
 				</div>

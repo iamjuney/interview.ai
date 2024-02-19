@@ -1,10 +1,18 @@
-import { type ClassValue, clsx } from 'clsx';
-import { twMerge } from 'tailwind-merge';
+import { clsx, type ClassValue } from 'clsx';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
+import { twMerge } from 'tailwind-merge';
 
 export function cn(...inputs: ClassValue[]) {
 	return twMerge(clsx(inputs));
+}
+
+export function getWPM(transcript: string, duration: number) {
+	// Count the number of words
+	const wordCount = transcript.split(' ').length;
+
+	// Calculate the WPM
+	return Math.round(wordCount / (duration / 60));
 }
 
 type FlyAndScaleParams = {

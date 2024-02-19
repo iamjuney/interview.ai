@@ -36,13 +36,14 @@ export type Answer = {
 	userId: string;
 	answer: string;
 	questionId: string;
+	duration: number;
 	videoUrl: string | null;
-	assessment: Assessment;
+	assessment?: Assessment;
 };
 
 export type Assessment = {
 	id: string;
-	data: unknown;
+	data: DetailResult[];
 	answerId: string;
 	feedback: string;
 	accuracy_score: number;

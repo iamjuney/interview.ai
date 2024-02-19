@@ -5,6 +5,7 @@ import {
 	pgEnum,
 	pgTable,
 	real,
+	integer,
 	text,
 	timestamp,
 	uniqueIndex,
@@ -153,6 +154,7 @@ export const answer = pgTable('answers', {
 		.notNull()
 		.references(() => question.id, { onDelete: 'cascade' }),
 	answer: text('answer').notNull(),
+	duration: integer('duration').default(0),
 	videoUrl: text('video_url').default(''),
 	createdAt: timestamp('createdAt').defaultNow().notNull()
 });

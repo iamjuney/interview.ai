@@ -73,19 +73,15 @@
 			<DropdownMenu.Root>
 				<DropdownMenu.Trigger class="group block">
 					<div class="flex items-center justify-start">
-						<div>
+						<div class="inline-block size-9 overflow-hidden rounded-full">
 							{#if user.image}
 								<img
-									class="inline-block size-9 rounded-full"
+									class="bg-cover bg-center"
 									src={user.image}
 									alt="Photo of {user.first_name} {user.last_name}"
 								/>
 							{:else}
-								<img
-									class="inline-block size-9 rounded-full"
-									src="/poddle.webp"
-									alt="Poddle by Freepik"
-								/>
+								<img class="bg-cover bg-center" src="/poddle.webp" alt="Poddle by Freepik" />
 							{/if}
 						</div>
 						<div class="ml-3 flex flex-col items-start">

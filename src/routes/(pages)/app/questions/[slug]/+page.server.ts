@@ -12,10 +12,6 @@ export const load = (async ({ params, locals }) => {
 		where: eq(question.slug, slug)
 	});
 
-	// const answers = await db
-	// 	.select()
-	// 	.from(answer)
-	// 	.where(and(eq(answer.questionId, questionDetails!.id), eq(answer.userId, userId)));
 	const answers = await db.query.answer.findMany({
 		with: {
 			assessment: true

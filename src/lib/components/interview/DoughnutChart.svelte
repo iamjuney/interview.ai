@@ -6,7 +6,7 @@
 	let canvas = $state<HTMLCanvasElement>();
 	let ctx = $state<CanvasRenderingContext2D | null>();
 	let data = [score, 100 - score]; // your data
-	let colors = ['#e4c942', '#ffffff']; // colors for each data point
+	let colors = ['#7936EC', '#ffffff']; // colors for each data point
 	let total = data.reduce((a, b) => a + b, 0);
 
 	onMount(() => {

@@ -1,8 +1,8 @@
 import { db } from '$lib/db';
-import { interview, userInterview, question } from '$lib/db/schema';
-import type { Interview, Question } from '$lib/types';
+import { question, userInterview } from '$lib/db/schema';
+import type { Question } from '$lib/types';
 import { fail } from '@sveltejs/kit';
-import { and, eq, ilike, notInArray, or, inArray } from 'drizzle-orm';
+import { and, eq, ilike, inArray } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
@@ -23,6 +23,9 @@ export const load = (async ({ locals }) => {
 
 	if (all.length > 0) {
 		questions = await db.query.question.findMany({
+			with: {
+				answers: true
+			},
 			where: inArray(
 				question.interviewId,
 				all.map((i) => i.interviewId)

@@ -1,7 +1,8 @@
 <script lang="ts">
-	import { Badge, Button, DoughnutChart, Progress } from '$lib/components';
+	import { Badge, Button, DoughnutChart, Progress, Tooltip } from '$lib/components';
 	import type { Answer } from '$lib/types';
-	import { Loader2, X, Trash } from 'lucide-svelte';
+	import { getWPM } from '$lib/utils';
+	import { Loader2, X, Trash, HelpCircle } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -46,7 +47,7 @@
 								<X class="size-6" />
 							</Button>
 							<div class="flex items-center justify-between border-b border-accent pb-6">
-								<h3 class="text-lg font-semibold">Interview Assessment</h3>
+								<h3 class="text-xl font-semibold">Interview Assessment</h3>
 								<Button size="lg" variant="destructive">
 									<!-- {#if isDeleteAccountSubmitting}
 							<span class="flex items-center space-x-2">
@@ -63,13 +64,9 @@
 							</div>
 							<div class="flex flex-col space-y-6">
 								<div class="flex flex-col">
-									<p class="font-medium">Question</p>
-									<p class="mt-2 text-xl font-semibold">What is React?</p>
-								</div>
-								<div class="flex flex-col">
-									<p class="font-medium">Recorded Answer</p>
+									<p class="text-lg font-semibold">Recorded Answer</p>
 									<video
-										class="mt-2 aspect-video h-full w-full lg:rounded-xl"
+										class="mt-3 aspect-video h-full w-full lg:rounded-xl"
 										crossorigin="anonymous"
 										controls
 									>
@@ -80,7 +77,18 @@
 								</div>
 								<div class="mx-auto flex w-full flex-col md:flex-row md:space-x-12">
 									<div class="flex flex-none flex-col">
-										<h2 class="mb-3 text-left text-lg font-semibold">Pronunciation Score</h2>
+										<h2 class="mb-3 text-left text-lg font-semibold">
+											Pronunciation Score
+											<Tooltip.Root>
+												<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
+												<Tooltip.Content class="max-w-sm">
+													<p>
+														Overall score indicating the pronunciation quality of the given speech.
+														This is aggregated from AccuracyScore, FluencyScore, and ProsodyScore.
+													</p>
+												</Tooltip.Content>
+											</Tooltip.Root>
+										</h2>
 										<DoughnutChart score={assessment!.pronunciation_score} />
 									</div>
 
@@ -89,47 +97,112 @@
 										<div class="mt-3 flex flex-col space-y-6 text-sm font-medium">
 											<div class="flex flex-col gap-1">
 												<p class="flex items-center justify-between">
-													<span> WPM </span>
-													<span> 96 / 100</span>
-												</p>
-												<Progress class="w-full bg-gray-200" value={96} />
-											</div>
-											<div class="flex flex-col gap-1">
-												<p class="flex items-center justify-between">
-													<span> Accuracy score </span>
+													<span>
+														Accuracy score
+														<Tooltip.Root>
+															<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
+															<Tooltip.Content class="max-w-sm">
+																<p>
+																	Accuracy indicates how closely the phonemes match a native
+																	speaker's pronunciation. Word and full text accuracy scores are
+																	aggregated from phoneme-level accuracy score.
+																</p>
+															</Tooltip.Content>
+														</Tooltip.Root>
+													</span>
+
 													<span> {assessment?.accuracy_score} / 100</span>
 												</p>
 												<Progress class="w-full bg-gray-200" value={assessment?.accuracy_score} />
 											</div>
 											<div class="flex flex-col gap-1">
 												<p class="flex items-center justify-between">
-													<span> Fluency score </span>
+													<span>
+														Fluency score
+														<Tooltip.Root>
+															<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
+															<Tooltip.Content class="max-w-sm">
+																<p>
+																	Fluency indicates how closely the speech matches a native
+																	speaker's use of silent breaks between words.
+																</p>
+															</Tooltip.Content>
+														</Tooltip.Root>
+													</span>
 													<span> {assessment?.fluency_score} / 100</span>
 												</p>
 												<Progress class="w-full bg-gray-200" value={assessment?.fluency_score} />
 											</div>
 											<div class="flex flex-col gap-1">
 												<p class="flex items-center justify-between">
-													<span> Prosody score </span>
+													<span>
+														Prosody score
+														<Tooltip.Root>
+															<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
+															<Tooltip.Content class="max-w-sm">
+																<p>
+																	Prosody indicates how nature of the given speech, including
+																	stress, intonation, speaking speed and rhythm.
+																</p>
+															</Tooltip.Content>
+														</Tooltip.Root>
+													</span>
 													<span> {assessment?.prosody_score} / 100</span>
 												</p>
 												<Progress class="w-full bg-gray-200" value={assessment?.prosody_score} />
 											</div>
+											<div class="flex flex-col gap-1">
+												<p class="flex items-center justify-between">
+													<span>
+														WPM
+														<Tooltip.Root>
+															<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
+															<Tooltip.Content class="max-w-sm">
+																<p>WPM indicates the number of words spoken per minute.</p>
+															</Tooltip.Content>
+														</Tooltip.Root>
+													</span>
+													{#if answer?.answer}
+														<span> {getWPM(answer?.answer, answer?.duration)}</span>
+													{:else}
+														<span> 0</span>
+													{/if}
+												</p>
+											</div>
 										</div>
 									</div>
 								</div>
-								<div class="flex flex-col">
-									<p class="font-medium">Transcript</p>
-									<p class="mt-2 text-sm leading-6">
-										{answer?.answer}
-									</p>
+								<div>
+									<div class="flex flex-col items-start justify-between md:flex-row">
+										<h2 class="text-left text-lg font-semibold">Transcript</h2>
+
+										<div class="flex gap-6 text-xs text-muted-foreground sm:text-sm">
+											<div class="flex items-center gap-2">
+												<div class="size-4 rounded bg-primary"></div>
+												<p>
+													Mispronunciations: <span class="font-semibold text-foreground">0</span>
+												</p>
+											</div>
+											<div class="flex items-center gap-2">
+												<div class="size-4 rounded bg-violet-500"></div>
+												<p>Monotone: <span class="font-semibold text-foreground">0</span></p>
+											</div>
+										</div>
+									</div>
+									<div
+										class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-base leading-6 text-secondary-foreground"
+									>
+										<p class="prose prose-sm max-w-none">{answer?.answer}</p>
+									</div>
 								</div>
 
-								<div class="flex flex-col">
-									<p class="font-medium">Feedback</p>
-									<p class="mt-2 text-sm leading-6">
-										{assessment?.feedback}
-									</p>
+								<div>
+									<h2 class="text-left text-lg font-semibold">Feedback</h2>
+									<div
+										class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-base leading-6 text-secondary-foreground"
+									>
+										<p class="prose prose-sm max-w-none">{assessment?.feedback}</p>
+									</div>
 								</div>
 							</div>
 						</div>

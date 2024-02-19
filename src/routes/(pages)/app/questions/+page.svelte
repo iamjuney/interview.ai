@@ -1,10 +1,9 @@
 <script lang="ts">
-	import { question } from '$lib/db/schema';
 	import { enhance } from '$app/forms';
-	import { Input } from '$lib/components';
-	import { ArrowLeft, Inbox, Loader2, Search, Timer } from 'lucide-svelte';
-	import { backOut } from 'svelte/easing';
+	import { Badge, Input } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
+	import { Check, Loader2, Search } from 'lucide-svelte';
+	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
 	let { data } = $props();
@@ -101,19 +100,21 @@
 				{:else}
 					{#each questions as question}
 						<a
-							class="group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border border-accent p-4 font-medium transition duration-100"
+							class="group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border p-4 font-medium shadow-sm transition duration-100 hover:border-primary"
 							href="/app/questions/{question.slug}"
-							><div
-								class="absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/[7.5%] group-hover:ring-zinc-900/10"
-							></div>
+						>
 							<div class="relative flex h-full flex-col overflow-hidden">
 								<div class="flex items-center text-left">
 									<p>{question.question}</p>
 								</div>
-								<p class="mt-1 grow text-wrap text-sm font-normal text-foreground/80">
-									{question.question}
-								</p>
-								<div class="flex flex-row space-x-2"></div>
+								<div class="mt-2 flex flex-row space-x-2">
+									{#if question.answers && question.answers.length > 0}
+										<Badge color="primary">
+											<Check class="mr-1 size-3" />
+											Answered
+										</Badge>
+									{/if}
+								</div>
 							</div></a
 						>
 					{/each}
