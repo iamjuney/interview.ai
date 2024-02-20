@@ -74,9 +74,9 @@
 				<div class="relative">
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-0">
 						{#if isSearching}
-							<Loader2 size="20" class="animate-spin text-foreground/60" />
+							<Loader2 size="20" class="animate-spin text-muted-foreground" />
 						{:else}
-							<Search size="20" class="text-foreground/60" />
+							<Search size="20" class="text-muted-foreground" />
 						{/if}
 					</div>
 					<Input
@@ -100,7 +100,7 @@
 				{:else}
 					{#each questions as question}
 						<a
-							class="group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border p-4 font-medium shadow-sm transition duration-100 hover:border-primary"
+							class="group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border p-4 font-medium shadow-sm transition duration-100 hover:bg-secondary hover:text-secondary-foreground"
 							href="/app/questions/{question.slug}"
 						>
 							<div class="relative flex h-full flex-col overflow-hidden">

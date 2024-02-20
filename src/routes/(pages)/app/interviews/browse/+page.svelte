@@ -62,8 +62,8 @@
 		<div class="flex w-full flex-col gap-3">
 			<div class="flex items-center">
 				<a href="/app/interviews" class="group flex items-center gap-2" data-sveltekit-preload-data>
-					<ArrowLeft size="20" class="text-foreground/60 group-hover:text-foreground" />
-					<p class="text-foreground/60 group-hover:text-foreground">Back to my interviews</p>
+					<ArrowLeft size="20" class="text-muted-foreground group-hover:text-foreground" />
+					<p class="text-muted-foreground group-hover:text-foreground">Back to my interviews</p>
 				</a>
 			</div>
 			<div class="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between">
@@ -84,9 +84,9 @@
 				<div class="relative">
 					<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-0">
 						{#if isSearching}
-							<Loader2 size="20" class="animate-spin text-foreground/60" />
+							<Loader2 size="20" class="animate-spin text-muted-foreground" />
 						{:else}
-							<Search size="20" class="text-foreground/60" />
+							<Search size="20" class="text-muted-foreground" />
 						{/if}
 					</div>
 					<Input

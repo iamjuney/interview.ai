@@ -52,7 +52,7 @@
 			</p>
 			<div class="mt-10 flex justify-center gap-x-6">
 				<Button size="lg" variant="solid" href="/sign-up">Get Started</Button>
-				<Button size="lg" variant="outline" href="/demo">
+				<Button size="lg" variant="outline" href="/">
 					<Play class="mr-2 size-4" />
 					Watch demo
 				</Button>

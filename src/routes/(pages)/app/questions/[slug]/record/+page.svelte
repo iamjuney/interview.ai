@@ -166,8 +166,8 @@
 		<div class="flex w-full flex-col gap-3">
 			<div class="flex items-center">
 				<a href="/app/questions/" class="group flex items-center gap-2">
-					<ArrowLeft size="20" class="text-foreground/60 group-hover:text-foreground" />
-					<p class="text-foreground/60 group-hover:text-foreground">Back to all recordings</p>
+					<ArrowLeft size="20" class="text-muted-foreground group-hover:text-foreground" />
+					<p class="text-muted-foreground group-hover:text-foreground">Back to all recordings</p>
 				</a>
 			</div>
 

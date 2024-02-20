@@ -1,8 +1,8 @@
 <script lang="ts">
 	import { afterNavigate } from '$app/navigation';
-	import { Badge, Button, InterviewAssessment } from '$lib/components';
+	import { Button, InterviewAssessment } from '$lib/components';
 	import type { Answer } from '$lib/types.js';
-	import { ArrowLeft, Loader2 } from 'lucide-svelte';
+	import { ArrowLeft } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -47,8 +47,8 @@
 		<div class="flex w-full flex-col gap-3">
 			<div class="flex items-center">
 				<a href={previousPage} data-sveltekit-preload-data class="group flex items-center gap-2">
-					<ArrowLeft size="20" class="text-foreground/60 group-hover:text-foreground" />
-					<p class="text-foreground/60 group-hover:text-foreground">Back {text}</p>
+					<ArrowLeft size="20" class="text-muted-foreground group-hover:text-foreground" />
+					<p class="text-muted-foreground group-hover:text-foreground">Back {text}</p>
 				</a>
 			</div>
 
@@ -70,7 +70,7 @@
 				class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
 			>
 				{#if data.answers.length === 0}
-					<p class="text-foreground/60">No recordings available</p>
+					<p class="text-muted-foreground">No recordings available</p>
 				{/if}
 				{#each data.answers as answer (answer.id)}
 					<button

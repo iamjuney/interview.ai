@@ -44,9 +44,9 @@
 		href="/app/questions/{q.slug}"
 		><div class="flex items-center text-left">
 			{#if q.answers!.length > 0}
-				<CheckCircle size="20" class="flex-none text-accent" />
+				<CheckCircle size="20" class="flex-none text-primary" />
 			{:else}
-				<PlayCircle size="20" class="flex-none text-accent" />
+				<PlayCircle size="20" class="flex-none text-primary" />
 			{/if}
 			<div class="ml-3 grow">{q.question}</div>
 		</div>
@@ -56,7 +56,7 @@
 {#snippet questionCardNotClickable(q:Question)}
 	<div class="flex w-full items-center justify-between p-3 font-medium transition-all duration-200">
 		<div class="flex items-center text-left">
-			<CircleDot size="20" class="flex-none text-accent" />
+			<CircleDot size="20" class="flex-none text-primary" />
 			<div class="ml-3 grow">{q.question}</div>
 		</div>
 	</div>
@@ -67,8 +67,8 @@
 		<div class="flex w-full flex-col gap-3">
 			<div class="flex items-center">
 				<a href={previousPage} class="group flex items-center gap-2" data-sveltekit-preload-data>
-					<ArrowLeft size="20" class="text-foreground/60 group-hover:text-foreground" />
-					<p class="text-foreground/60 group-hover:text-foreground">Back {text}</p>
+					<ArrowLeft size="20" class="text-muted-foreground group-hover:text-foreground" />
+					<p class="text-muted-foreground group-hover:text-foreground">Back {text}</p>
 				</a>
 			</div>
 		</div>
@@ -87,13 +87,13 @@
 					<div
 						class="mb-5 flex h-4 items-center whitespace-nowrap border-r px-4 leading-none last:border-r-0"
 					>
-						<Inbox size="16" class="text-accent" />
+						<Inbox size="16" class="text-primary" />
 						<span class="ml-2">{questionsCount} questions</span>
 					</div>
 					<div
 						class="mb-5 flex h-4 items-center whitespace-nowrap border-r px-4 leading-none last:border-r-0"
 					>
-						<Timer size="16" class="text-accent" />
+						<Timer size="16" class="text-primary" />
 						<span class="ml-2">about {questionsCount * 2} minutes</span>
 					</div>
 				</div>
@@ -190,7 +190,7 @@
 						{/if}
 					{/each}
 				</Collapsible.Content>
-				<Collapsible.Trigger class="text-sm font-semibold text-accent underline">
+				<Collapsible.Trigger class="text-sm font-semibold text-primary underline">
 					{#if questionsIsOpen}
 						Show less
 					{:else}

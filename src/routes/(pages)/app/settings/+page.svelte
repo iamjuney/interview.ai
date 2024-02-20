@@ -80,7 +80,7 @@
 
 		<div class="max-w-xl space-y-2">
 			<h2 class="truncate text-xl font-medium tracking-tight">Personal information</h2>
-			<p class="text-foreground/60">Update your information and profile details.</p>
+			<p class="text-muted-foreground">Update your information and profile details.</p>
 
 			{#if failedUpdateName}
 				<div class="flex items-center justify-center text-destructive">
@@ -98,7 +98,7 @@
 			>
 				<input type="hidden" id="user_id" name="user_id" value={user.userId} />
 				<div class="mt-4">
-					<p class="text-sm font-medium text-foreground/60" aria-hidden="true">Photo</p>
+					<p class="text-sm font-medium text-muted-foreground" aria-hidden="true">Photo</p>
 					<div class="mt-1 lg:hidden">
 						<div class="flex items-center">
 							<div
@@ -164,12 +164,12 @@
 
 				<div class="mt-6 grid grid-cols-12 gap-6">
 					<div class="col-span-12 sm:col-span-6">
-						<Label for="first_name" class="text-foreground/60">First name</Label>
+						<Label for="first_name" class="text-muted-foreground">First name</Label>
 						<Input id="first_name" name="first_name" value={user.first_name} required />
 					</div>
 
 					<div class="col-span-12 sm:col-span-6">
-						<Label for="last_name" class="text-foreground/60">Last name</Label>
+						<Label for="last_name" class="text-muted-foreground">Last name</Label>
 						<Input id="last_name" name="last_name" value={user.last_name} required />
 					</div>
 				</div>
@@ -191,7 +191,7 @@
 
 		<div class="max-w-xl space-y-2">
 			<h2 class="truncate text-xl font-medium tracking-tight">Change Password</h2>
-			<p class="text-foreground/60">
+			<p class="text-muted-foreground">
 				Ensure your account is using a long, random password to stay secure.
 			</p>
 
@@ -203,7 +203,7 @@
 			{/if}
 
 			<form
-				class="max-w-xl text-foreground/60"
+				class="max-w-xl text-muted-foreground"
 				action="?/updatePassword"
 				use:enhance={handleUpdatePasswordSubmit}
 				method="POST"
@@ -257,7 +257,7 @@
 
 		<div class="max-w-xl space-y-2">
 			<h2 class="truncate text-xl font-medium tracking-tight">Danger Zone</h2>
-			<p class="text-foreground/60">Manage your account and delete your account.</p>
+			<p class="text-muted-foreground">Manage your account and delete your account.</p>
 
 			<AlertDialog.Root>
 				<AlertDialog.Trigger>

@@ -11,10 +11,10 @@
 <a
 	href="/app/interviews/{interview.slug}"
 	data-sveltekit-preload-data
-	class="group relative cursor-pointer rounded-xl border p-4 shadow hover:bg-secondary hover:text-secondary-foreground"
+	class="group relative cursor-pointer rounded-xl border p-4 shadow-sm hover:bg-secondary hover:text-secondary-foreground"
 >
 	<div
-		class="relative mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg shadow"
+		class="relative mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg shadow-sm"
 	>
 		<div class="relative z-10 h-full w-full rounded-lg bg-secondary text-secondary-foreground">
 			{#if status}
