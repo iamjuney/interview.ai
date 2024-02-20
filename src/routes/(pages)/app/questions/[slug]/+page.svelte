@@ -38,6 +38,12 @@
 			day: 'numeric'
 		});
 	}
+
+	function readableTime(duration: number) {
+		const minutes = Math.floor(duration / 60);
+		const seconds = duration % 60;
+		return `${minutes}:${seconds}`;
+	}
 </script>
 
 <InterviewAssessment bind:isOpen answer={selectedAnswer} />
@@ -87,7 +93,7 @@
 								<div
 									class="absolute right-2 top-2 z-30 flex items-center justify-center rounded bg-gray-900 bg-opacity-50 px-1.5 py-0.5 text-[11px] font-medium text-white"
 								>
-									00:37
+									{readableTime(answer.duration)}
 								</div>
 							</div>
 						</div>

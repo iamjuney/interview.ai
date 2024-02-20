@@ -154,8 +154,8 @@ export const answer = pgTable('answers', {
 		.notNull()
 		.references(() => question.id, { onDelete: 'cascade' }),
 	answer: text('answer').notNull(),
-	duration: integer('duration').default(0),
-	videoUrl: text('video_url').default(''),
+	duration: integer('duration').default(0).notNull(),
+	videoUrl: text('video_url').default('').notNull(),
 	createdAt: timestamp('createdAt').defaultNow().notNull()
 });
 

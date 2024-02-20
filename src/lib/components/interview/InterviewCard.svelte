@@ -25,7 +25,7 @@
 					<div class="h-4 w-[2px] bg-primary"></div>
 					<p class="ml-2 font-semibold">{interview.company}</p>
 				</div>
-				<p class="text-2xl font-semibold">{interview.position}</p>
+				<p class="text-xl font-semibold md:text-2xl">{interview.position}</p>
 				{#if status === 'completed'}
 					<Progress value={100} class="mt-6" />
 					<p class="text-sm">100% completed</p>

@@ -37,7 +37,7 @@ export type Answer = {
 	answer: string;
 	questionId: string;
 	duration: number;
-	videoUrl: string | null;
+	videoUrl: string;
 	assessment?: Assessment;
 };
 

@@ -158,7 +158,10 @@
 														<Tooltip.Root>
 															<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
 															<Tooltip.Content class="max-w-sm">
-																<p>WPM indicates the number of words spoken per minute.</p>
+																<p>
+																	WPM indicates the number of words spoken per minute. A great WPM
+																	during job interviews is around 120-150 WPM.
+																</p>
 															</Tooltip.Content>
 														</Tooltip.Root>
 													</span>
