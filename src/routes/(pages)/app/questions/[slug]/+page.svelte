@@ -46,7 +46,13 @@
 	}
 </script>
 
-<InterviewAssessment bind:isOpen answer={selectedAnswer} />
+{#if selectedAnswer}
+	<InterviewAssessment
+		bind:isOpen
+		answer={selectedAnswer}
+		question={data.questionDetails?.question}
+	/>
+{/if}
 
 {#if animate}
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>

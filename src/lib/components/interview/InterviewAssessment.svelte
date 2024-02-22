@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { Badge, Button, DoughnutChart, Progress, Tooltip } from '$lib/components';
+	import { Button, DoughnutChart, Progress, Tooltip } from '$lib/components';
 	import type { Answer } from '$lib/types';
 	import { getWPM } from '$lib/utils';
-	import { Loader2, X, Trash, HelpCircle } from 'lucide-svelte';
+	import { HelpCircle, Trash, X } from 'lucide-svelte';
+	import { CldVideoPlayer } from 'svelte-cloudinary';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -11,9 +12,13 @@
 		easing: backOut
 	};
 
-	let { isOpen, answer } = $props<{ isOpen: boolean; answer?: Answer }>();
+	let { isOpen, answer, question } = $props<{
+		isOpen: boolean;
+		answer: Answer;
+		question?: string;
+	}>();
 
-	let assessment = $derived(answer?.assessment);
+	let assessment = $state(answer.assessment);
 </script>
 
 {#if isOpen}
@@ -47,7 +52,7 @@
 								<X class="size-6" />
 							</Button>
 							<div class="flex items-center justify-between border-b border-accent pb-6">
-								<h3 class="text-xl font-semibold">Interview Assessment</h3>
+								<h3 class="text-xl font-semibold">{question}</h3>
 								<Button size="lg" variant="destructive">
 									<!-- {#if isDeleteAccountSubmitting}
 							<span class="flex items-center space-x-2">
@@ -64,16 +69,13 @@
 							</div>
 							<div class="flex flex-col space-y-6">
 								<div class="flex flex-col">
-									<p class="text-lg font-semibold">Recorded Answer</p>
-									<video
-										class="mt-3 aspect-video h-full w-full lg:rounded-xl"
-										crossorigin="anonymous"
-										controls
-									>
-										<source src={answer?.videoUrl} type="video/mp4" />
-										<track kind="captions" />
-										Your browser does not support the video tag.
-									</video>
+									<p class="mb-3 text-lg font-semibold">Recorded Answer</p>
+									<CldVideoPlayer
+										width={640}
+										height={480}
+										src={answer.videoUrl}
+										class="lg:rounded-xl"
+									/>
 								</div>
 								<div class="mx-auto flex w-full flex-col md:flex-row md:space-x-12">
 									<div class="flex flex-none flex-col">

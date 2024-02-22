@@ -6,6 +6,7 @@
 	import { LayoutDashboard, MessageCircleQuestion, Settings, Video, X } from 'lucide-svelte';
 	import { resetMode, setMode } from 'mode-watcher';
 	import { Moon, Sun } from 'radix-icons-svelte';
+	import { CldImage } from 'svelte-cloudinary';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -101,9 +102,12 @@
 						<div class="flex items-center justify-start">
 							<div class="inline-block size-9 overflow-hidden rounded-full">
 								{#if user.image}
-									<img
-										class="bg-cover bg-center"
+									<CldImage
 										src={user.image}
+										crop="fill"
+										width={36 * 4}
+										height={36 * 4}
+										sizes="100vw"
 										alt="Photo of {user.first_name} {user.last_name}"
 									/>
 								{:else}

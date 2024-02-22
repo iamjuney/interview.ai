@@ -2,9 +2,9 @@
 	import { applyAction, enhance } from '$app/forms';
 	import { AlertDialog, Button, Input, Label } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { is } from 'drizzle-orm';
 	import type { User } from 'lucia';
-	import { XCircle, Loader2 } from 'lucide-svelte';
+	import { Loader2, XCircle } from 'lucide-svelte';
+	import { CldImage } from 'svelte-cloudinary';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -19,6 +19,7 @@
 	let mobileUserPhoto = $state<HTMLInputElement>();
 	let desktopUserPhoto = $state<HTMLInputElement>();
 	let imageFile = $state<File>();
+	let newProfile = $state('');
 
 	$effect(() => {
 		animate = true;
@@ -32,7 +33,7 @@
 
 	function handleImageUpload() {
 		imageFile = mobileUserPhoto?.files?.[0] || desktopUserPhoto?.files?.[0];
-		if (imageFile) user.image = URL.createObjectURL(imageFile);
+		if (imageFile) newProfile = URL.createObjectURL(imageFile);
 	}
 
 	const handleUpdateNameSubmit: SubmitFunction = async () => {
@@ -105,11 +106,24 @@
 								class="relative inline-block size-12 flex-shrink-0 overflow-hidden rounded-full"
 								aria-hidden="true"
 							>
-								{#if user.image}
-									<img class="absolute bg-cover bg-center" src={user.image} alt="" />
+								{#if newProfile}
+									<img
+										class="absolute inset-0 aspect-square object-cover object-center"
+										src={newProfile}
+										alt=""
+									/>
+								{:else if user.image}
+									<CldImage
+										src={user.image}
+										crop="fill"
+										width={48 * 4}
+										height={48 * 4}
+										sizes="100vw"
+										alt="Photo of {user.first_name} {user.last_name}"
+									/>
 								{:else}
 									<img
-										class="absolute bg-cover bg-center"
+										class="absolute inset-0 aspect-square object-cover object-center"
 										src="/assets/poddle.webp"
 										alt="Poddle by Freepik"
 									/>
@@ -138,14 +152,31 @@
 					</div>
 
 					<div class="hidden size-40 overflow-hidden rounded-full lg:relative lg:inline-block">
-						{#if user.image}
-							<img class="bg-cover bg-center" src={user.image} alt="" />
+						{#if newProfile}
+							<img
+								class="absolute inset-0 aspect-square object-cover object-center"
+								src={newProfile}
+								alt=""
+							/>
+						{:else if user.image}
+							<CldImage
+								src={user.image}
+								crop="fill"
+								width={160 * 4}
+								height={160 * 4}
+								sizes="100vw"
+								alt="Photo of {user.first_name} {user.last_name}"
+							/>
 						{:else}
-							<img class="bg-cover bg-center" src="/assets/poddle.webp" alt="" />
+							<img
+								class="absolute inset-0 aspect-square object-cover object-center"
+								src="/assets/poddle.webp"
+								alt=""
+							/>
 						{/if}
 						<label
 							for="desktop_user_photo"
-							class="absolute inset-0 flex h-full w-full items-center justify-center bg-black bg-opacity-75 text-sm font-medium text-white opacity-0 focus-within:opacity-100 hover:opacity-100"
+							class="absolute inset-0 flex h-full w-full items-center justify-center bg-background bg-opacity-75 text-sm font-medium opacity-0 focus-within:opacity-100 hover:opacity-100"
 						>
 							<span>Change</span>
 							<span class="sr-only"> user photo</span>

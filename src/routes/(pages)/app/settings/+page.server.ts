@@ -2,7 +2,6 @@ import { db } from '$lib/db';
 import { user } from '$lib/db/schema';
 import { auth } from '$lib/server/lucia';
 import { fail, redirect } from '@sveltejs/kit';
-import { put, type PutBlobResult } from '@vercel/blob';
 import { eq } from 'drizzle-orm';
 import { LuciaError } from 'lucia';
 import { superValidate } from 'sveltekit-superforms/server';
@@ -22,7 +21,7 @@ const passwordSchema = z.object({
 });
 
 export const actions = {
-	updateName: async ({ request }) => {
+	updateName: async ({ request, fetch }) => {
 		const body = await request.formData();
 
 		let user_photo: File | undefined;
@@ -47,15 +46,15 @@ export const actions = {
 		try {
 			// check if there is a photo
 			if (user_photo) {
-				// upload photo to the vercel blob
-				const newBlob = (await put(`avatar/${user_photo.name}`, user_photo, {
-					access: 'public'
-				})) as PutBlobResult;
-				if (!newBlob) {
-					return fail(400, {
-						message: 'Error uploading user photo'
-					});
-				}
+				// upload photo to the cloudinary
+				const photoForm = new FormData();
+				photoForm.append('file', user_photo);
+				photoForm.append('type', 'image');
+				const response = await fetch('/api/services/cloudinary', {
+					method: 'POST',
+					body: photoForm
+				});
+				const public_id = await response.json();
 
 				// update user in the database
 				await db
@@ -63,7 +62,7 @@ export const actions = {
 					.set({
 						first_name: form.data.first_name,
 						last_name: form.data.last_name,
-						image: newBlob.url
+						image: public_id
 					})
 					.where(eq(user.id, form.data.user_id));
 			} else {

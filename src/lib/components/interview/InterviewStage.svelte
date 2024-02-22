@@ -4,8 +4,6 @@
 	import { getWPM } from '$lib/utils';
 	import { FFmpeg } from '@ffmpeg/ffmpeg';
 	import { fetchFile, toBlobURL } from '@ffmpeg/util';
-	import type { PutBlobResult } from '@vercel/blob';
-	import { upload } from '@vercel/blob/client';
 	import type { User } from 'lucia';
 	import { AlertTriangle, ArrowRight, HelpCircle, Loader2, RefreshCw } from 'lucide-svelte';
 	import { untrack } from 'svelte';
@@ -200,7 +198,6 @@
 		if (audioFile) {
 			form.append('file', audioFile, audioFile.name);
 			form.append('model', 'whisper-1');
-			form.append('model', 'whisper-1');
 		}
 
 		const upload = await fetch('/api/services/openai_whisper', {
@@ -301,12 +298,17 @@
 	async function uploadVideo() {
 		if (!videoFile) return;
 
-		const newBlob = (await upload(`recordings/${videoFile.name}`, videoFile, {
-			access: 'public',
-			handleUploadUrl: '/api/services/vercel_blob'
-		})) as PutBlobResult;
+		const form = new FormData();
+		form.append('file', videoFile, videoFile.name);
+		form.append('type', 'video');
 
-		return newBlob.url;
+		const response = await fetch('/api/services/cloudinary', {
+			method: 'POST',
+			body: form
+		});
+		const public_id = await response.json();
+
+		return public_id;
 	}
 
 	async function uploadAnswer(newAnswerID: string) {

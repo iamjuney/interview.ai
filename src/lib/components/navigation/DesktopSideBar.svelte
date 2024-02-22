@@ -6,6 +6,7 @@
 	import { LayoutDashboard, MessageCircleQuestion, Settings, Video } from 'lucide-svelte';
 	import { resetMode, setMode } from 'mode-watcher';
 	import { Moon, Sun } from 'radix-icons-svelte';
+	import { CldImage } from 'svelte-cloudinary';
 
 	let { user } = $props<{ user: User }>();
 	let pathName = $derived(() => {
@@ -75,13 +76,16 @@
 					<div class="flex items-center justify-start">
 						<div class="inline-block size-9 overflow-hidden rounded-full">
 							{#if user.image}
-								<img
-									class="bg-cover bg-center"
+								<CldImage
 									src={user.image}
+									crop="fill"
+									width={36 * 4}
+									height={36 * 4}
+									sizes="100vw"
 									alt="Photo of {user.first_name} {user.last_name}"
 								/>
 							{:else}
-								<img class="bg-cover bg-center" src="/poddle.webp" alt="Poddle by Freepik" />
+								<img class="bg-cover bg-center" src="/assets/poddle.webp" alt="Poddle by Freepik" />
 							{/if}
 						</div>
 						<div class="ml-3 flex flex-col items-start">
