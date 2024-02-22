@@ -1,4 +1,8 @@
 <script lang="ts">
+	import {
+		PUBLIC_CLOUDINARY_CLOUD_NAME,
+		PUBLIC_CLOUDINARY_UPLOAD_PRESET
+	} from '$env/static/public';
 	import { Button, Progress, Tooltip } from '$lib/components';
 	import type { DetailResult, PronunciationAssessmentResult, Question } from '$lib/types';
 	import { getWPM } from '$lib/utils';
@@ -9,10 +13,6 @@
 	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
 	import DoughnutChart from './DoughnutChart.svelte';
-	import {
-		PUBLIC_CLOUDINARY_CLOUD_NAME,
-		PUBLIC_CLOUDINARY_UPLOAD_PRESET
-	} from '$env/static/public';
 
 	let { question, user } = $props<{ question: Question; user: User }>();
 	const uniqueId = uuidv4();
@@ -377,11 +377,11 @@
 
 			// set the status to transcribing
 			status = 'Transcribing';
-			await Promise.all([transcribeProcess(), uploadVideo()]);
+			await transcribeProcess();
 
 			// set the status to assessing
 			status = 'Generating Feedback';
-			await Promise.all([feedbackProcess(), assessmentProcess()]);
+			await Promise.all([feedbackProcess(), assessmentProcess(), uploadVideo()]);
 
 			const newAnswerID = uuidv4();
 			// set the status to saving
