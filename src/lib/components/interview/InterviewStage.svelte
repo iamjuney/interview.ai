@@ -161,7 +161,6 @@
 		mediaRecorderRef?.stop();
 
 		cameraRecording = false;
-		countdown = 0;
 	}
 
 	// function to handle the restart of the recording
@@ -179,16 +178,6 @@
 		// create files from the blobs
 		audioFile = new File([audioBlob], `${uniqueId}.webm`, { type: 'audio/webm' });
 		videoFile = new File([recordBlob], `video.webm`, { type: 'video/webm' });
-
-		// get the duration of the video
-		const video = document.createElement('video');
-		video.src = URL.createObjectURL(videoFile);
-		await new Promise<void>((resolve) => {
-			video.onloadedmetadata = () => {
-				duration = video.duration;
-				resolve();
-			};
-		});
 	}
 
 	// function to handle the processing of the recording
@@ -313,6 +302,7 @@
 
 	async function uploadAnswer(newAnswerID: string) {
 		const videoURL = await uploadVideo();
+		duration = 150 - countdown;
 
 		const upload = await fetch('/api/db/answers', {
 			method: 'POST',
@@ -398,11 +388,6 @@
 			isSubmitting = false;
 			completed = true;
 			stopStream();
-
-			// // reset the recording after 1.5 seconds
-			// setTimeout(function () {
-			// 	recordedChunks = [];
-			// }, 1500);
 		}
 	}
 </script>
@@ -446,8 +431,8 @@
 		<div class="absolute bottom-0 left-0 z-50 flex h-[82px] w-full items-center justify-center">
 			<div class="absolute bottom-[6px] left-5 right-5 md:bottom-5">
 				<div class="flex flex-col items-center justify-center gap-2 lg:mt-4">
-					{#if recordedChunks.length > 0}
-						{#if !completed}
+					{#if !completed}
+						{#if recordedChunks.length > 0}
 							<div class="flex flex-row gap-2">
 								{#if isSubmitting}
 									<Button variant="secondary">
@@ -462,19 +447,19 @@
 									</Button>
 								{/if}
 							</div>
+						{:else if cameraRecording}
+							<button
+								onclick={handleStopCaptureClick}
+								class="flex size-10 scale-100 cursor-pointer flex-col items-center justify-center rounded-full bg-transparent text-white ring-4 ring-white duration-75 hover:shadow-xl active:scale-95"
+							>
+								<div class="size-5 cursor-pointer rounded bg-red-500"></div>
+							</button>
+						{:else}
+							<button
+								onclick={handleStartCaptureClick}
+								class="flex size-8 scale-100 flex-col items-center justify-center rounded-full bg-red-500 ring-4 ring-white ring-offset-2 ring-offset-gray-500 duration-75 hover:shadow-xl active:scale-95 sm:h-8 sm:w-8"
+							></button>
 						{/if}
-					{:else if cameraRecording}
-						<button
-							onclick={handleStopCaptureClick}
-							class="flex size-10 scale-100 cursor-pointer flex-col items-center justify-center rounded-full bg-transparent text-white ring-4 ring-white duration-75 hover:shadow-xl active:scale-95"
-						>
-							<div class="size-5 cursor-pointer rounded bg-red-500"></div>
-						</button>
-					{:else}
-						<button
-							onclick={handleStartCaptureClick}
-							class="flex size-8 scale-100 flex-col items-center justify-center rounded-full bg-red-500 ring-4 ring-white ring-offset-2 ring-offset-gray-500 duration-75 hover:shadow-xl active:scale-95 sm:h-8 sm:w-8"
-						></button>
 					{/if}
 				</div>
 			</div>
