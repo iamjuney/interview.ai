@@ -1,6 +1,6 @@
 export type DetailResult = {
 	word: string;
-	errorType?: string;
+	errorType: string;
 };
 
 export type PronunciationAssessmentResult = {

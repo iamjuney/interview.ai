@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Button, DoughnutChart, Progress, Tooltip } from '$lib/components';
 	import type { Answer } from '$lib/types';
-	import { getWPM } from '$lib/utils';
+	import { countMispronunciations, countMonotone, getWPM } from '$lib/utils';
 	import { HelpCircle, Trash, X } from 'lucide-svelte';
 	import { CldVideoPlayer } from 'svelte-cloudinary';
 	import { backOut } from 'svelte/easing';
@@ -19,6 +19,7 @@
 	}>();
 
 	let assessment = $state(answer.assessment);
+	let transcript = $state(assessment?.data ?? []);
 </script>
 
 {#if isOpen}
@@ -183,21 +184,58 @@
 
 										<div class="flex gap-6 text-xs text-muted-foreground sm:text-sm">
 											<div class="flex items-center gap-2">
-												<div class="size-4 rounded bg-primary"></div>
+												<div class="size-4 rounded bg-yellow-500"></div>
 												<p>
-													Mispronunciations: <span class="font-semibold text-foreground">0</span>
+													Mispronunciations: <span class="font-semibold text-foreground"
+														>{countMispronunciations(assessment!.data)}</span
+													>
 												</p>
 											</div>
 											<div class="flex items-center gap-2">
-												<div class="size-4 rounded bg-violet-500"></div>
-												<p>Monotone: <span class="font-semibold text-foreground">0</span></p>
+												<div class="size-4 rounded bg-primary"></div>
+												<p>
+													Monotone: <span class="font-semibold text-foreground"
+														>{countMonotone(assessment!.data)}</span
+													>
+												</p>
 											</div>
 										</div>
 									</div>
 									<div
 										class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-base leading-6 text-secondary-foreground"
 									>
-										<p class="prose prose-sm max-w-none">{answer?.answer}</p>
+										<p class="w-full whitespace-normal text-wrap">
+											<!-- {#each transcript as word}
+												{#if word.errorType === 'Mispronunciation'}
+													<span
+														class="me-[3px] inline-block font-semibold underline decoration-yellow-500 decoration-2"
+														>{word.word}
+													</span>
+												{:else if word.errorType === 'Monotone'}
+													<span
+														class="me-[3px] inline-block font-semibold underline decoration-primary decoration-wavy decoration-2"
+														>{word.word}
+													</span>
+												{:else}
+													<span class="me-[3px] inline-block">{word.word}</span>
+												{/if}
+											{/each} -->
+											{#each answer?.answer.split(' ') as word, idx}
+												{#if transcript[idx]?.errorType === 'Mispronunciation'}
+													<span
+														class="me-[3px] inline-block font-semibold underline decoration-yellow-500 decoration-2"
+														>{word}
+													</span>
+												{:else if transcript[idx]?.errorType === 'Monotone'}
+													<span
+														class="me-[3px] inline-block font-semibold underline decoration-primary decoration-wavy decoration-2"
+														>{word}
+													</span>
+												{:else}
+													<span class="me-[3px] inline-block">{word}</span>
+												{/if}
+											{/each}
+										</p>
 									</div>
 								</div>
 

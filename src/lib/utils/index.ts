@@ -1,3 +1,4 @@
+import type { DetailResult } from '$lib/types';
 import { clsx, type ClassValue } from 'clsx';
 import { cubicOut } from 'svelte/easing';
 import type { TransitionConfig } from 'svelte/transition';
@@ -13,6 +14,14 @@ export function getWPM(transcript: string, duration: number) {
 
 	// Calculate the WPM
 	return Math.round(wordCount / (duration / 60));
+}
+
+export function countMispronunciations(words: DetailResult[]) {
+	return words.filter((word) => word.errorType === 'Mispronunciation').length;
+}
+
+export function countMonotone(words: DetailResult[]) {
+	return words.filter((word) => word.errorType === 'Monotone').length;
 }
 
 type FlyAndScaleParams = {
