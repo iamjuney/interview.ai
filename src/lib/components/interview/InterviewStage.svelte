@@ -9,6 +9,10 @@
 	import { untrack } from 'svelte';
 	import { v4 as uuidv4 } from 'uuid';
 	import DoughnutChart from './DoughnutChart.svelte';
+	import {
+		PUBLIC_CLOUDINARY_CLOUD_NAME,
+		PUBLIC_CLOUDINARY_UPLOAD_PRESET
+	} from '$env/static/public';
 
 	let { question, user } = $props<{ question: Question; user: User }>();
 	const uniqueId = uuidv4();
@@ -36,6 +40,7 @@
 	let transcript = $state('');
 	let generatedFeedback = $state('');
 	let duration = $state(0);
+	let videoURL = $state('');
 	let assessmentData = $state<PronunciationAssessmentResult>();
 
 	// handles the camera stream
@@ -288,20 +293,22 @@
 		if (!videoFile) return;
 
 		const form = new FormData();
-		form.append('file', videoFile, videoFile.name);
-		form.append('type', 'video');
+		form.append('file', videoFile);
+		form.append('upload_preset', PUBLIC_CLOUDINARY_UPLOAD_PRESET);
 
-		const response = await fetch('/api/services/cloudinary', {
-			method: 'POST',
-			body: form
-		});
-		const public_id = await response.json();
+		const response = await fetch(
+			`https://api.cloudinary.com/v1_1/${PUBLIC_CLOUDINARY_CLOUD_NAME}/video/upload`,
+			{
+				method: 'POST',
+				body: form
+			}
+		);
+		const signature = await response.json();
 
-		return public_id;
+		videoURL = signature.public_id;
 	}
 
 	async function uploadAnswer(newAnswerID: string) {
-		const videoURL = await uploadVideo();
 		duration = 150 - countdown;
 
 		const upload = await fetch('/api/db/answers', {
@@ -370,14 +377,14 @@
 
 			// set the status to transcribing
 			status = 'Transcribing';
-			await transcribeProcess();
+			await Promise.all([transcribeProcess(), uploadVideo()]);
 
 			// set the status to assessing
 			status = 'Generating Feedback';
 			await Promise.all([feedbackProcess(), assessmentProcess()]);
 
 			const newAnswerID = uuidv4();
-			// set the status to uploading
+			// set the status to saving
 			status = 'Saving';
 			await uploadAnswer(newAnswerID);
 			await uploadAssessment(newAnswerID);

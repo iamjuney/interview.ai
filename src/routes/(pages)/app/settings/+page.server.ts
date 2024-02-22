@@ -6,6 +6,7 @@ import { eq } from 'drizzle-orm';
 import { LuciaError } from 'lucia';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
+import { PUBLIC_CLOUDINARY_UPLOAD_PRESET, PUBLIC_CLOUDINARY_CLOUD_NAME } from '$env/static/public';
 
 const nameSchema = z.object({
 	user_id: z.string().max(16),
@@ -49,12 +50,16 @@ export const actions = {
 				// upload photo to the cloudinary
 				const photoForm = new FormData();
 				photoForm.append('file', user_photo);
-				photoForm.append('type', 'image');
-				const response = await fetch('/api/services/cloudinary', {
-					method: 'POST',
-					body: photoForm
-				});
-				const public_id = await response.json();
+				photoForm.append('upload_preset', PUBLIC_CLOUDINARY_UPLOAD_PRESET);
+
+				const response = await fetch(
+					`https://api.cloudinary.com/v1_1/${PUBLIC_CLOUDINARY_CLOUD_NAME}/image/upload`,
+					{
+						method: 'POST',
+						body: photoForm
+					}
+				);
+				const signature = await response.json();
 
 				// update user in the database
 				await db
@@ -62,7 +67,7 @@ export const actions = {
 					.set({
 						first_name: form.data.first_name,
 						last_name: form.data.last_name,
-						image: public_id
+						image: signature.public_id
 					})
 					.where(eq(user.id, form.data.user_id));
 			} else {
