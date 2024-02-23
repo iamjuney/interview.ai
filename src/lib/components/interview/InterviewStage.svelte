@@ -5,7 +5,7 @@
 	} from '$env/static/public';
 	import { Button, Progress, Tooltip } from '$lib/components';
 	import type { DetailResult, PronunciationAssessmentResult, Question } from '$lib/types';
-	import { getWPM } from '$lib/utils';
+	import { countMispronunciations, countMonotone, getWPM } from '$lib/utils';
 	import { FFmpeg } from '@ffmpeg/ffmpeg';
 	import { fetchFile, toBlobURL } from '@ffmpeg/util';
 	import type { User } from 'lucia';
@@ -401,7 +401,7 @@
 
 {#if cameraLoaded}
 	<div
-		class="relative aspect-[16/9] w-full max-w-[1080px] overflow-hidden rounded-lg bg-muted shadow-md ring-1 ring-gray-900/5"
+		class="relative aspect-[16/9] w-full max-w-4xl overflow-hidden rounded-lg bg-muted shadow-md ring-1 ring-gray-900/5"
 		style="transform: none;"
 	>
 		<div class="relative z-10 h-full w-full rounded-lg">
@@ -472,21 +472,16 @@
 			</div>
 		</div>
 	</div>
-	<!-- <div class="mt-4 flex flex-row items-center space-x-1" style="opacity: 1; transform: none;">
-		<ShieldQuestion class="size-4 text-muted-foreground" />
-		<p class="text-sm font-normal leading-[20px]">
-			Video is not stored on our servers, it is solely used for transcription.
-		</p>
-	</div> -->
+
 	{#if errorMessage}
-		<div class="mt-4 flex flex-row items-center space-x-1" style="opacity: 1; transform: none;">
-			<AlertTriangle class="size-4 text-red-500" />
-			<p class="text-sm font-normal leading-[20px] text-red-500">{errorMessage}</p>
+		<div class="mt-4 flex flex-row items-center space-x-1">
+			<AlertTriangle class="size-4 text-destructive" />
+			<p class="text-sm font-normal leading-[20px] text-destructive">{errorMessage}</p>
 		</div>
 	{/if}
 
-	{#if completed}
-		<div class="mt-12 flex max-w-[1080px] flex-col gap-12">
+	{#if completed && assessmentData}
+		<div class="container mt-12 flex max-w-4xl flex-col gap-12">
 			<div class="mx-auto flex w-full max-w-2xl flex-col md:flex-row md:space-x-12">
 				<div class="flex flex-none flex-col">
 					<h2 class="mb-3 text-left text-lg font-semibold">
@@ -570,7 +565,10 @@
 									<Tooltip.Root>
 										<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
 										<Tooltip.Content class="max-w-sm">
-											<p>WPM indicates the number of words spoken per minute.</p>
+											<p>
+												WPM indicates the number of words spoken per minute. A great WPM during job
+												interviews is around 120-150 WPM.
+											</p>
 										</Tooltip.Content>
 									</Tooltip.Root>
 								</span>
@@ -586,21 +584,43 @@
 
 					<div class="flex gap-6 text-xs text-muted-foreground sm:text-sm">
 						<div class="flex items-center gap-2">
-							<div class="size-4 rounded bg-primary"></div>
+							<div class="size-4 rounded bg-yellow-500"></div>
 							<p>
-								Mispronunciations: <span class="font-semibold text-foreground">0</span>
+								Mispronunciations: <span class="font-semibold text-foreground"
+									>{countMispronunciations(assessmentData?.data)}</span
+								>
 							</p>
 						</div>
 						<div class="flex items-center gap-2">
-							<div class="size-4 rounded bg-violet-500"></div>
-							<p>Monotone: <span class="font-semibold text-foreground">0</span></p>
+							<div class="size-4 rounded bg-primary"></div>
+							<p>
+								Monotone: <span class="font-semibold text-foreground"
+									>{countMonotone(assessmentData.data)}</span
+								>
+							</p>
 						</div>
 					</div>
 				</div>
 				<div
 					class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-base leading-6 text-secondary-foreground"
 				>
-					<p class="prose prose-sm max-w-none">{transcript}</p>
+					<p class="w-full whitespace-normal text-wrap">
+						{#each transcript.split(' ') as word, idx}
+							{#if assessmentData.data[idx]?.errorType === 'Mispronunciation'}
+								<span
+									class="me-[3px] inline-block font-semibold underline decoration-yellow-500 decoration-2"
+									>{word}
+								</span>
+							{:else if assessmentData.data[idx]?.errorType === 'Monotone'}
+								<span
+									class="me-[3px] inline-block font-semibold underline decoration-primary decoration-wavy decoration-2"
+									>{word}
+								</span>
+							{:else}
+								<span class="me-[3px] inline-block">{word}</span>
+							{/if}
+						{/each}
+					</p>
 				</div>
 			</div>
 
@@ -625,7 +645,7 @@
 		</p>
 	</div>
 	<div class="fixed bottom-0 w-full bg-background px-4">
-		<div class="container flex max-w-5xl justify-center gap-4 border-t py-6 md:justify-end">
+		<div class="container flex max-w-4xl justify-center gap-4 border-t py-6 md:justify-end">
 			<Button class="group" onclick={() => location.reload()}>
 				<span class="mr-2">Restart demo</span>
 				<RefreshCw class="size-5 group-hover:animate-spin" />

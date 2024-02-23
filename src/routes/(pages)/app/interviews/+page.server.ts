@@ -60,6 +60,8 @@ export const actions = {
 
 		try {
 			await db.delete(userInterview).where(eq(userInterview.id, userInterviewId));
+
+			// TODO: delete all videos and answers associated with the interview
 		} catch (error) {
 			return fail(500, {
 				message: 'Failed to delete interview'

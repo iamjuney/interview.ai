@@ -105,7 +105,7 @@
 					<div class="mt-4">
 						<div class="flex items-center justify-between">
 							<div class="flex items-center">
-								<Volume2 class="size-6 text-accent" />
+								<Volume2 class="size-6 text-muted-foreground" />
 								<span class="ml-2 text-sm font-medium">Can you hear the audio?</span>
 							</div>
 							<div>
