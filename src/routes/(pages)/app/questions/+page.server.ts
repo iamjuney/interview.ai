@@ -1,5 +1,5 @@
 import { db } from '$lib/db';
-import { question, userInterview } from '$lib/db/schema';
+import { question, userInterview, answer } from '$lib/db/schema';
 import type { Question } from '$lib/types';
 import { fail } from '@sveltejs/kit';
 import { and, eq, ilike, inArray } from 'drizzle-orm';
@@ -24,7 +24,9 @@ export const load = (async ({ locals }) => {
 	if (all.length > 0) {
 		questions = await db.query.question.findMany({
 			with: {
-				answers: true
+				answers: {
+					where: eq(answer.userId, user.userId)
+				}
 			},
 			where: inArray(
 				question.interviewId,

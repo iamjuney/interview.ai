@@ -205,21 +205,6 @@
 										class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-base leading-6 text-secondary-foreground"
 									>
 										<p class="w-full whitespace-normal text-wrap">
-											<!-- {#each transcript as word}
-												{#if word.errorType === 'Mispronunciation'}
-													<span
-														class="me-[3px] inline-block font-semibold underline decoration-yellow-500 decoration-2"
-														>{word.word}
-													</span>
-												{:else if word.errorType === 'Monotone'}
-													<span
-														class="me-[3px] inline-block font-semibold underline decoration-primary decoration-wavy decoration-2"
-														>{word.word}
-													</span>
-												{:else}
-													<span class="me-[3px] inline-block">{word.word}</span>
-												{/if}
-											{/each} -->
 											{#each answer?.answer.split(' ') as word, idx}
 												{#if transcript[idx]?.errorType === 'Mispronunciation'}
 													<span

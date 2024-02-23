@@ -43,7 +43,7 @@
 					</div>
 				{:else}
 					<div class="mt-8 w-full">
-						<p class="text-foreground/80">No interviews found.</p>
+						<p class="text-muted-foreground">No interviews found.</p>
 					</div>
 				{/if}
 			</Tabs.Content>
@@ -58,7 +58,7 @@
 					</div>
 				{:else}
 					<div class="mt-8 w-full">
-						<p class="text-foreground/80">No interviews found.</p>
+						<p class="text-muted-foreground">No interviews found.</p>
 					</div>
 				{/if}
 			</Tabs.Content>
@@ -73,7 +73,7 @@
 					</div>
 				{:else}
 					<div class="mt-8 w-full">
-						<p class="text-foreground/80">No interviews found.</p>
+						<p class="text-muted-foreground">No interviews found.</p>
 					</div>
 				{/if}
 			</Tabs.Content>
