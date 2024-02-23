@@ -34,7 +34,7 @@
 		background: linear-gradient(
 			90deg,
 			hsl(var(--primary)) 0%,
-			hsl(var(--secondary)) 50%,
+			hsl(var(--primary)) 50%,
 			hsl(var(--primary)) 100%
 		) !important;
 	}

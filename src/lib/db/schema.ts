@@ -117,7 +117,7 @@ export const userInterview = pgTable('user_interviews', {
 	})
 		.notNull()
 		.references(() => interview.id, { onDelete: 'cascade' }),
-	status: statusEnum('status').default('in-progress')
+	status: statusEnum('status').default('in-progress').notNull()
 });
 
 // questions table

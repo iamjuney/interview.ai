@@ -3,9 +3,18 @@
 	import type { Interview, Question } from '$lib/types';
 	import { Inbox, Timer } from 'lucide-svelte';
 
-	let { interview, status } = $props<{ interview: Interview; status?: string | null }>();
-
+	let { interview, status } = $props<{ interview: Interview; status?: string }>();
+	let progress = $state(0);
 	const questions = interview.questions as Question[];
+
+	function getProgress() {
+		const answeredQuestions = questions.reduce((count, question) => {
+			return count + (question.answers!.length > 0 ? 1 : 0);
+		}, 0);
+		progress = Math.round((answeredQuestions / questions.length) * 100);
+	}
+
+	if (status) getProgress();
 </script>
 
 <a
@@ -26,9 +35,9 @@
 					<p class="ml-2 font-semibold">{interview.company}</p>
 				</div>
 				<p class="text-xl font-semibold md:text-2xl">{interview.position}</p>
-				{#if status === 'completed'}
-					<Progress value={100} class="mt-6" />
-					<p class="text-sm">100% completed</p>
+				{#if progress > 0}
+					<Progress value={progress} class="mt-6" />
+					<p class="text-sm">{progress}% completed</p>
 				{:else}
 					<Progress value={2} class="mt-6" />
 					<p class="text-sm">Not Yet Started</p>

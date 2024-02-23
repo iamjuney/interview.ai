@@ -1,7 +1,7 @@
 import { db } from '$lib/db';
-import { question, userInterview, answer } from '$lib/db/schema';
+import { answer, question, userInterview } from '$lib/db/schema';
 import type { Question } from '$lib/types';
-import { fail } from '@sveltejs/kit';
+import { error, fail } from '@sveltejs/kit';
 import { and, eq, ilike, inArray } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -9,14 +9,18 @@ import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
 	const session = await locals.auth.validate();
-	const user = session!.user;
+	const userId = session?.user.userId;
+
+	if (!userId) {
+		error(401, 'Unauthorized');
+	}
 
 	// Get all user interviews and the interview details
 	const all = await db.query.userInterview.findMany({
 		columns: {
 			interviewId: true
 		},
-		where: eq(userInterview.userId, user.userId)
+		where: eq(userInterview.userId, userId)
 	});
 
 	let questions: Question[] = [];
@@ -25,7 +29,7 @@ export const load = (async ({ locals }) => {
 		questions = await db.query.question.findMany({
 			with: {
 				answers: {
-					where: eq(answer.userId, user.userId)
+					where: eq(answer.userId, userId)
 				}
 			},
 			where: inArray(
@@ -57,7 +61,11 @@ export const actions = {
 		}
 
 		const session = await locals.auth.validate();
-		const userId = session!.user.userId.toString();
+		const userId = session?.user.userId;
+
+		if (!userId) {
+			error(401, 'Unauthorized');
+		}
 
 		try {
 			// Get all user interviews and the interview details

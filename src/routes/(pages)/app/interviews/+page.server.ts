@@ -1,20 +1,30 @@
 import { db } from '$lib/db';
-import { userInterview } from '$lib/db/schema';
-import { fail, redirect } from '@sveltejs/kit';
+import { answer, userInterview } from '$lib/db/schema';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { v4 as uuidv4 } from 'uuid';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ locals }) => {
 	const session = await locals.auth.validate();
-	const userId = session!.user.userId.toString();
+	const userId = session?.user.userId;
+
+	if (!userId) {
+		error(401, 'Unauthorized');
+	}
 
 	// Get all user interviews and the interview details
 	const all = await db.query.userInterview.findMany({
 		with: {
 			interview: {
 				with: {
-					questions: true
+					questions: {
+						with: {
+							answers: {
+								where: eq(answer.userId, userId)
+							}
+						}
+					}
 				}
 			}
 		},
@@ -33,7 +43,11 @@ export const load = (async ({ locals }) => {
 export const actions = {
 	add: async ({ request, locals }) => {
 		const session = await locals.auth.validate();
-		const userId = session!.user.userId;
+		const userId = session?.user.userId;
+
+		if (!userId) {
+			error(401, 'Unauthorized');
+		}
 
 		// Get the interview id and slug from the form data
 		const form = await request.formData();
