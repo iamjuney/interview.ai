@@ -73,7 +73,9 @@ export const actions = {
 			if (all.length > 0) {
 				questions = await db.query.question.findMany({
 					with: {
-						answers: true
+						answers: {
+							where: eq(answer.userId, userId)
+						}
 					},
 					where: and(
 						inArray(
