@@ -1,19 +1,36 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { Badge, Input } from '$lib/components';
-	import type { SubmitFunction } from '@sveltejs/kit';
+	import { goto } from '$app/navigation';
+	import { Badge, Button, Input } from '$lib/components';
+	import { type SubmitFunction } from '@sveltejs/kit';
 	import { Check, Loader2, Search } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
+	import { page } from '$app/stores';
 
 	let { data } = $props();
 	let questions = $state(data.questions);
+	let total = $derived<number | undefined>(data.total);
+	let current = $state(Number($page.params.slug));
 	let animate = $state(false);
 	let searchForm = $state<HTMLFormElement>();
 	let query = $state('');
 	let timeoutId = $state<NodeJS.Timeout>();
 	let isSearching = $state(false);
 	let failedSearchData = $state<Record<string, any>>();
+	let pagination = $derived(() => {
+		return {
+			total: total,
+			per_page: 12,
+			current_page: current,
+			last_page: Math.ceil(questions.length / 12),
+			from: (current - 1) * 12 + 1,
+			to:
+				Math.ceil((total ?? 0) / 12) === current
+					? 12 * (current - 1) + questions.length
+					: 12 * current
+		};
+	});
 
 	$effect(() => {
 		animate = true;
@@ -57,12 +74,12 @@
 </script>
 
 {#if animate}
-	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
+	<div class="container flex grow flex-col space-y-12 md:pt-10" in:fly={flyOptions}>
 		<div class="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between">
 			<h2 class="text-3xl font-medium tracking-tight">My Questions</h2>
 		</div>
 
-		<div>
+		<div class="grow">
 			<form
 				bind:this={searchForm}
 				class="w-full"
@@ -95,13 +112,12 @@
 			{/if}
 
 			<div class="mt-3 grid w-full grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
-				{#if questions.length === 0}
-					<p class="text-muted-foreground">No questions found.</p>
-				{:else}
+				{#if questions.length > 0}
 					{#each questions as question}
 						<a
 							class="group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border p-4 font-medium shadow-sm transition duration-100 hover:bg-secondary hover:text-secondary-foreground"
 							href="/app/questions/{question.slug}"
+							data-sveltekit-preload-data
 						>
 							<div class="relative flex h-full flex-col overflow-hidden">
 								<div class="flex items-center text-left">
@@ -118,50 +134,39 @@
 							</div></a
 						>
 					{/each}
+				{:else}
+					<p class="text-muted-foreground">No questions found.</p>
 				{/if}
-
-				<!-- <a
-					class="group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border border-accent p-4 font-medium transition duration-100"
-					href="/app/questions"
-					><div
-						class="absolute inset-0 rounded-xl ring-1 ring-inset ring-zinc-900/[7.5%] group-hover:ring-zinc-900/10"
-					></div>
-					<div class="relative flex h-full flex-col overflow-hidden">
-						<div class="flex items-center text-left"><p>Salary Expectation</p></div>
-						<p class="mt-1 grow text-wrap text-sm font-normal text-foreground/80">
-							What is your expected salary?
-						</p>
-						<div class="flex flex-row space-x-2">
-							<p
-								class="inline-flex items-center justify-center truncate rounded-full border border-[#D0E7DC] bg-[#F3FAF1] px-2 py-0.5 text-xs font-normal text-slate-700 hover:bg-[#edf8ea]"
-							>
-								<span class="mr-1 flex items-center text-emerald-600"
-									><svg
-										class="h-5 w-5"
-										viewBox="0 0 24 24"
-										fill="none"
-										xmlns="http://www.w3.org/2000/svg"
-										><path
-											d="M4.75 12C4.75 7.99594 7.99594 4.75 12 4.75C16.0041 4.75 19.25 7.99594 19.25 12C19.25 16.0041 16.0041 19.25 12 19.25C7.99594 19.25 4.75 16.0041 4.75 12Z"
-											fill="#459A5F"
-											stroke="#459A5F"
-											stroke-width="1.5"
-											stroke-linecap="round"
-											stroke-linejoin="round"
-										></path><path
-											d="M9.75 12.75L10.1837 13.6744C10.5275 14.407 11.5536 14.4492 11.9564 13.7473L14.25 9.75"
-											stroke="#F4FAF4"
-											stroke-width="1.5"
-											stroke-linecap="round"
-											stroke-linejoin="round"
-										></path></svg
-									></span
-								>Completed
-							</p>
-						</div>
-					</div></a
-				> -->
 			</div>
+		</div>
+
+		<div class="pb-8">
+			<nav
+				class="flex items-center justify-between border-t px-4 py-[13px] sm:px-6"
+				aria-label="Pagination"
+			>
+				<div class="hidden sm:block">
+					<p class="text-sm">
+						Showing <span class="font-medium">{pagination().from}</span> to
+						<span class="font-medium">{pagination().to}</span>
+						of
+						<span class="font-medium">{total}</span> results
+					</p>
+				</div>
+				<div class="flex flex-1 justify-between gap-3 sm:justify-end">
+					{#if current === 1}
+						<Button disabled>Previous</Button>
+					{:else}
+						<Button href="/app/questions/page/{current - 1}" data-sveltekit-reload>Previous</Button>
+					{/if}
+
+					{#if pagination().to === total}
+						<Button disabled>Next</Button>
+					{:else}
+						<Button href="/app/questions/page/{current + 1}" data-sveltekit-reload>Next</Button>
+					{/if}
+				</div>
+			</nav>
 		</div>
 	</div>
 {/if}

@@ -34,6 +34,7 @@ export * as Dialog from './ui/dialog';
 export * as DropdownMenu from './ui/dropdown-menu';
 export { Input } from './ui/input';
 export { Label } from './ui/label';
+export * as Pagination from './ui/pagination';
 export { Progress } from './ui/progress';
 export * as RadioGroup from './ui/radio-group';
 export * as Tabs from './ui/tabs';

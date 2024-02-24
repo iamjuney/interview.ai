@@ -2,14 +2,15 @@ import { db } from '$lib/db';
 import { answer, question, userInterview } from '$lib/db/schema';
 import type { Question } from '$lib/types';
 import { error, fail } from '@sveltejs/kit';
-import { and, eq, ilike, inArray } from 'drizzle-orm';
+import { and, eq, ilike, inArray, sql } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
 
-export const load = (async ({ locals }) => {
+export const load = (async ({ locals, params }) => {
 	const session = await locals.auth.validate();
 	const userId = session?.user.userId;
+	const slug = Number(params.slug);
 
 	if (!userId) {
 		error(401, 'Unauthorized');
@@ -23,26 +24,41 @@ export const load = (async ({ locals }) => {
 		where: eq(userInterview.userId, userId)
 	});
 
-	let questions: Question[] = [];
+	if (all.length === 0) {
+		return {
+			questions: []
+		};
+	}
 
-	if (all.length > 0) {
-		questions = await db.query.question.findMany({
-			with: {
-				answers: {
-					where: eq(answer.userId, userId)
-				}
-			},
-			where: inArray(
+	const questions = await db.query.question.findMany({
+		limit: 12,
+		offset: (slug - 1) * 12,
+		with: {
+			answers: {
+				where: eq(answer.userId, userId)
+			}
+		},
+		where: inArray(
+			question.interviewId,
+			all.map((i) => i.interviewId)
+		)
+	});
+
+	const total = await db
+		.select({
+			count: sql<number>`cast(count(${question.id}) as int)`
+		})
+		.from(question)
+		.where(
+			inArray(
 				question.interviewId,
 				all.map((i) => i.interviewId)
 			)
-		});
-	} else {
-		questions = [];
-	}
+		);
 
 	return {
-		questions
+		questions,
+		total: total[0].count
 	};
 }) satisfies PageServerLoad;
 

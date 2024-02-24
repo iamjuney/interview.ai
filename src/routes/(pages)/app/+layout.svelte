@@ -29,11 +29,7 @@
 	</div>
 
 	<!-- Main -->
-	<main class="relative isolate flex min-h-dvh flex-1 flex-col bg-transparent">
-		<div class="flex h-3 flex-shrink-0 bg-transparent"></div>
-
-		<div class="relative block w-full flex-1 flex-col rounded-tl-xl bg-transparent">
-			{@render children()}
-		</div>
+	<main class="relative flex min-h-[calc(100dvh-30px)] w-full flex-1 rounded-tl-xl">
+		{@render children()}
 	</main>
 </div>
