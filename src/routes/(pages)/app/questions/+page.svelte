@@ -1,34 +1,35 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
 	import { Badge, Button, Input } from '$lib/components';
 	import { type SubmitFunction } from '@sveltejs/kit';
 	import { Check, Loader2, Search } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
-	import { page } from '$app/stores';
 
 	let { data } = $props();
 	let questions = $state(data.questions);
-	let total = $derived<number | undefined>(data.total);
-	let current = $state(Number($page.params.slug));
 	let animate = $state(false);
 	let searchForm = $state<HTMLFormElement>();
 	let query = $state('');
 	let timeoutId = $state<NodeJS.Timeout>();
 	let isSearching = $state(false);
 	let failedSearchData = $state<Record<string, any>>();
+
+	let total = $derived(data.questions.length);
+	let perPage = $state(12);
+	let currentPage = $state(1);
+	let currentQuestions = $derived(() => {
+		let start = (currentPage - 1) * perPage;
+		let end = start + perPage;
+		return questions.slice(start, end);
+	});
 	let pagination = $derived(() => {
 		return {
-			total: total,
-			per_page: 12,
-			current_page: current,
-			last_page: Math.ceil(questions.length / 12),
-			from: (current - 1) * 12 + 1,
+			from: (currentPage - 1) * perPage + 1,
 			to:
-				Math.ceil((total ?? 0) / 12) === current
-					? 12 * (current - 1) + questions.length
-					: 12 * current
+				Math.ceil((total ?? 0) / perPage) === currentPage
+					? perPage * (currentPage - 1) + currentQuestions().length
+					: perPage * currentPage
 		};
 	});
 
@@ -113,7 +114,7 @@
 
 			<div class="mt-3 grid w-full grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
 				{#if questions.length > 0}
-					{#each questions as question}
+					{#each currentQuestions() as question}
 						<a
 							class="group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border p-4 font-medium shadow-sm transition duration-100 hover:bg-secondary hover:text-secondary-foreground"
 							href="/app/questions/{question.slug}"
@@ -154,16 +155,24 @@
 					</p>
 				</div>
 				<div class="flex flex-1 justify-between gap-3 sm:justify-end">
-					{#if current === 1}
+					{#if currentPage === 1}
 						<Button disabled>Previous</Button>
 					{:else}
-						<Button href="/app/questions/page/{current - 1}" data-sveltekit-reload>Previous</Button>
+						<Button
+							on:click={() => {
+								currentPage -= 1;
+							}}>Previous</Button
+						>
 					{/if}
 
 					{#if pagination().to === total}
 						<Button disabled>Next</Button>
 					{:else}
-						<Button href="/app/questions/page/{current + 1}" data-sveltekit-reload>Next</Button>
+						<Button
+							on:click={() => {
+								currentPage += 1;
+							}}>Next</Button
+						>
 					{/if}
 				</div>
 			</nav>
