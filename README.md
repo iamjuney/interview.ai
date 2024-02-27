@@ -4,9 +4,8 @@
 
 ## Tech Stack:
 
-- Frontend: SvelteKit
-- State Management: SvelteKit built-in store
-- UI Framework: Shaden
+- Framework: SvelteKit
+- UI: Shadcn UI
 - Deployment: Vercel
 - Database: Postgres
 - Speech Recognition: Azure Speech Services
