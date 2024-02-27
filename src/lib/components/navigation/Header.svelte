@@ -18,7 +18,7 @@
 					<Button href="#testimonials" variant="ghost">Testimonials</Button>
 				</div>
 			</div>
-			<div class="flex items-center gap-x-5 md:gap-x-8">
+			<div class="flex items-center gap-x-3 md:gap-x-6">
 				{#if session}
 					<Button href="/app">Go to Dashboard</Button>
 

@@ -95,8 +95,6 @@ export const actions = {
 						ilike(question.question, `%${form.data.query}%`)
 					)
 				});
-			} else {
-				questions = [];
 			}
 
 			return {

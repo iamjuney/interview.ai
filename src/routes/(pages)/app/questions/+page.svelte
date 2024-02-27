@@ -155,25 +155,19 @@
 					</p>
 				</div>
 				<div class="flex flex-1 justify-between gap-3 sm:justify-end">
-					{#if currentPage === 1}
-						<Button disabled>Previous</Button>
-					{:else}
-						<Button
-							on:click={() => {
-								currentPage -= 1;
-							}}>Previous</Button
-						>
-					{/if}
+					<Button
+						disabled={currentPage === 1}
+						on:click={() => {
+							currentPage -= 1;
+						}}>Previous</Button
+					>
 
-					{#if pagination().to === total}
-						<Button disabled>Next</Button>
-					{:else}
-						<Button
-							on:click={() => {
-								currentPage += 1;
-							}}>Next</Button
-						>
-					{/if}
+					<Button
+						disabled={pagination().to === total}
+						on:click={() => {
+							currentPage += 1;
+						}}>Next</Button
+					>
 				</div>
 			</nav>
 		</div>

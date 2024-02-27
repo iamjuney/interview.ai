@@ -71,6 +71,7 @@
 							<div class="flex flex-col space-y-6">
 								<div class="flex flex-col">
 									<p class="mb-3 text-lg font-semibold">Recorded Answer</p>
+									<!-- Typescript error below is expected -->
 									<CldVideoPlayer
 										width={640}
 										height={480}
