@@ -1,4 +1,4 @@
-<a href="/" class="-m-1.5 p-1.5">
+<a href="/" class="-m-1.5 p-1.5" data-sveltekit-preload-data>
 	<!-- <span class="sr-only">Your Company</span>
 				<img
 					class="h-8 w-auto"

@@ -256,7 +256,7 @@
 							id="new_password"
 							name="new_password"
 							type="password"
-							placeholder="New password"
+							placeholder="Enter new password"
 						/>
 					</div>
 
@@ -266,7 +266,7 @@
 							id="confirm_password"
 							name="confirm_password"
 							type="password"
-							placeholder="Confirm new password"
+							placeholder="Re-type new password"
 						/>
 					</div>
 				</div>
