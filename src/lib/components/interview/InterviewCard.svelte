@@ -25,7 +25,7 @@
 	<div
 		class="relative z-10 mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg shadow-sm"
 	>
-		<div class="relative h-full w-full rounded-lg bg-primary/5">
+		<div class="relative h-full w-full rounded-lg border bg-primary/5">
 			{#if status}
 				<Badge class="absolute right-4 top-4 capitalize">{status}</Badge>
 			{/if}

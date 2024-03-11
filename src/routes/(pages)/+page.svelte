@@ -47,7 +47,7 @@
 				without the pressure.
 			</h1>
 			<p class="mx-auto mt-6 max-w-2xl text-lg tracking-tight text-muted-foreground">
-				Practice CS/IT related job interview scenarios and get instant feedback and speech
+				Practice CS/IT related job interview questions and get instant feedback and speech
 				assessment. Your practice, your privacy.
 			</p>
 			<div class="mt-10 flex justify-center gap-x-6">
@@ -61,8 +61,7 @@
 				<p class="text-base font-medium text-muted-foreground">
 					<span
 						>This is a thesis project of
-						<a class="underline" href="https://www.linkedin.com/in/aljon-lerios/">Aljon Lerios</a> for
-						the degree of BSCS.
+						<a class="underline" href="https://www.linkedin.com/in/aljon-lerios/">Aljon Lerios</a>.
 					</span>
 				</p>
 				<ul role="list" class="mt-8 flex items-center justify-center">
@@ -113,13 +112,13 @@
 			</div>
 		</div>
 
-		<!-- <FeaturesSection />
+		<FeaturesSection />
 
-		<SecondaryFeaturesSection />
+		<!-- <SecondaryFeaturesSection /> -->
 
-		<GetStartedSection />
+		<TestimonialsSection />
 
-		<TestimonialsSection /> -->
+		<!-- <GetStartedSection /> -->
 	</main>
 
 	<Footer />

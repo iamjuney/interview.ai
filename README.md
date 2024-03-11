@@ -1,5 +1,7 @@
 # AI-Driven Job Interview Practice Platform
-## Abstract: 
+
+## Abstract:
+
 ### This repository contains the source code for an AI-driven job interview practice platform, developed for my thesis research.
 
 ## Tech Stack:
