@@ -1,9 +1,9 @@
+<script lang="ts">
+	import { mode } from 'mode-watcher';
+</script>
+
 <a href="/" class="-m-1.5 p-1.5" data-sveltekit-preload-data>
-	<!-- <span class="sr-only">Your Company</span>
-				<img
-					class="h-8 w-auto"
-					src="https://tailwindui.com/img/logos/mark.svg?color=indigo&shade=600"
-					alt=""
-				/> -->
-	<span class="text-2xl font-bold">.interview</span>
+	<span class="sr-only">Interview Hero</span>
+	<img class="h-8 w-auto" src="/logo/{$mode}/interviewhero.svg" alt="" />
+	<!-- <span class="text-2xl font-bold">.interview</span> -->
 </a>

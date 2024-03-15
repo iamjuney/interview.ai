@@ -11,6 +11,7 @@
 	import { Play } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
+	import { mode } from 'mode-watcher';
 
 	const flyOptions = {
 		y: 30,
@@ -26,9 +27,9 @@
 	});
 </script>
 
-<Header session={data.hasSession} />
-
 {#if animate}
+	<Header session={data.hasSession} />
+
 	<main in:fly={flyOptions}>
 		<div class="container pb-16 pt-20 text-center lg:pt-32">
 			<h1 class="font-display mx-auto max-w-4xl text-5xl font-medium tracking-tight sm:text-7xl">
@@ -71,40 +72,13 @@
 							class="flex flex-col items-center gap-y-8 sm:flex-row sm:gap-x-12 sm:gap-y-0"
 						>
 							<li class="flex">
-								<img
-									alt="Mirage"
-									loading="lazy"
-									width="138"
-									height="48"
-									decoding="async"
-									data-nimg="1"
-									style="color:transparent"
-									src="/assets/vsu.png"
-								/>
+								<img alt="VSU Logo" class="h-auto w-36" src="/logo/{$mode}/vsu.svg" />
 							</li>
 							<li class="flex">
-								<img
-									alt="Laravel"
-									loading="lazy"
-									width="136"
-									height="48"
-									decoding="async"
-									data-nimg="1"
-									style="color:transparent"
-									src="/assets/vsu.png"
-								/>
+								<img alt="CET Logo" class="h-auto w-36" src="/logo/{$mode}/cet.svg" />
 							</li>
 							<li class="flex">
-								<img
-									alt="Statamic"
-									loading="lazy"
-									width="147"
-									height="48"
-									decoding="async"
-									data-nimg="1"
-									style="color:transparent"
-									src="/assets/vsu.png"
-								/>
+								<img alt="DCST Logo" class="h-auto w-36" src="/logo/{$mode}/dcst.svg" />
 							</li>
 						</ul>
 					</li>
