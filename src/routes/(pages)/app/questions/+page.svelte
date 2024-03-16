@@ -15,7 +15,7 @@
 	let isSearching = $state(false);
 	let failedSearchData = $state<Record<string, any>>();
 
-	let total = $derived(data.questions.length);
+	let total = $derived(questions.length);
 	let perPage = $state(12);
 	let currentPage = $state(1);
 	let currentQuestions = $derived(() => {
