@@ -168,7 +168,7 @@
 
 		<div class="w-full md:w-7/12">
 			<div class="mb-5 mt-1">
-				<div class="text-lg font-semibold">Technical Questions</div>
+				<div class="text-lg font-semibold">Questions</div>
 			</div>
 			<Collapsible.Root
 				open={questionsIsOpen}
