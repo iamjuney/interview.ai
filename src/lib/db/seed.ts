@@ -5,7 +5,8 @@ import { interview, question } from './schema';
 
 const randomInterviewIds = [
 	'9a8b5c9b-3b7a-4e9a-8f2b-2f0a3b3c4d5e',
-	'9a8b5c9b-3b7a-4e9a-8f2b-2f0a3b3c4d5f'
+	'9a8b5c9b-3b7a-4e9a-8f2b-2f0a3b3c4d5f',
+    '9a8b5c9b-3b7a-4e9a-8f2b-2f0a3b3c4d5g',
 ];
 
 async function seed() {
@@ -32,7 +33,16 @@ async function insertInterviews() {
 			company_url: 'https://company-b.com',
 			description:
 				'A Java developer is a highly skilled individual who can build highly efficient enterprise applications and can also work on software analysis and troubleshooting. '
-		}
+		},
+        {
+            id: randomInterviewIds[2],
+            slug: 'laravel-developer',
+            position: 'Laravel Developer',
+            company: 'Company C',
+            company_url: 'https://company-c.com',
+            description:
+                'A Laravel developer is responsible for developing web applications using Laravel. They will work with other developers and product managers throughout the software development life cycle.'
+        }
 	];
 
 	await db.insert(interview).values(interviews);
@@ -82,6 +92,28 @@ async function insertQuestions() {
 	}));
 
 	await db.insert(question).values(questions2);
+
+    const questionsList3 = [
+        'Can Laravel be used for Full Stack Development (Frontend + Backend)?',
+        'Tell us about your prior experience as a remote Laravel developer.',
+        'Have you ever faced any challenges while working in distributed teams?',
+        'What kind of tools did you use for the remote role to stay connected?',
+        'Do you find it difficult to focus on work as a remote developer?',
+        'What is the latest version of Laravel?',
+        'Mention the databases supported by Laravel.',
+        'Explain what is composer in Laravel.',
+        'What is maintenance mode in Laravel.',
+        'What is a Route in Laravel?',
+    ];
+
+    const questions3 = questionsList3.map((question, index) => ({
+        id: uuidv4(),
+        interviewId: randomInterviewIds[2],
+        slug: slugGenerator(question),
+        question
+    }));
+
+    await db.insert(question).values(questions3);
 }
 
 function slugGenerator(str: string) {

@@ -16,7 +16,7 @@
 	let failedSearchData = $state<Record<string, any>>();
 
 	let total = $derived(questions.length);
-	let perPage = $state(12);
+	let perPage = $derived(total > 0 ? 12 : 0);
 	let currentPage = $state(1);
 	let currentQuestions = $derived(() => {
 		let start = (currentPage - 1) * perPage;
@@ -25,7 +25,7 @@
 	});
 	let pagination = $derived(() => {
 		return {
-			from: (currentPage - 1) * perPage + 1,
+			from: total > 0 ? (currentPage - 1) * perPage + 1 : 0,
 			to:
 				Math.ceil((total ?? 0) / perPage) === currentPage
 					? perPage * (currentPage - 1) + currentQuestions().length
