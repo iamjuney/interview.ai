@@ -9,10 +9,15 @@
 	import { CldImage } from 'svelte-cloudinary';
 
 	let { user } = $props<{ user: User }>();
+	let isLoaded = $state(false);
 	let pathName = $derived(() => {
 		const path = $page.url.pathname.split('/')[2];
 
 		return '/app' + (path ? `/${path}` : '');
+	});
+
+	$effect(() => {
+		isLoaded = true;
 	});
 
 	const nav_links = [
@@ -43,7 +48,9 @@
 	<div class="flex min-h-0 flex-1 flex-col bg-transparent">
 		<div class="flex flex-1 flex-col overflow-y-auto pb-4 pt-8">
 			<div class="flex flex-shrink-0 items-center px-8">
-				<Logo />
+				{#if isLoaded}
+					<Logo />
+				{/if}
 			</div>
 			<nav class="mt-24 flex-1 space-y-1">
 				<h4 class="px-8 py-2 text-sm text-muted-foreground">Menu</h4>
