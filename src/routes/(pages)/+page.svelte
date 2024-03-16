@@ -51,14 +51,14 @@
 				Practice CS/IT related job interview questions and get instant feedback and speech
 				assessment. Your practice, your privacy.
 			</p>
-			<div class="mt-10 flex justify-center gap-x-6">
+			<div class="mt-10 flex justify-center gap-x-3 md:gap-x-6">
 				<Button size="lg" variant="solid" href="/sign-up">Get Started</Button>
 				<Button size="lg" variant="outline" href="/">
 					<Play class="mr-2 size-4" />
 					Watch demo
 				</Button>
 			</div>
-			<div class="mt-36 lg:mt-44">
+			<div class="mt-24 lg:mt-44">
 				<p class="text-base font-medium text-muted-foreground">
 					<span
 						>This is a thesis project of

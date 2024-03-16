@@ -11,7 +11,7 @@
 <header class="py-10">
 	<div class="container">
 		<nav class="relative z-50 flex justify-between">
-			<div class="flex items-center md:gap-x-12">
+			<div class="mr-3 flex items-center md:gap-x-12">
 				<Logo />
 				<div class="hidden md:flex md:gap-x-6">
 					<Button href="#features" variant="ghost">Features</Button>

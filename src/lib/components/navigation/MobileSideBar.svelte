@@ -68,7 +68,7 @@
 				</Button>
 			</div>
 
-			<div class="h-0 flex-1 overflow-y-auto pb-4 pt-5">
+			<div class="h-0 flex-1 overflow-y-auto pb-4 pt-8">
 				<div class="flex flex-shrink-0 items-center px-8">
 					<Logo />
 				</div>
