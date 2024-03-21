@@ -2,7 +2,7 @@ import { db } from '$lib/db';
 import { answer, question, userInterview } from '$lib/db/schema';
 import type { Question } from '$lib/types';
 import { error, fail } from '@sveltejs/kit';
-import { and, eq, ilike, inArray } from 'drizzle-orm';
+import { and, eq, ilike, inArray, sql } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
@@ -102,7 +102,7 @@ export const actions = {
 			};
 		} catch (error) {
 			return fail(500, {
-				message: 'Failed to search interviews'
+				message: 'Failed to search interviews.'
 			});
 		}
 	}

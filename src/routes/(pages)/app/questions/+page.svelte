@@ -109,36 +109,36 @@
 			</form>
 
 			{#if failedSearchData}
-				<p class="text-secondary">{failedSearchData.message}</p>
+				<p class="text-muted-foreground">{failedSearchData.message}</p>
+			{:else}
+				<div class="mt-3 grid w-full grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
+					{#if questions.length > 0}
+						{#each currentQuestions() as question}
+							<a
+								class="hover:text-muted-foreground-foreground group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border p-4 font-medium shadow-sm transition duration-100 hover:bg-secondary"
+								href="/app/questions/{question.slug}"
+								data-sveltekit-preload-data
+							>
+								<div class="relative flex h-full flex-col overflow-hidden">
+									<div class="flex items-center text-left">
+										<p>{question.question}</p>
+									</div>
+									<div class="mt-2 flex flex-row space-x-2">
+										{#if question.answers && question.answers.length > 0}
+											<Badge color="primary">
+												<Check class="mr-1 size-3" />
+												Answered
+											</Badge>
+										{/if}
+									</div>
+								</div></a
+							>
+						{/each}
+					{:else}
+						<p class="text-muted-foreground">No questions found.</p>
+					{/if}
+				</div>
 			{/if}
-
-			<div class="mt-3 grid w-full grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
-				{#if questions.length > 0}
-					{#each currentQuestions() as question}
-						<a
-							class="group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border p-4 font-medium shadow-sm transition duration-100 hover:bg-secondary hover:text-secondary-foreground"
-							href="/app/questions/{question.slug}"
-							data-sveltekit-preload-data
-						>
-							<div class="relative flex h-full flex-col overflow-hidden">
-								<div class="flex items-center text-left">
-									<p>{question.question}</p>
-								</div>
-								<div class="mt-2 flex flex-row space-x-2">
-									{#if question.answers && question.answers.length > 0}
-										<Badge color="primary">
-											<Check class="mr-1 size-3" />
-											Answered
-										</Badge>
-									{/if}
-								</div>
-							</div></a
-						>
-					{/each}
-				{:else}
-					<p class="text-muted-foreground">No questions found.</p>
-				{/if}
-			</div>
 		</div>
 
 		<div class="pb-8">

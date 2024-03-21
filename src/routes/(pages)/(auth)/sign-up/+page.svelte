@@ -35,13 +35,14 @@
 </script>
 
 <div class="container relative">
-	<div class="absolute left-4 top-4 z-10 md:left-8 md:top-8">
-		<Logo />
-	</div>
-	<Button href="/sign-in" variant="ghost" class="absolute right-4 top-4 z-10 md:right-8 md:top-8">
-		Sign in
-	</Button>
 	{#if animate}
+		<div class="absolute left-4 top-4 z-10 md:left-8 md:top-8">
+			<Logo />
+		</div>
+		<Button href="/sign-in" variant="ghost" class="absolute right-4 top-4 z-10 md:right-8 md:top-8">
+			Sign in
+		</Button>
+
 		<div class="grid place-content-center py-40" in:fly={flyOptions}>
 			<div class="flex w-full flex-col justify-center space-y-6 sm:w-[350px]">
 				<div class="flex flex-col space-y-2 text-center">
