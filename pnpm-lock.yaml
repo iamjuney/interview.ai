@@ -19,6 +19,9 @@ dependencies:
   '@lucia-auth/adapter-postgresql':
     specifier: ^2.0.2
     version: 2.0.2(lucia@2.7.7)(pg@8.11.3)
+  '@lucia-auth/oauth':
+    specifier: ^3.5.3
+    version: 3.5.3(lucia@2.7.7)
   '@types/nprogress':
     specifier: ^0.2.3
     version: 0.2.3
@@ -34,6 +37,9 @@ dependencies:
   ai:
     specifier: ^2.2.33
     version: 2.2.33(react@18.2.0)(solid-js@1.8.14)(svelte@5.0.0-next.53)(vue@3.4.15)
+  arctic:
+    specifier: ^1.5.0
+    version: 1.5.0
   axios:
     specifier: ^1.6.7
     version: 1.6.7
@@ -786,6 +792,14 @@ packages:
     dependencies:
       lucia: 2.7.7
       pg: 8.11.3
+    dev: false
+
+  /@lucia-auth/oauth@3.5.3(lucia@2.7.7):
+    resolution: {integrity: sha512-3blBldenf2zXsSJTZUwzB+NxI+0KJljfMHT0WR7hyLNwi4Ijss7F2cQqk2xW1lGH3lzdmsV93ZsY9Yv8ekBRUw==}
+    peerDependencies:
+      lucia: ^2.0.0
+    dependencies:
+      lucia: 2.7.7
     dev: false
 
   /@mapbox/node-pre-gyp@1.0.11:
@@ -1691,6 +1705,12 @@ packages:
   /aproba@2.0.0:
     resolution: {integrity: sha512-lYe4Gx7QT+MKGbDsA+Z+he/Wtef0BiwDOlK/XkBrdfsh9J/jPPXbX0tE9x9cl27Tmu5gg3QUbUrQYa/y+KOHPQ==}
     dev: true
+
+  /arctic@1.5.0:
+    resolution: {integrity: sha512-ZBC3a7yFncIkeoavrOFi+Jq+Qc4ENsl1JViCMjFe2VEv30XEEHyUsWOO8MHmPFsCyRXbboWSHf+OGpc3WyR67A==}
+    dependencies:
+      oslo: 1.2.0
+    dev: false
 
   /are-we-there-yet@2.0.0:
     resolution: {integrity: sha512-Ci/qENmwHnsYo9xKIcUJN5LeDKdJ6R1Z1j9V/J5wyq8nh/mYPEpIKJbBZXtZjG04HiK7zV/p6Vs9952MrMeUIw==}
@@ -3146,6 +3166,13 @@ packages:
       '@node-rs/argon2': 1.7.0
       '@node-rs/bcrypt': 1.9.0
       auri: 1.0.2
+    dev: false
+
+  /oslo@1.2.0:
+    resolution: {integrity: sha512-OoFX6rDsNcOQVAD2gQD/z03u4vEjWZLzJtwkmgfRF+KpQUXwdgEXErD7zNhyowmHwHefP+PM9Pw13pgpHMRlzw==}
+    dependencies:
+      '@node-rs/argon2': 1.7.0
+      '@node-rs/bcrypt': 1.9.0
     dev: false
 
   /packet-reader@1.0.0:

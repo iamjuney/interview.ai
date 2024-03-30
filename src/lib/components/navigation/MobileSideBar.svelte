@@ -16,6 +16,7 @@
 	};
 
 	let { isOpen, user } = $props<{ isOpen: boolean; user: User }>();
+	let newProfile = $state('');
 	let pathName = $derived(() => {
 		const path = $page.url.pathname.split('/')[2];
 
@@ -25,6 +26,13 @@
 	$effect(() => {
 		pathName();
 		isOpen = false;
+	});
+
+	// check if profile image is from github
+	$effect(() => {
+		if (user.image && user.image.includes('github')) {
+			newProfile = user.image;
+		}
 	});
 
 	const nav_links = [
@@ -101,7 +109,13 @@
 					<DropdownMenu.Trigger class="group block">
 						<div class="flex items-center justify-start">
 							<div class="inline-block size-9 overflow-hidden rounded-full">
-								{#if user.image}
+								{#if newProfile}
+									<img
+										src={newProfile}
+										alt="Photo of {user.first_name} {user.last_name}"
+										class="h-9 w-9 rounded-full"
+									/>
+								{:else if user.image}
 									<CldImage
 										src={user.image}
 										crop="fill"

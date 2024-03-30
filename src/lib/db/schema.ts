@@ -25,6 +25,9 @@ export const user = pgTable(
 		id: varchar('id', {
 			length: 36 // uuid
 		}).primaryKey(),
+        username: varchar('username', {
+            length: 255
+        }).unique(),
 		first_name: varchar('first_name', {
 			length: 50
 		}).notNull(),

@@ -25,6 +25,13 @@
 		animate = true;
 	});
 
+	// check if profile image is from github
+	$effect(() => {
+		if (user.image && user.image.includes('github')) {
+			newProfile = user.image;
+		}
+	});
+
 	const flyOptions = {
 		y: 30,
 		delay: 300,
@@ -110,7 +117,7 @@
 									<img
 										class="absolute inset-0 aspect-square object-cover object-center"
 										src={newProfile}
-										alt=""
+										alt="Photo of {user.first_name} {user.last_name}"
 									/>
 								{:else if user.image}
 									<CldImage
@@ -156,7 +163,7 @@
 							<img
 								class="absolute inset-0 aspect-square object-cover object-center"
 								src={newProfile}
-								alt=""
+								alt="Photo of {user.first_name} {user.last_name}"
 							/>
 						{:else if user.image}
 							<CldImage
