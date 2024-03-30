@@ -27,11 +27,13 @@
 		</div>
 
 		<Tabs.Root value="all" class="w-full">
-			<Tabs.List>
-				<Tabs.Trigger value="all">All</Tabs.Trigger>
-				<Tabs.Trigger value="ongoing">In-Progress</Tabs.Trigger>
-				<Tabs.Trigger value="completed">Completed</Tabs.Trigger>
-			</Tabs.List>
+			<div class="grid w-full place-content-center md:place-content-start">
+				<Tabs.List>
+					<Tabs.Trigger value="all">All</Tabs.Trigger>
+					<Tabs.Trigger value="ongoing">In-Progress</Tabs.Trigger>
+					<Tabs.Trigger value="completed">Completed</Tabs.Trigger>
+				</Tabs.List>
+			</div>
 			<Tabs.Content value="all">
 				{#if data.all.length > 0}
 					<div
