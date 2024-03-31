@@ -31,7 +31,7 @@
 					<MonitorCheck class="size-5" />
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-3xl font-bold">4</div>
+					<div class="text-3xl font-bold">{data.completed.length}</div>
 				</div>
 			</div>
 			<div class="rounded-xl border bg-primary text-primary-foreground shadow">
@@ -42,7 +42,7 @@
 					<Hourglass class="size-5" />
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-3xl font-bold">2 hours</div>
+					<div class="text-3xl font-bold">{data.interviewTime}</div>
 				</div>
 			</div>
 			<div class="rounded-xl border bg-primary text-primary-foreground shadow">
