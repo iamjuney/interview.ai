@@ -16,7 +16,6 @@ import {
 /** Enums */
 
 export const statusEnum = pgEnum('status', ['in-progress', 'completed']);
-export const difficultyEnum = pgEnum('difficulty', ['basic', 'Intermediate', 'Advanced']);
 
 /** TABLES */
 
@@ -98,7 +97,11 @@ export const interview = pgTable('interviews', {
 	position: varchar('position', {
 		length: 255
 	}).notNull(),
-	difficulty: difficultyEnum('difficulty').default('basic').notNull(),
+	difficulty: varchar('difficulty', {
+		length: 255
+	})
+		.default('Basic')
+		.notNull(),
 	duration: integer('duration').default(0).notNull(),
 	description: text('description').notNull(),
 	createdAt: timestamp('createdAt').defaultNow().notNull()

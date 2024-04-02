@@ -1,3 +1,9 @@
+enum Difficulty {
+	Basic = 'Basic',
+	Intermediate = 'Intermediate',
+	Advanced = 'Advanced'
+}
+
 export type DetailResult = {
 	word: string;
 	errorType: string;
@@ -16,7 +22,7 @@ export type Interview = {
 	createdAt: Date;
 	slug: string;
 	position: string;
-	difficulty: string;
+	difficulty: Difficulty;
 	duration: number;
 	description: string;
 	questions: Question[];
