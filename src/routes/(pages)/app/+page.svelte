@@ -31,7 +31,7 @@
 					<MonitorCheck class="size-5" />
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-3xl font-bold">{data.completed.length}</div>
+					<div class="text-3xl font-bold">{data.completed}</div>
 				</div>
 			</div>
 			<div class="rounded-xl border bg-primary text-primary-foreground shadow">
@@ -51,7 +51,7 @@
 					<TrendingUp class="size-5" />
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-3xl font-bold">5 days</div>
+					<div class="text-3xl font-bold">{data.dailyStreak} day(s)</div>
 				</div>
 			</div>
 		</div>
@@ -64,7 +64,7 @@
 			<div
 				class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
 			>
-				{#each data.interviews as interview}
+				{#each data.suggestedInterviews as interview}
 					<InterviewCard {interview} />
 				{/each}
 			</div>
