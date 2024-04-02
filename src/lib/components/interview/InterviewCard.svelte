@@ -32,7 +32,7 @@
 			<div class="absolute bottom-2 left-4 right-4 top-4 flex flex-col gap-3">
 				<div class="flex flex-row items-center">
 					<div class="h-4 w-[2px] bg-primary"></div>
-					<p class="ml-2 font-semibold">{interview.company}</p>
+					<p class="ml-2 font-semibold">{interview.difficulty}</p>
 				</div>
 				<p class="text-xl font-semibold md:text-2xl">{interview.position}</p>
 				{#if progress > 0}
@@ -53,7 +53,7 @@
 			</span>
 			<span class="flex items-center">
 				<Timer class="mr-2 size-4 text-primary group-hover:text-secondary-foreground" />
-				about {questions.length * 2} minutes
+				about {interview.duration} minutes
 			</span>
 		</div>
 		<div class="mt-4 items-center">

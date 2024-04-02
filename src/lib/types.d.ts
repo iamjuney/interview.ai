@@ -16,8 +16,8 @@ export type Interview = {
 	createdAt: Date;
 	slug: string;
 	position: string;
-	company: string;
-	company_url: string;
+	difficulty: string;
+	duration: number;
 	description: string;
 	questions: Question[];
 };

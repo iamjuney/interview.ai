@@ -1,11 +1,12 @@
 import { relations } from 'drizzle-orm';
 import {
 	bigint,
+	boolean,
+	integer,
 	jsonb,
 	pgEnum,
 	pgTable,
 	real,
-	integer,
 	text,
 	timestamp,
 	uniqueIndex,
@@ -15,6 +16,7 @@ import {
 /** Enums */
 
 export const statusEnum = pgEnum('status', ['in-progress', 'completed']);
+export const difficultyEnum = pgEnum('difficulty', ['basic', 'Intermediate', 'Advanced']);
 
 /** TABLES */
 
@@ -25,9 +27,9 @@ export const user = pgTable(
 		id: varchar('id', {
 			length: 36 // uuid
 		}).primaryKey(),
-        username: varchar('username', {
-            length: 255
-        }).unique(),
+		username: varchar('username', {
+			length: 255
+		}).unique(),
 		first_name: varchar('first_name', {
 			length: 50
 		}).notNull(),
@@ -40,6 +42,7 @@ export const user = pgTable(
 			.notNull()
 			.unique(),
 		image: text('image').default(''),
+		showOnboarding: boolean('show_onboarding').default(true),
 		createdAt: timestamp('createdAt').defaultNow()
 	},
 	(users) => {
@@ -95,12 +98,8 @@ export const interview = pgTable('interviews', {
 	position: varchar('position', {
 		length: 255
 	}).notNull(),
-	company: varchar('company', {
-		length: 255
-	}).notNull(),
-	company_url: varchar('company_url', {
-		length: 255
-	}).notNull(),
+	difficulty: difficultyEnum('difficulty').default('basic').notNull(),
+	duration: integer('duration').default(0).notNull(),
 	description: text('description').notNull(),
 	createdAt: timestamp('createdAt').defaultNow().notNull()
 });

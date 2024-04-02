@@ -81,7 +81,7 @@
 					</div>
 				{/if}
 				<h1 class="mb-2 mt-5 text-2xl font-semibold md:mt-0">
-					{interview.position} at {interview.company}
+					{interview.position}
 				</h1>
 				<div class="-ml-4 flex flex-wrap items-center">
 					<div
@@ -94,7 +94,7 @@
 						class="mb-5 flex h-4 items-center whitespace-nowrap border-r px-4 leading-none last:border-r-0"
 					>
 						<Timer size="16" class="text-primary" />
-						<span class="ml-2">about {questionsCount * 2} minutes</span>
+						<span class="ml-2">about {interview.duration} minutes</span>
 					</div>
 				</div>
 				<div class="mb-4 font-normal">
