@@ -194,7 +194,7 @@ export const actions = {
 			// delete user in the database
 			await db.delete(user).where(eq(user.id, form.data.user_id));
 
-			// Todo: delete user photo from the vercel blob along with all video recordings
+			// Todo: delete user photo from the cloudinary along with all video recordings
 		} catch (error) {
 			console.error(error);
 			return fail(400, {

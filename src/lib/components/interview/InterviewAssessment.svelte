@@ -1,8 +1,9 @@
 <script lang="ts">
-	import { Button, DoughnutChart, Progress, Tooltip } from '$lib/components';
-	import type { Answer } from '$lib/types';
+	import { enhance } from '$app/forms';
+	import { AlertDialog, Button, DoughnutChart, Progress, Tooltip } from '$lib/components';
+	import type { Answer, Question } from '$lib/types';
 	import { countMispronunciations, countMonotone, getWPM } from '$lib/utils';
-	import { HelpCircle, Trash, X } from 'lucide-svelte';
+	import { HelpCircle, Loader2, Trash, X } from 'lucide-svelte';
 	import { CldVideoPlayer } from 'svelte-cloudinary';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -15,11 +16,12 @@
 	let { isOpen, answer, question } = $props<{
 		isOpen: boolean;
 		answer: Answer;
-		question?: string;
+		question?: Question;
 	}>();
 
 	let assessment = $state(answer.assessment);
 	let transcript = $state(assessment?.data ?? []);
+	let isSubmitting = $state(false);
 </script>
 
 {#if isOpen}
@@ -53,17 +55,49 @@
 								<X class="size-6" />
 							</Button>
 							<div class="flex items-center justify-between border-b border-accent pb-6">
-								<h3 class="text-xl font-semibold">{question}</h3>
-								<Button variant="destructive" size="icon" title="Delete recording">
-									<!-- {#if isDeleteAccountSubmitting}
-							<span class="flex items-center space-x-2">
-								<span>Deleting...</span>
-								<Loader2 class="size-4 animate-spin" />
-							</span>
-						{:else} -->
-									<span class="sr-only">Delete recording</span>
-									<Trash class="size-4" />
-								</Button>
+								<h3 class="text-xl font-semibold">{question?.question}</h3>
+								<AlertDialog.Root>
+									<AlertDialog.Trigger>
+										<Button
+											type="submit"
+											variant="destructive"
+											size="icon"
+											title="Delete recording"
+											bind:disabled={isSubmitting}
+										>
+											{#if isSubmitting}
+												<span class="flex items-center space-x-2">
+													<span>Deleting...</span>
+													<Loader2 class="size-4 animate-spin" />
+												</span>
+											{:else}
+												<span class="sr-only">Delete recording</span>
+												<Trash class="size-4" />
+											{/if}
+										</Button>
+									</AlertDialog.Trigger>
+									<AlertDialog.Content>
+										<AlertDialog.Header>
+											<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+											<AlertDialog.Description>
+												This action cannot be undone. This will permanently <strong>delete</strong> your
+												answers and assessments from our servers.
+											</AlertDialog.Description>
+										</AlertDialog.Header>
+										<AlertDialog.Footer>
+											<form class="mt-4" action="/app/questions?/delete" method="post" use:enhance>
+												<input type="hidden" name="answer_id" value={answer.id} />
+												<input type="hidden" name="question_slug" value={question?.slug} />
+												<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+												<AlertDialog.Action
+													type="submit"
+													class="bg-destructive text-destructive-foreground hover:bg-destructive/80"
+													>Continue</AlertDialog.Action
+												>
+											</form>
+										</AlertDialog.Footer>
+									</AlertDialog.Content>
+								</AlertDialog.Root>
 							</div>
 							<div class="flex flex-col space-y-6">
 								<div class="flex flex-col">

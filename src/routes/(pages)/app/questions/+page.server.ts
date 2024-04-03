@@ -1,7 +1,7 @@
 import { db } from '$lib/db';
 import { answer, question, userInterview } from '$lib/db/schema';
 import type { Question } from '$lib/types';
-import { error, fail } from '@sveltejs/kit';
+import { error, fail, redirect } from '@sveltejs/kit';
 import { and, eq, ilike, inArray, sql } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
@@ -118,7 +118,8 @@ export const actions = {
 		const form = await superValidate(
 			request,
 			z.object({
-				questionId: z.string()
+				question_slug: z.string(),
+				answer_id: z.string()
 			})
 		);
 
@@ -129,46 +130,14 @@ export const actions = {
 		}
 
 		try {
-			const questionId = form.data.questionId;
+			const answerId = form.data.answer_id;
+			const deletedAnswer = await db.delete(answer).where(eq(answer.id, answerId)).returning();
 
-			console.log('Delete question', questionId);
+			// Todo: delete the videos from cloudinary
 
-			// Check if the question exists
-			// const questionExists = await db.query.question.exists({
-			//     where: eq(question.questionId, questionId)
-			// });
-
-			// if (!questionExists) {
-			//     return fail(404, {
-			//         message: 'Question not found'
-			//     });
-			// }
-
-			// // Check if the user has answered the question
-			// const hasAnswered = await db.query.answer.exists({
-			//     where: and(
-			//         eq(answer.userId, userId),
-			//         eq(answer.questionId, questionId)
-			//     )
-			// });
-
-			// if (!hasAnswered) {
-			//     return fail(403, {
-			//         message: 'You have not answered this question'
-			//     });
-			// }
-
-			// // Delete the answer
-			// await db.query.answer.delete({
-			//     where: and(
-			//         eq(answer.userId, userId),
-			//         eq(answer.questionId, questionId)
-			//     )
-			// });
-
-			// return {
-			//     message: 'Answer deleted successfully'
-			// };
+			if (deletedAnswer) {
+				redirect(303, `/app/questions/${form.data.question_slug}`);
+			}
 		} catch (error) {
 			return fail(500, {
 				message: 'Failed to delete answer'

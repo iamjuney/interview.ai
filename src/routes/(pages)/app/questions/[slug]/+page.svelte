@@ -48,11 +48,7 @@
 </script>
 
 {#if selectedAnswer}
-	<InterviewAssessment
-		bind:isOpen
-		answer={selectedAnswer}
-		question={data.questionDetails?.question}
-	/>
+	<InterviewAssessment bind:isOpen answer={selectedAnswer} question={data.questionDetails} />
 {/if}
 
 {#if animate}
@@ -88,8 +84,8 @@
 				{#each data.answers as answer (answer.id)}
 					<button
 						onclick={() => {
-							selectedAnswer = answer;
 							isOpen = true;
+							selectedAnswer = answer;
 						}}
 						class="group relative cursor-pointer rounded-xl border border-input p-4 hover:bg-secondary"
 					>
