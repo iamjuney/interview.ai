@@ -20,7 +20,7 @@ declare global {
 			last_name: string;
 			email: string;
 			image: string;
-			showOnboarding: boolean;
+			show_onboarding: boolean;
 		};
 		type DatabaseSessionAttributes = {};
 	}

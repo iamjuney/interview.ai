@@ -1,7 +1,7 @@
 import { dev } from '$app/environment';
-import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from "$env/static/private";
+import { GITHUB_CLIENT_ID, GITHUB_CLIENT_SECRET } from '$env/static/private';
 import { pg } from '@lucia-auth/adapter-postgresql';
-import { github } from "@lucia-auth/oauth/providers";
+import { github } from '@lucia-auth/oauth/providers';
 import { db } from '@vercel/postgres';
 import { lucia } from 'lucia';
 import { sveltekit } from 'lucia/middleware';
@@ -14,11 +14,12 @@ export const auth = lucia({
 	}),
 	env: dev ? 'DEV' : 'PROD',
 	getUserAttributes: (userData) => ({
-        username: userData.username,
+		username: userData.username,
 		first_name: userData.first_name,
 		last_name: userData.last_name,
 		email: userData.email,
-		image: userData.image
+		image: userData.image,
+		show_onboarding: userData.show_onboarding
 	}),
 	middleware: sveltekit()
 });

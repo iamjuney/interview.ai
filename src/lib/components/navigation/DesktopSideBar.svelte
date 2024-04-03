@@ -2,7 +2,6 @@
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
 	import { AlertDialog, Button, DropdownMenu, Logo } from '$lib/components';
-	import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
 	import type { User } from 'lucia';
 	import { LayoutDashboard, MessageCircleQuestion, Settings, Video } from 'lucide-svelte';
 	import { resetMode, setMode } from 'mode-watcher';
@@ -10,12 +9,10 @@
 	import { CldImage } from 'svelte-cloudinary';
 
 	let { user } = $props<{ user: User }>();
-	let onboardingOpen = $state(true);
 	let isLoaded = $state(false);
 	let newProfile = $state('');
 	let pathName = $derived(() => {
 		const path = $page.url.pathname.split('/')[2];
-
 		return '/app' + (path ? `/${path}` : '');
 	});
 
@@ -52,21 +49,6 @@
 			href: '/app/settings'
 		}
 	];
-
-	let controlsLayout = [
-		'previousFrame',
-		'playpause',
-		'stop',
-		'nextFrame',
-		'progress',
-		'frame',
-		'loop',
-		'spacer',
-		'background',
-		'snapshot',
-		'zoom',
-		'info'
-	];
 </script>
 
 <div class="hidden md:fixed md:inset-y-0 md:flex md:w-72 md:flex-col">
@@ -75,33 +57,6 @@
 			<div class="flex flex-shrink-0 items-center px-8">
 				{#if isLoaded}
 					<Logo />
-					<AlertDialog.Root bind:open={onboardingOpen}>
-						<AlertDialog.Content>
-							<AlertDialog.Header>
-								<div class="mx-auto">
-									<LottiePlayer
-										src="https://lottie.host/4b836bf7-ae16-41fc-b06f-0860256a437c/niM3eQh9v8.json"
-										autoplay={true}
-										loop={true}
-										controls={false}
-										renderer="svg"
-										background="transparent"
-										height={280}
-										width={280}
-										{controlsLayout}
-									/>
-								</div>
-								<AlertDialog.Title class="text-center">Welcome to Interview Hero</AlertDialog.Title>
-								<AlertDialog.Description class="text-center">
-									Now you can start practicing your interview skills and get feedback
-								</AlertDialog.Description>
-							</AlertDialog.Header>
-							<AlertDialog.Footer>
-								<AlertDialog.Cancel>Skip</AlertDialog.Cancel>
-								<AlertDialog.Action>Take a tour</AlertDialog.Action>
-							</AlertDialog.Footer>
-						</AlertDialog.Content>
-					</AlertDialog.Root>
 				{/if}
 			</div>
 			<nav class="mt-24 flex-1 space-y-1">
@@ -109,6 +64,7 @@
 				{#each nav_links as link}
 					{#if pathName() === link.href}
 						<a
+							id={link.name}
 							href={link.href}
 							data-sveltekit-preload-data="hover"
 							class="group flex items-center border-l-4 border-primary p-2 font-medium"
@@ -118,6 +74,7 @@
 						</a>
 					{:else}
 						<a
+							id={link.name}
 							href={link.href}
 							data-sveltekit-preload-data="hover"
 							class="group flex items-center rounded-md px-3 py-2 font-medium text-muted-foreground hover:text-foreground"

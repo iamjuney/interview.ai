@@ -85,6 +85,7 @@
 					{#each nav_links as link}
 						{#if pathName() === link.href}
 							<a
+								id={link.name}
 								href={link.href}
 								class="group flex items-center border-l-4 border-foreground p-2 font-medium"
 							>
@@ -93,6 +94,7 @@
 							</a>
 						{:else}
 							<a
+								id={link.name}
 								href={link.href}
 								class="group flex items-center rounded-md px-3 py-2 font-medium text-muted-foreground hover:text-foreground"
 							>

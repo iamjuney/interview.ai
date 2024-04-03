@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InterviewCard } from '$lib/components';
+	import { InterviewCard, Onboarding } from '$lib/components';
 	import { Hourglass, MonitorCheck, TrendingUp } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -19,6 +19,9 @@
 </script>
 
 {#if animate}
+	{#if data.showOnboarding}
+		<Onboarding />
+	{/if}
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
 		<h2 class="truncate text-3xl font-medium tracking-tight">Dashboard</h2>
 

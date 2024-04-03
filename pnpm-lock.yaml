@@ -55,6 +55,9 @@ dependencies:
   clsx:
     specifier: ^2.1.0
     version: 2.1.0
+  driver.js:
+    specifier: ^1.3.1
+    version: 1.3.1
   drizzle-orm:
     specifier: ^0.29.3
     version: 0.29.3(@vercel/postgres@0.7.2)(pg@8.11.3)(react@18.2.0)
@@ -2157,6 +2160,10 @@ packages:
     dependencies:
       wordwrap: 1.0.0
     dev: true
+
+  /driver.js@1.3.1:
+    resolution: {integrity: sha512-MvUdXbqSgEsgS/H9KyWb5Rxy0aE6BhOVT4cssi2x2XjmXea6qQfgdx32XKVLLSqTaIw7q/uxU5Xl3NV7+cN6FQ==}
+    dev: false
 
   /drizzle-kit@0.20.14:
     resolution: {integrity: sha512-0fHv3YIEaUcSVPSGyaaBfOi9bmpajjhbJNdPsRMIUvYdLVxBu9eGjH8mRc3Qk7HVmEidFc/lhG1YyJhoXrn5yA==}
