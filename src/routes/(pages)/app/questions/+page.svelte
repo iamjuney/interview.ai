@@ -111,7 +111,10 @@
 			{#if failedSearchData}
 				<p class="text-muted-foreground">{failedSearchData.message}</p>
 			{:else}
-				<div class="mt-3 grid w-full grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3">
+				<div
+					id="BrowseQuestions"
+					class="mt-3 grid w-full grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3"
+				>
 					{#if questions.length > 0}
 						{#each currentQuestions() as question}
 							<a

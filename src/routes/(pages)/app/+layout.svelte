@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, DesktopSideBar, MobileSideBar } from '$lib/components';
+	import { Button, DesktopSideBar, MobileSideBar, Onboarding } from '$lib/components';
 	import { Menu } from 'lucide-svelte';
 
 	let { children, data } = $props();
@@ -12,6 +12,12 @@
 <!-- Static sidebar for desktop -->
 <DesktopSideBar user={data.user} />
 
+<!-- Onboarding -->
+{#if data.showOnboarding}
+	<Onboarding />
+{/if}
+
+<!-- Main content -->
 <div class="flex flex-1 flex-col md:pl-72">
 	<div class="sticky top-0 bg-transparent p-6 backdrop-blur md:hidden">
 		<Button

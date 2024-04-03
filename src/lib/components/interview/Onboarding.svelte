@@ -22,11 +22,47 @@
 				}
 			},
 			{
+				element: '#Analytics',
+				popover: {
+					title: 'Dashboard Analytics',
+					description: 'Here you can see your progress and stats.',
+					side: 'bottom',
+					align: 'start'
+				}
+			},
+			{
+				element: '#SuggestedInterviews',
+				popover: {
+					title: 'Suggested Interviews',
+					description: 'You can see the suggested interviews here.',
+					side: 'left',
+					align: 'start'
+				}
+			},
+			{
 				element: '#Interviews',
 				popover: {
 					title: 'Interviews',
 					description:
-						'Here you can see all the interviews you have completed and the feedback you have received.',
+						'Here you can see all the interviews you have completed and the feedback you have received. Click it to see more details.',
+					side: 'left',
+					align: 'start'
+				}
+			},
+			{
+				element: '#StartNewInterview',
+				popover: {
+					title: 'Lets Start New Interview',
+					description: 'Click the button to start a new interview.',
+					side: 'left',
+					align: 'start'
+				}
+			},
+			{
+				element: '#BrowseInterviews',
+				popover: {
+					title: 'Browse Interviews',
+					description: 'You can browse all the interviews available here.',
 					side: 'left',
 					align: 'start'
 				}
@@ -35,7 +71,17 @@
 				element: '#Questions',
 				popover: {
 					title: 'Questions',
-					description: 'You can practice your interview skills by answering questions here.',
+					description:
+						'You can practice your interview skills by answering questions here. Click it to see more details.',
+					side: 'left',
+					align: 'start'
+				}
+			},
+			{
+				element: '#BrowseQuestions',
+				popover: {
+					title: 'Browse Questions',
+					description: 'You can browse all the questions available here.',
 					side: 'left',
 					align: 'start'
 				}
@@ -51,14 +97,19 @@
 			},
 			{
 				popover: {
-					title: 'End of tour',
+					title: 'Congratulations!',
 					description:
 						'You have completed the tour, you can always start it again from the settings.',
 					side: 'left',
 					align: 'start'
 				}
 			}
-		]
+		],
+		onDestroyStarted: () => {
+			if (!driverObj.hasNextStep() || confirm('Are you sure?')) {
+				driverObj.destroy();
+			}
+		}
 	});
 
 	const controlsLayout = [

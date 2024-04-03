@@ -1,4 +1,4 @@
-enum Difficulty {
+export enum Difficulty {
 	Basic = 'Basic',
 	Intermediate = 'Intermediate',
 	Advanced = 'Advanced'
@@ -22,7 +22,7 @@ export type Interview = {
 	createdAt: Date;
 	slug: string;
 	position: string;
-	difficulty: Difficulty;
+	difficulty: string;
 	duration: number;
 	description: string;
 	questions: Question[];

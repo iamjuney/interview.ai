@@ -62,7 +62,6 @@ function calculateDailyStreak(answers: Answer[]) {
 export const load = (async ({ locals }) => {
 	const session = await locals.auth.validate();
 	const userId = session?.user.userId;
-	const showOnboarding = session?.user.show_onboarding;
 
 	if (!userId) {
 		error(401, 'Unauthorized');
@@ -134,7 +133,6 @@ export const load = (async ({ locals }) => {
 		suggestedInterviews,
 		completed,
 		interviewTime,
-		dailyStreak,
-		showOnboarding
+		dailyStreak
 	};
 }) satisfies PageServerLoad;

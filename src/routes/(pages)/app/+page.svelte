@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { InterviewCard, Onboarding } from '$lib/components';
+	import { InterviewCard } from '$lib/components';
 	import { Hourglass, MonitorCheck, TrendingUp } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -19,13 +19,10 @@
 </script>
 
 {#if animate}
-	{#if data.showOnboarding}
-		<Onboarding />
-	{/if}
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
 		<h2 class="truncate text-3xl font-medium tracking-tight">Dashboard</h2>
 
-		<div class="grid gap-4 md:grid-cols-3 lg:grid-cols-3">
+		<div class="grid gap-4 md:grid-cols-3 lg:grid-cols-3" id="Analytics">
 			<div class="rounded-xl border bg-primary text-primary-foreground shadow">
 				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
 					<h3 class="font-medium tracking-tight text-primary-foreground/80">
@@ -65,6 +62,7 @@
 			</div>
 
 			<div
+				id="SuggestedInterviews"
 				class="grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
 			>
 				{#each data.suggestedInterviews as interview}
