@@ -41,7 +41,7 @@ export const user = pgTable(
 			.notNull()
 			.unique(),
 		image: text('image').default(''),
-		showOnboarding: boolean('show_onboarding').default(true),
+		show_onboarding: boolean('show_onboarding').default(true),
 		createdAt: timestamp('createdAt').defaultNow()
 	},
 	(users) => {

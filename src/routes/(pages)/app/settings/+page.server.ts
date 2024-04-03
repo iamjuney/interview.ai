@@ -138,6 +138,38 @@ export const actions = {
 		redirect(303, '/sign-in');
 	},
 
+	updateShowOnboarding: async ({ request, locals }) => {
+		const session = await locals.auth.validate();
+		if (!session) return fail(401);
+
+		const form = await superValidate(
+			request,
+			z.object({
+				show_onboarding: z.boolean()
+			})
+		);
+
+		if (!form.valid) {
+			return fail(400, {
+				message: 'Invalid form data'
+			});
+		}
+
+		try {
+			await db
+				.update(user)
+				.set({
+					show_onboarding: !form.data.show_onboarding
+				})
+				.where(eq(user.id, session.user.userId));
+		} catch (error) {
+			console.error(error);
+			return fail(400, {
+				message: 'Error updating user'
+			});
+		}
+	},
+
 	deleteAccount: async ({ request, locals }) => {
 		const form = await superValidate(
 			request,

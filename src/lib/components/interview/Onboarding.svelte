@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { enhance } from '$app/forms';
 	import { AlertDialog } from '$lib/components';
 	import { LottiePlayer } from '@lottiefiles/svelte-lottie-player';
 	import { driver } from 'driver.js';
@@ -107,12 +108,30 @@
 			</AlertDialog.Description>
 		</AlertDialog.Header>
 		<AlertDialog.Footer>
-			<AlertDialog.Cancel>Skip</AlertDialog.Cancel>
-			<AlertDialog.Action
-				on:click={() => {
-					startOnboarding = true;
-				}}>Take a tour</AlertDialog.Action
-			>
+			<div class="flex w-full items-center justify-between gap-1">
+				<form
+					action="/app/settings?/updateShowOnboarding"
+					method="post"
+					use:enhance
+					class="flex w-full items-center justify-between"
+				>
+					<div class="flex items-center">
+						<input
+							type="checkbox"
+							id="show_onboarding"
+							name="show_onboarding"
+							class="size-4 rounded border-gray-300"
+						/>
+						<label for="show_onboarding" class="ml-2 block text-sm">Don't show this again</label>
+					</div>
+					<AlertDialog.Cancel type="submit">Skip</AlertDialog.Cancel>
+				</form>
+				<AlertDialog.Action
+					on:click={() => {
+						startOnboarding = true;
+					}}>Take a tour</AlertDialog.Action
+				>
+			</div>
 		</AlertDialog.Footer>
 	</AlertDialog.Content>
 </AlertDialog.Root>

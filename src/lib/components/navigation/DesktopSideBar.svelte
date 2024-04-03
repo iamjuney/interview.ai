@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
 	import { page } from '$app/stores';
-	import { AlertDialog, Button, DropdownMenu, Logo } from '$lib/components';
+	import { Button, DropdownMenu, Logo } from '$lib/components';
 	import type { User } from 'lucia';
 	import { LayoutDashboard, MessageCircleQuestion, Settings, Video } from 'lucide-svelte';
 	import { resetMode, setMode } from 'mode-watcher';
