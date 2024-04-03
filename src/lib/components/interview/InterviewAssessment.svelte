@@ -35,7 +35,7 @@
 				role="button"
 				on:click={() => (isOpen = !isOpen)}
 				class="absolute inset-0 bg-gray-500 bg-opacity-75 transition-opacity"
-				aria-hidden="true"
+				aria-hidden={isOpen}
 			></div>
 			<div class="fixed inset-y-0 right-0 flex max-w-full">
 				<div class="relative w-screen max-w-2xl">
@@ -54,18 +54,15 @@
 							</Button>
 							<div class="flex items-center justify-between border-b border-accent pb-6">
 								<h3 class="text-xl font-semibold">{question}</h3>
-								<Button size="lg" variant="destructive">
+								<Button variant="destructive" size="icon" title="Delete recording">
 									<!-- {#if isDeleteAccountSubmitting}
 							<span class="flex items-center space-x-2">
 								<span>Deleting...</span>
 								<Loader2 class="size-4 animate-spin" />
 							</span>
 						{:else} -->
-									<div class="flex items-center">
-										<span>Delete</span>
-										<Trash class="ml-2 size-4" />
-									</div>
-									<!-- {/if} -->
+									<span class="sr-only">Delete recording</span>
+									<Trash class="size-4" />
 								</Button>
 							</div>
 							<div class="flex flex-col space-y-6">

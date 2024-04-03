@@ -105,5 +105,74 @@ export const actions = {
 				message: 'Failed to search interviews.'
 			});
 		}
+	},
+
+	delete: async ({ request, locals }) => {
+		const session = await locals.auth.validate();
+		const userId = session?.user.userId;
+
+		if (!userId) {
+			error(401, 'Unauthorized');
+		}
+
+		const form = await superValidate(
+			request,
+			z.object({
+				questionId: z.string()
+			})
+		);
+
+		if (!form.valid) {
+			return fail(400, {
+				message: 'Invalid request'
+			});
+		}
+
+		try {
+			const questionId = form.data.questionId;
+
+			console.log('Delete question', questionId);
+
+			// Check if the question exists
+			// const questionExists = await db.query.question.exists({
+			//     where: eq(question.questionId, questionId)
+			// });
+
+			// if (!questionExists) {
+			//     return fail(404, {
+			//         message: 'Question not found'
+			//     });
+			// }
+
+			// // Check if the user has answered the question
+			// const hasAnswered = await db.query.answer.exists({
+			//     where: and(
+			//         eq(answer.userId, userId),
+			//         eq(answer.questionId, questionId)
+			//     )
+			// });
+
+			// if (!hasAnswered) {
+			//     return fail(403, {
+			//         message: 'You have not answered this question'
+			//     });
+			// }
+
+			// // Delete the answer
+			// await db.query.answer.delete({
+			//     where: and(
+			//         eq(answer.userId, userId),
+			//         eq(answer.questionId, questionId)
+			//     )
+			// });
+
+			// return {
+			//     message: 'Answer deleted successfully'
+			// };
+		} catch (error) {
+			return fail(500, {
+				message: 'Failed to delete answer'
+			});
+		}
 	}
 };

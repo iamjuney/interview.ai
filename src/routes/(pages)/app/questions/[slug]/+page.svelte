@@ -2,7 +2,8 @@
 	import { afterNavigate } from '$app/navigation';
 	import { Button, InterviewAssessment } from '$lib/components';
 	import type { Answer } from '$lib/types.js';
-	import { ArrowLeft } from 'lucide-svelte';
+	import { ArrowLeft, Trash } from 'lucide-svelte';
+	import { CldVideoPlayer } from 'svelte-cloudinary';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -95,7 +96,14 @@
 						<div
 							class="relative mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg"
 						>
-							<div class="relative h-full w-full rounded bg-white">
+							<div class="relative h-full w-full rounded">
+								<CldVideoPlayer
+									width={326}
+									height={183}
+									controls={false}
+									src={answer.videoUrl}
+									class="rounded-xl"
+								/>
 								<div
 									class="absolute right-2 top-2 z-30 flex items-center justify-center rounded bg-gray-900 bg-opacity-50 px-1.5 py-0.5 text-[11px] font-medium text-white"
 								>
@@ -103,7 +111,17 @@
 								</div>
 							</div>
 						</div>
-						<div class="text-start text-sm">{readableDate(answer.createdAt)}</div>
+						<div class="flex items-center justify-between">
+							<div class="flex flex-col text-start">
+								<p class="font-semibold">
+									<span>Overall Score: </span>
+									<span> {answer.assessment?.pronunciation_score}</span>
+								</p>
+								<p class="text-sm">
+									Recorded on {readableDate(answer.createdAt)}
+								</p>
+							</div>
+						</div>
 					</button>
 				{/each}
 			</div>

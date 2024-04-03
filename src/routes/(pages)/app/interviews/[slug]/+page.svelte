@@ -44,7 +44,7 @@
 		href="/app/questions/{q.slug}"
 		><div class="flex items-center text-left">
 			{#if q.answers!.length > 0}
-				<CheckCircle size="20" class="flex-none text-primary" />
+				<CheckCircle size="20" class="flex-none text-green-500" />
 			{:else}
 				<PlayCircle size="20" class="flex-none text-primary" />
 			{/if}

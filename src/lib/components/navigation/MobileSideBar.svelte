@@ -66,7 +66,12 @@
 		aria-modal={isOpen}
 		transition:fly={flyOptions}
 	>
-		<div class="fixed inset-0 bg-gray-600 bg-opacity-75" aria-hidden={isOpen}></div>
+		<div
+			role="button"
+			on:click={() => (isOpen = !isOpen)}
+			class="fixed inset-0 bg-gray-600 bg-opacity-75"
+			aria-hidden={isOpen}
+		></div>
 
 		<div class="relative flex w-full max-w-xs flex-1 flex-col bg-background">
 			<div class="absolute right-0 top-0 -mr-12 pt-2">
@@ -127,7 +132,11 @@
 										alt="Photo of {user.first_name} {user.last_name}"
 									/>
 								{:else}
-									<img class="bg-cover bg-center" src="/poddle.webp" alt="Poddle by Freepik" />
+									<img
+										class="bg-cover bg-center"
+										src="/assets/poddle.webp"
+										alt="Poddle by Freepik"
+									/>
 								{/if}
 							</div>
 							<div class="ml-3 flex flex-col items-start">
