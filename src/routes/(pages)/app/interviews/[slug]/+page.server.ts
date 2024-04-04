@@ -46,3 +46,5 @@ export const load = (async ({ params, locals }) => {
 		questions
 	};
 }) satisfies PageServerLoad;
+
+// Todo: Implement marking interviews as complete

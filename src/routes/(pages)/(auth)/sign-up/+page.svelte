@@ -36,7 +36,7 @@
 
 <div class="container relative">
 	{#if animate}
-		<div class="absolute left-4 top-4 z-10 md:left-8 md:top-8">
+		<div class="absolute left-4 top-4 z-10 md:left-8">
 			<Logo />
 		</div>
 		<Button href="/sign-in" variant="ghost" class="absolute right-4 top-4 z-10 md:right-8 md:top-8">
