@@ -82,7 +82,7 @@ export const actions = {
 						questions: true
 					},
 					where: or(
-						ilike(interview.company, `%${form.data.query}%`),
+						ilike(interview.difficulty, `%${form.data.query}%`),
 						ilike(interview.position, `%${form.data.query}%`),
 						ilike(interview.description, `%${form.data.query}%`)
 					)
@@ -98,7 +98,7 @@ export const actions = {
 							userInterviews.map((ui) => ui.interviewId)
 						),
 						or(
-							ilike(interview.company, `%${form.data.query}%`),
+							ilike(interview.difficulty, `%${form.data.query}%`),
 							ilike(interview.position, `%${form.data.query}%`),
 							ilike(interview.description, `%${form.data.query}%`)
 						)
