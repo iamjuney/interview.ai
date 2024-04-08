@@ -95,7 +95,7 @@
 							<div class="relative h-full w-full rounded">
 								<CldVideoPlayer
 									width={326}
-									height={183}
+									height={244}
 									controls={false}
 									src={answer.videoUrl}
 									class="rounded-xl"
