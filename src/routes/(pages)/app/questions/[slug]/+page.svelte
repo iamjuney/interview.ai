@@ -90,7 +90,7 @@
 						class="group relative cursor-pointer rounded-xl border border-input p-4 hover:bg-secondary"
 					>
 						<div
-							class="relative mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg"
+							class="relative mb-4 grid w-full flex-shrink-0 place-items-center rounded-lg"
 						>
 							<div class="relative h-full w-full rounded">
 								<CldVideoPlayer
