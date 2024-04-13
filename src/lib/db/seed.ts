@@ -25,8 +25,9 @@ async function insertQuestions() {
 			const data: Question = {
 				id: uuidv4(),
 				interviewId: interviews[i].id,
-				slug: slugGenerator(q[j]),
-				question: q[j]
+				slug: slugGenerator(q[j].question),
+				question: q[j].question,
+				videoUrl: q[j].video_url
 			};
 
 			list.push(data);

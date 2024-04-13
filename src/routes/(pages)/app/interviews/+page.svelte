@@ -48,6 +48,7 @@
 					</div>
 				{:else}
 					<div class="mt-8 w-full">
+						<!-- Todo: Add svg here -->
 						<p class="text-muted-foreground">No interviews found.</p>
 					</div>
 				{/if}

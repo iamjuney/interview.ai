@@ -141,7 +141,8 @@ export const question = pgTable('questions', {
 	})
 		.notNull()
 		.unique(),
-	question: text('question').notNull()
+	question: text('question').notNull(),
+	videoUrl: text('video_url').default('')
 });
 
 // answers table

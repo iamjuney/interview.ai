@@ -34,6 +34,7 @@ export type Question = {
 	interviewId: string;
 	question: string;
 	answers?: Answer[];
+	videoUrl?: string;
 };
 
 export type Answer = {
