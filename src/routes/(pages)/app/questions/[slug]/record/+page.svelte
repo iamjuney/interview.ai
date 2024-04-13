@@ -94,7 +94,7 @@
 							bind:this={videoRef}
 							autoplay
 							playsinline
-							class="absolute z-20 h-full w-full -scale-x-100 object-cover"
+							class="absolute z-20 h-full w-full -scale-x-100 rounded-lg object-cover"
 						>
 						</video>
 					</div>

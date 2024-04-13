@@ -11,6 +11,7 @@
 	import type { User } from 'lucia';
 	import { AlertTriangle, ArrowRight, HelpCircle, Loader2, RefreshCw } from 'lucide-svelte';
 	import { untrack } from 'svelte';
+	import { CldVideoPlayer } from 'svelte-cloudinary';
 	import { v4 as uuidv4 } from 'uuid';
 	import DoughnutChart from './DoughnutChart.svelte';
 
@@ -34,6 +35,11 @@
 	let status = $state('');
 	let completed = $state(false);
 	let errorMessage = $state('');
+	let isMounted = $state(false);
+
+	$effect(() => {
+		isMounted = true;
+	});
 
 	let videoFile = $state<File>();
 	let audioFile = $state<File>();
@@ -420,19 +426,47 @@
 						>{new Date(countdown * 1000).toISOString().slice(14, 19)}</span
 					>
 				</div>
+				<div
+					class="absolute left-auto right-2 top-2 z-20 block aspect-video h-[60px] rounded sm:right-4 sm:top-4 sm:h-[100px] md:right-6 md:h-[140px] lg:top-6"
+				>
+					<div class="h-full w-full rounded md:rounded-lg lg:rounded-xl">
+						<!-- svelte-ignore a11y-media-has-caption -->
+						<video
+							bind:this={videoRef}
+							autoplay
+							playsinline
+							class="aspect-video h-full w-full -scale-x-100 rounded-md object-cover md:rounded-md"
+						>
+						</video>
+					</div>
+				</div>
+
+				{#if isMounted}
+					{#if question.videoUrl}
+						<CldVideoPlayer
+							width={688}
+							height={387}
+							autoPlay="true"
+							src={question.videoUrl}
+							class="absolute z-10 h-full w-full object-cover"
+						/>
+					{/if}
+				{/if}
+
+				<!-- <video
+					src="https://res.cloudinary.com/dmaf9d2j5/video/upload/v1712985318/aivideos/senior_python_developer/icdbsftaxbfpnbcvbbl5.mp4"
+					autoPlay
+					playsInline
+					class="absolute z-10 h-full w-full object-cover"
+				>
+					<track kind="captions" />
+				</video> -->
+
 				{#if cameraLoading}
 					<div class="absolute z-10 grid h-full w-full place-content-center">
 						<Loader2 class="size-6 animate-spin text-muted-foreground" />
 					</div>
 				{/if}
-				<!-- svelte-ignore a11y-media-has-caption -->
-				<video
-					bind:this={videoRef}
-					autoplay
-					playsinline
-					class="absolute z-10 h-full w-full -scale-x-100 object-cover"
-				>
-				</video>
 			{/if}
 		</div>
 		<div class="absolute bottom-0 left-0 z-50 flex h-[82px] w-full items-center justify-center">
