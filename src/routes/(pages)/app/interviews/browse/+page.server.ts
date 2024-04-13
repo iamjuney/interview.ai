@@ -2,7 +2,7 @@ import { db } from '$lib/db';
 import { interview, userInterview } from '$lib/db/schema';
 import type { Interview } from '$lib/types';
 import { fail } from '@sveltejs/kit';
-import { and, eq, ilike, notInArray, or } from 'drizzle-orm';
+import { and, eq, ilike, notInArray, or, asc } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
@@ -27,7 +27,8 @@ export const load = (async ({ locals }) => {
 		interviews = (await db.query.interview.findMany({
 			with: {
 				questions: true
-			}
+			},
+			orderBy: [asc(interview.position)]
 		})) as Interview[];
 	} else {
 		interviews = (await db.query.interview.findMany({
@@ -37,7 +38,8 @@ export const load = (async ({ locals }) => {
 			where: notInArray(
 				interview.id,
 				userInterviews.map((ui) => ui.interviewId)
-			)
+			),
+			orderBy: [asc(interview.position)]
 		})) as Interview[];
 	}
 
@@ -77,7 +79,7 @@ export const actions = {
 			// If userInterviews is empty, get all interviews
 			// else, get all interviews that the user has not taken
 			if (userInterviews.length === 0) {
-				interviews = await db.query.interview.findMany({
+				interviews = (await db.query.interview.findMany({
 					with: {
 						questions: true
 					},
@@ -86,9 +88,9 @@ export const actions = {
 						ilike(interview.position, `%${form.data.query}%`),
 						ilike(interview.description, `%${form.data.query}%`)
 					)
-				});
+				})) as Interview[];
 			} else {
-				interviews = await db.query.interview.findMany({
+				interviews = (await db.query.interview.findMany({
 					with: {
 						questions: true
 					},
@@ -103,7 +105,7 @@ export const actions = {
 							ilike(interview.description, `%${form.data.query}%`)
 						)
 					)
-				});
+				})) as Interview[];
 			}
 
 			return {
