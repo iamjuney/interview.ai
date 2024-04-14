@@ -35,11 +35,10 @@
 	let status = $state('');
 	let completed = $state(false);
 	let errorMessage = $state('');
-	let isMounted = $state(false);
-
-	$effect(() => {
-		isMounted = true;
-	});
+	let avatarVideoRef = $state<HTMLVideoElement>();
+	let avatarVideoFinished = $state(false);
+	let isTimerBeforeRecordingShowing = $state(false);
+	let timerBeforeRecording = $state(4);
 
 	let videoFile = $state<File>();
 	let audioFile = $state<File>();
@@ -69,6 +68,28 @@
 				countdown--;
 			}, 1000);
 			if (countdown === 0) handleStopCaptureClick();
+		}
+
+		return () => {
+			clearInterval(timer);
+		};
+	});
+
+	// handles the countdown timer
+	$effect(() => {
+		let timer: any = null;
+		if (avatarVideoFinished) {
+			isTimerBeforeRecordingShowing = true;
+
+			timer = setInterval(() => {
+				timerBeforeRecording--;
+			}, 1000);
+
+			if (timerBeforeRecording === 0) {
+				avatarVideoFinished = false;
+				isTimerBeforeRecordingShowing = false;
+				handleStartCaptureClick();
+			}
 		}
 
 		return () => {
@@ -147,6 +168,10 @@
 		return new File([data.buffer], 'output.wav', { type: 'audio/wav' });
 	}
 
+	function handleStartVideoClick() {
+		if (avatarVideoRef) avatarVideoRef.play();
+	}
+
 	// function to handle the start of the recording
 	function handleStartCaptureClick() {
 		cameraRecording = true;
@@ -172,6 +197,7 @@
 		mediaRecorderRef?.stop();
 
 		cameraRecording = false;
+		timerBeforeRecording = 4;
 	}
 
 	// function to handle the restart of the recording
@@ -429,6 +455,18 @@
 				<div
 					class="absolute left-auto right-2 top-2 z-20 block aspect-video h-[60px] rounded sm:right-4 sm:top-4 sm:h-[100px] md:right-6 md:h-[140px] lg:top-6"
 				>
+					{#if isTimerBeforeRecordingShowing}
+						<div
+							class="absolute z-10 grid h-full w-full place-content-center rounded bg-black/80 md:rounded-lg lg:rounded-xl"
+						>
+							{#if timerBeforeRecording === 1}
+								<div class="text-4xl font-bold text-white">Start!</div>
+							{:else}
+								<div class="text-5xl font-extrabold text-white">{timerBeforeRecording - 1}</div>
+							{/if}
+						</div>
+					{/if}
+
 					<div class="h-full w-full rounded md:rounded-lg lg:rounded-xl">
 						<!-- svelte-ignore a11y-media-has-caption -->
 						<video
@@ -441,26 +479,21 @@
 					</div>
 				</div>
 
-				{#if isMounted}
-					{#if question.videoUrl}
-						<CldVideoPlayer
-							width={688}
-							height={387}
-							autoPlay="true"
-							src={question.videoUrl}
-							class="absolute z-10 h-full w-full object-cover"
-						/>
-					{/if}
+				{#if question.videoUrl}
+					<CldVideoPlayer
+						onMetadataLoad={({ player }: { player: any }) => {
+							avatarVideoRef = player;
+						}}
+						onEnded={() => {
+							avatarVideoFinished = true;
+						}}
+						controls={false}
+						width={1080}
+						height={720}
+						src={question.videoUrl}
+						class="absolute z-10 h-full w-full object-cover"
+					/>
 				{/if}
-
-				<!-- <video
-					src="https://res.cloudinary.com/dmaf9d2j5/video/upload/v1712985318/aivideos/senior_python_developer/icdbsftaxbfpnbcvbbl5.mp4"
-					autoPlay
-					playsInline
-					class="absolute z-10 h-full w-full object-cover"
-				>
-					<track kind="captions" />
-				</video> -->
 
 				{#if cameraLoading}
 					<div class="absolute z-10 grid h-full w-full place-content-center">
@@ -497,7 +530,7 @@
 							</button>
 						{:else}
 							<button
-								onclick={handleStartCaptureClick}
+								onclick={handleStartVideoClick}
 								class="flex size-8 scale-100 flex-col items-center justify-center rounded-full bg-red-500 ring-4 ring-white ring-offset-2 ring-offset-gray-500 duration-75 hover:shadow-xl active:scale-95 sm:h-8 sm:w-8"
 							></button>
 						{/if}
