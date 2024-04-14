@@ -7,7 +7,6 @@
 
 	let startOnboarding = $state(false);
 	let loaded = $state(false);
-	let isChecked = $state(false);
 
 	const driverObj = driver({
 		showProgress: true,
@@ -169,7 +168,6 @@
 				>
 					<div class="flex items-center">
 						<input
-							bind:checked={isChecked}
 							type="checkbox"
 							id="show_onboarding"
 							name="show_onboarding"
@@ -179,22 +177,13 @@
 					</div>
 
 					<div class="flex gap-3">
-						{#if isChecked}
-							<AlertDialog.Cancel type="submit">Skip</AlertDialog.Cancel>
-							<AlertDialog.Action
-								type="submit"
-								on:click={() => {
-									startOnboarding = true;
-								}}>Take a tour</AlertDialog.Action
-							>
-						{:else}
-							<AlertDialog.Cancel>Skip</AlertDialog.Cancel>
-							<AlertDialog.Action
-								on:click={() => {
-									startOnboarding = true;
-								}}>Take a tour</AlertDialog.Action
-							>
-						{/if}
+						<AlertDialog.Cancel type="submit">Skip</AlertDialog.Cancel>
+						<AlertDialog.Action
+							type="submit"
+							on:click={() => {
+								startOnboarding = true;
+							}}>Take a tour</AlertDialog.Action
+						>
 					</div>
 				</form>
 			</div>
