@@ -34,7 +34,7 @@
 					<div class="h-4 w-[2px] bg-primary"></div>
 					<p class="ml-2 font-semibold">{interview.difficulty}</p>
 				</div>
-				<p class="text-xl font-semibold md:text-2xl">{interview.position}</p>
+				<p class="text-xl font-semibold">{interview.position}</p>
 				{#if progress > 0}
 					<Progress value={progress} class="mt-6" />
 					<p class="text-sm">{progress}% completed</p>
