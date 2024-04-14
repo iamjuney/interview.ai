@@ -7,6 +7,7 @@
 
 	let startOnboarding = $state(false);
 	let loaded = $state(false);
+	let isChecked = $state(false);
 
 	const driverObj = driver({
 		showProgress: true,
@@ -106,7 +107,7 @@
 			}
 		],
 		onDestroyStarted: () => {
-			if (!driverObj.hasNextStep() || confirm('Are you sure?')) {
+			if (!driverObj.hasNextStep() || confirm('Are you to exit tour?')) {
 				driverObj.destroy();
 			}
 		}
@@ -168,6 +169,7 @@
 				>
 					<div class="flex items-center">
 						<input
+							bind:checked={isChecked}
 							type="checkbox"
 							id="show_onboarding"
 							name="show_onboarding"
@@ -175,13 +177,26 @@
 						/>
 						<label for="show_onboarding" class="ml-2 block text-sm">Don't show this again</label>
 					</div>
-					<AlertDialog.Cancel type="submit">Skip</AlertDialog.Cancel>
+
+					<div class="flex gap-3">
+						{#if isChecked}
+							<AlertDialog.Cancel type="submit">Skip</AlertDialog.Cancel>
+							<AlertDialog.Action
+								type="submit"
+								on:click={() => {
+									startOnboarding = true;
+								}}>Take a tour</AlertDialog.Action
+							>
+						{:else}
+							<AlertDialog.Cancel>Skip</AlertDialog.Cancel>
+							<AlertDialog.Action
+								on:click={() => {
+									startOnboarding = true;
+								}}>Take a tour</AlertDialog.Action
+							>
+						{/if}
+					</div>
 				</form>
-				<AlertDialog.Action
-					on:click={() => {
-						startOnboarding = true;
-					}}>Take a tour</AlertDialog.Action
-				>
 			</div>
 		</AlertDialog.Footer>
 	</AlertDialog.Content>
