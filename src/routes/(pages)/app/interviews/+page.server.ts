@@ -4,6 +4,20 @@ import { error, fail, redirect } from '@sveltejs/kit';
 import { eq } from 'drizzle-orm';
 import { v4 as uuidv4 } from 'uuid';
 import type { PageServerLoad } from './$types';
+import type { Interview, UserInterview } from '$lib/types';
+
+// Check if all questions in an interview have been answered
+function checkInterviews(interviews: UserInterview[]) {
+	return interviews.map((interview) => {
+		const answered = interview.interview?.questions.every((question) =>
+			question?.answers?.some((answer) => answer.userId === interview.userId)
+		);
+		return {
+			id: interview.id,
+			answered
+		};
+	});
+}
 
 export const load = (async ({ locals }) => {
 	const session = await locals.auth.validate();
@@ -37,6 +51,19 @@ export const load = (async ({ locals }) => {
 	// filter where status is completed
 	const completed = all.filter((interview) => interview.status === 'completed');
 
+	// Check if all questions in an interview have been answered
+	const interviews = checkInterviews(all);
+
+	// loop through all interviews and update the status
+	for (const interview of interviews) {
+		await db
+			.update(userInterview)
+			.set({
+				status: interview.answered ? 'completed' : 'in-progress'
+			})
+			.where(eq(userInterview.id, interview.id));
+	}
+
 	return { all, in_progress, completed };
 }) satisfies PageServerLoad;
 
@@ -68,6 +95,7 @@ export const actions = {
 
 		redirect(302, `/app/interviews`);
 	},
+
 	delete: async ({ request }) => {
 		const form = await request.formData();
 		const userInterviewId = form.get('user_interview_id')!.toString();
@@ -84,6 +112,4 @@ export const actions = {
 
 		redirect(302, '/app/interviews');
 	}
-
-	// Todo: mark the interview as completed
 };

@@ -36,7 +36,6 @@ export const load = (async ({ params, locals }) => {
 	});
 
 	let questions: Question[] = [];
-
 	if (userInterviewDetails) questions = userInterviewDetails.interview.questions;
 	else questions = interviewDetails.questions;
 
@@ -46,5 +45,3 @@ export const load = (async ({ params, locals }) => {
 		questions
 	};
 }) satisfies PageServerLoad;
-
-// Todo: Implement marking interviews as complete

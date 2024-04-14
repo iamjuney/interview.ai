@@ -17,6 +17,15 @@ export type PronunciationAssessmentResult = {
 	data: DetailResult[];
 };
 
+export type UserInterview = {
+	status: 'completed' | 'in-progress';
+	id: string;
+	createdAt: Date;
+	userId: string;
+	interviewId: string;
+	interview?: Interview;
+};
+
 export type Interview = {
 	id: string;
 	createdAt: Date;
