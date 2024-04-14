@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Button, InterviewCard, Tabs } from '$lib/components';
+	import { Button, InterviewCard, Tabs, NotFound } from '$lib/components';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -29,7 +29,7 @@
 			>
 		</div>
 
-		<Tabs.Root value="all" class="w-full">
+		<Tabs.Root value="all" class="h-full w-full">
 			<div class="grid w-full place-content-center md:place-content-start">
 				<Tabs.List>
 					<Tabs.Trigger value="all">All</Tabs.Trigger>
@@ -37,7 +37,7 @@
 					<Tabs.Trigger value="completed">Completed</Tabs.Trigger>
 				</Tabs.List>
 			</div>
-			<Tabs.Content value="all">
+			<Tabs.Content value="all" class="h-full">
 				{#if data.all.length > 0}
 					<div
 						class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
@@ -47,13 +47,10 @@
 						{/each}
 					</div>
 				{:else}
-					<div class="mt-8 w-full">
-						<!-- Todo: Add svg here -->
-						<p class="text-muted-foreground">No interviews found.</p>
-					</div>
+					<NotFound message="No interviews found." />
 				{/if}
 			</Tabs.Content>
-			<Tabs.Content value="ongoing">
+			<Tabs.Content value="ongoing" class="h-full">
 				{#if data.in_progress.length > 0}
 					<div
 						class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
@@ -63,12 +60,10 @@
 						{/each}
 					</div>
 				{:else}
-					<div class="mt-8 w-full">
-						<p class="text-muted-foreground">No interviews found.</p>
-					</div>
+					<NotFound message="No interviews found." />
 				{/if}
 			</Tabs.Content>
-			<Tabs.Content value="completed">
+			<Tabs.Content value="completed" class="h-full">
 				{#if data.completed.length > 0}
 					<div
 						class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
@@ -78,9 +73,7 @@
 						{/each}
 					</div>
 				{:else}
-					<div class="mt-8 w-full">
-						<p class="text-muted-foreground">No interviews found.</p>
-					</div>
+					<NotFound message="No interviews found." />
 				{/if}
 			</Tabs.Content>
 		</Tabs.Root>

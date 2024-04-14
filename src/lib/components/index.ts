@@ -15,6 +15,7 @@ export { default as InterviewAssessment } from './interview/InterviewAssessment.
 export { default as InterviewCard } from './interview/InterviewCard.svelte';
 export { default as InterviewStage } from './interview/InterviewStage.svelte';
 export { default as Onboarding } from './interview/Onboarding.svelte';
+export { default as NotFound } from './interview/NotFound.svelte';
 
 /* Layout */
 export { default as LayoutBackground } from './layout/LayoutBackground.svelte';

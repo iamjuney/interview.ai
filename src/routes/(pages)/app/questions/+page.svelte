@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { Badge, Button, Input } from '$lib/components';
+	import { Badge, Button, Input, NotFound } from '$lib/components';
 	import { type SubmitFunction } from '@sveltejs/kit';
 	import { Check, Loader2, Search } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
@@ -110,37 +110,35 @@
 
 			{#if failedSearchData}
 				<p class="text-muted-foreground">{failedSearchData.message}</p>
-			{:else}
+			{:else if questions.length > 0}
 				<div
 					id="BrowseQuestions"
 					class="mt-3 grid w-full grid-cols-1 gap-4 lg:grid-cols-2 xl:grid-cols-3"
 				>
-					{#if questions.length > 0}
-						{#each currentQuestions() as question}
-							<a
-								class="hover:text-muted-foreground-foreground group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border p-4 font-medium shadow-sm transition duration-100 hover:bg-secondary"
-								href="/app/questions/{question.slug}"
-								data-sveltekit-preload-data
-							>
-								<div class="relative flex h-full flex-col overflow-hidden">
-									<div class="flex items-center text-left">
-										<p>{question.question}</p>
-									</div>
-									<div class="mt-2 flex flex-row space-x-2">
-										{#if question.answers && question.answers.length > 0}
-											<Badge color="primary">
-												<Check class="mr-1 size-3" />
-												Answered
-											</Badge>
-										{/if}
-									</div>
-								</div></a
-							>
-						{/each}
-					{:else}
-						<p class="text-muted-foreground">No questions found.</p>
-					{/if}
+					{#each currentQuestions() as question}
+						<a
+							class="hover:text-muted-foreground-foreground group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border p-4 font-medium shadow-sm transition duration-100 hover:bg-secondary"
+							href="/app/questions/{question.slug}"
+							data-sveltekit-preload-data
+						>
+							<div class="relative flex h-full flex-col overflow-hidden">
+								<div class="flex items-center text-left">
+									<p>{question.question}</p>
+								</div>
+								<div class="mt-2 flex flex-row space-x-2">
+									{#if question.answers && question.answers.length > 0}
+										<Badge color="primary">
+											<Check class="mr-1 size-3" />
+											Answered
+										</Badge>
+									{/if}
+								</div>
+							</div></a
+						>
+					{/each}
 				</div>
+			{:else}
+				<NotFound message="No questions found." />
 			{/if}
 		</div>
 

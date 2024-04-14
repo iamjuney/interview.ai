@@ -16,9 +16,6 @@ dependencies:
   '@ffmpeg/util':
     specifier: '*'
     version: 0.12.1(patch_hash=jmvtu6rmnhxvos2ceaap65unle)
-  '@lottiefiles/svelte-lottie-player':
-    specifier: ^0.3.1
-    version: 0.3.1
   '@lucia-auth/adapter-postgresql':
     specifier: ^2.0.2
     version: 2.0.2(lucia@2.7.7)(pg@8.11.3)
@@ -117,6 +114,9 @@ dependencies:
     version: 9.0.1
 
 devDependencies:
+  '@lottiefiles/svelte-lottie-player':
+    specifier: ^0.3.1
+    version: 0.3.1
   '@playwright/test':
     specifier: ^1.41.2
     version: 1.41.2
@@ -788,7 +788,7 @@ packages:
     resolution: {integrity: sha512-WnJasuRJJiKl1nSaZeYpaorNCdVOeR9FcWve/QLliPGxF6UUkS88uGH0Vd4ExP8PSpkagyQ7QYRBGCymBIxVxQ==}
     dependencies:
       lottie-web: 5.12.2
-    dev: false
+    dev: true
 
   /@lucia-auth/adapter-postgresql@2.0.2(lucia@2.7.7)(pg@8.11.3):
     resolution: {integrity: sha512-gQ7SlFu+gxQj2IX2J8ZVivcLBbdnf9SbNQOVWkJxZOdY1uaaIQGeNfEDld2Awy02VrXmA4sjHsbkJx1JPVw2+A==}
@@ -2849,7 +2849,7 @@ packages:
 
   /lottie-web@5.12.2:
     resolution: {integrity: sha512-uvhvYPC8kGPjXT3MyKMrL3JitEAmDMp30lVkuq/590Mw9ok6pWcFCwXJveo0t5uqYw1UREQHofD+jVpdjBv8wg==}
-    dev: false
+    dev: true
 
   /lru-cache@10.2.0:
     resolution: {integrity: sha512-2bIM8x+VAf6JT4bKAljS1qUWgMsqZRPGJS6FSahIMPVvctcNhyVp7AJu7quxOW9jwkryBReKZY5tY5JYv2n/7Q==}

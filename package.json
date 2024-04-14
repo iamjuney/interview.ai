@@ -19,6 +19,7 @@
 		"db:delete": "node --import tsx --env-file .env.local ./src/lib/db/delete.ts"
 	},
 	"devDependencies": {
+		"@lottiefiles/svelte-lottie-player": "^0.3.1",
 		"@playwright/test": "^1.41.2",
 		"@sveltejs/adapter-auto": "^3.0.0",
 		"@sveltejs/adapter-vercel": "^5.1.0",
@@ -50,7 +51,6 @@
 	"dependencies": {
 		"@ffmpeg/ffmpeg": "*",
 		"@ffmpeg/util": "*",
-		"@lottiefiles/svelte-lottie-player": "^0.3.1",
 		"@lucia-auth/adapter-postgresql": "^2.0.2",
 		"@lucia-auth/oauth": "^3.5.3",
 		"@types/nprogress": "^0.2.3",

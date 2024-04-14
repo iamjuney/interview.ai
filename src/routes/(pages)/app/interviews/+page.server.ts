@@ -84,4 +84,6 @@ export const actions = {
 
 		redirect(302, '/app/interviews');
 	}
+
+	// Todo: mark the interview as completed
 };

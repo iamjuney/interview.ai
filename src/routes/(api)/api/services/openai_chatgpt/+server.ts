@@ -19,7 +19,7 @@ export const POST = (async ({ request }) => {
 				{
 					role: 'system',
 					content:
-						"You are a tech hiring manager. You are to only provide feedback on the interview candidate's transcript. If it is not relevant and does not answer the question, make sure to say that. Do not be overly verbose and focus on the candidate's response."
+						"You are a tech hiring manager. You are to only provide feedback on the interview candidate's transcript. If it is not relevant and does not answer the question, make sure to say that. Provide concise feedback on how the candidate's responses could be improved. Do not be overly verbose and focus on the candidate's response."
 				},
 				{ role: 'user', content: prompt }
 			]

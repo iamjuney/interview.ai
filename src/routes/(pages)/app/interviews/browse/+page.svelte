@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { enhance } from '$app/forms';
-	import { Input, InterviewCard } from '$lib/components';
+	import { Input, InterviewCard, NotFound } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { ArrowLeft, Loader2, Search } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
@@ -72,7 +72,7 @@
 			</div>
 		</div>
 
-		<div>
+		<div class="h-full">
 			<form
 				bind:this={searchForm}
 				class="w-full"
@@ -104,18 +104,18 @@
 				<p class="text-muted-foreground">{failedSearchData.message}</p>
 			{/if}
 
-			<div
-				id="BrowseInterviews"
-				class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
-			>
-				{#if interviews.length === 0}
-					<p class="text-muted-foreground">No interviews found.</p>
-				{:else}
+			{#if interviews.length === 0}
+				<NotFound message="No interviews found." />
+			{:else}
+				<div
+					id="BrowseInterviews"
+					class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
+				>
 					{#each interviews as interview}
 						<InterviewCard {interview} />
 					{/each}
-				{/if}
-			</div>
+				</div>
+			{/if}
 		</div>
 	</div>
 {/if}
