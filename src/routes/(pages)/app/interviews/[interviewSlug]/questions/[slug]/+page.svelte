@@ -1,4 +1,5 @@
 <script lang="ts">
+	import { page } from '$app/stores';
 	import { Button, InterviewAssessment, NotFound } from '$lib/components';
 	import type { Answer } from '$lib/types.js';
 	import { ArrowLeft } from 'lucide-svelte';
@@ -44,9 +45,13 @@
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
 		<div class="flex w-full flex-col gap-3">
 			<div class="flex items-center">
-				<a href="/app/questions" data-sveltekit-preload-data class="group flex items-center gap-2">
+				<a
+					href="/app/interviews/{$page.params.interviewSlug}"
+					data-sveltekit-preload-data
+					class="group flex items-center gap-2"
+				>
 					<ArrowLeft size="20" class="text-muted-foreground group-hover:text-foreground" />
-					<p class="text-muted-foreground group-hover:text-foreground">Back to questions</p>
+					<p class="text-muted-foreground group-hover:text-foreground">Back to interview</p>
 				</a>
 			</div>
 
@@ -56,7 +61,8 @@
 				</h2>
 				<Button
 					size="lg"
-					href="/app/questions/{data.questionDetails?.slug}/record"
+					href="/app/interviews/{$page.params.interviewSlug}/questions/{data.questionDetails
+						?.slug}/record"
 					data-sveltekit-preload-data="hover">Record New Answer</Button
 				>
 			</div>

@@ -9,7 +9,7 @@ export const load = (async ({ params, locals }) => {
 	const userId = session!.user.userId.toString();
 
 	const interviewDetails = (await db.query.interview.findFirst({
-		where: eq(interview.slug, params.slug),
+		where: eq(interview.interviewSlug, params.interviewSlug),
 		with: {
 			questions: true
 		}

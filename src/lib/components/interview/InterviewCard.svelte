@@ -18,7 +18,7 @@
 </script>
 
 <a
-	href="/app/interviews/{interview.slug}"
+	href="/app/interviews/{interview.interviewSlug}"
 	data-sveltekit-preload-data
 	class="group relative cursor-pointer rounded-xl border p-4 shadow-sm hover:bg-secondary hover:text-secondary-foreground"
 >

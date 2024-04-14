@@ -89,7 +89,7 @@ export const interview = pgTable('interviews', {
 	id: varchar('id', {
 		length: 36
 	}).primaryKey(),
-	slug: varchar('slug', {
+	interviewSlug: varchar('slug', {
 		length: 255
 	})
 		.notNull()

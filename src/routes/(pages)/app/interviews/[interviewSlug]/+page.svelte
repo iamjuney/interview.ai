@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
 	import { afterNavigate, goto } from '$app/navigation';
+	import { page } from '$app/stores';
 	import { AlertDialog, Badge, Button, Collapsible } from '$lib/components';
 	import type { Question } from '$lib/types';
 	import { ArrowLeft, CheckCircle, CircleDot, Inbox, PlayCircle, Timer } from 'lucide-svelte';
@@ -15,16 +16,20 @@
 	let questionsCount = $derived<number>(questions.length);
 	let questionsIsOpen = $state(false);
 
-	let previousPage = $state<string>('/app/interviews');
-	let text = $state<string>('to my interviews');
+	let previousPage = $state<string>('/app/interviews/browse');
+	let text = $state<string>('to browse interviews');
 	let isSubmitting = $state(false);
 
 	afterNavigate(({ from }) => {
 		previousPage = from?.url.pathname || previousPage;
 
 		if (previousPage === '/app/interviews/browse') {
-			text = 'to all interviews';
+			text = 'to browse interviews';
+			return;
 		}
+
+		previousPage = '/app/interviews';
+		text = 'to my interviews';
 	});
 
 	$effect(() => {
@@ -41,7 +46,7 @@
 {#snippet questionCardClickable(q:Question)}
 	<a
 		class="mb-2 flex w-full items-center justify-between rounded-md border border-border p-3 font-medium transition-all duration-200 hover:ml-3"
-		href="/app/questions/{q.slug}"
+		href="/app/interviews/{$page.params.interviewSlug}/questions/{q.slug}"
 		><div class="flex items-center text-left">
 			{#if q.answers!.length > 0}
 				<CheckCircle size="20" class="flex-none text-green-500" />

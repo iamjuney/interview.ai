@@ -20,7 +20,7 @@ export type PronunciationAssessmentResult = {
 export type Interview = {
 	id: string;
 	createdAt: Date;
-	slug: string;
+	interviewSlug: string;
 	position: string;
 	difficulty: string;
 	duration: number;

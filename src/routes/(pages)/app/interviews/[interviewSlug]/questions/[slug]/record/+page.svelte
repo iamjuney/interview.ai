@@ -4,6 +4,7 @@
 	import { untrack } from 'svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
+	import { page } from '$app/stores';
 
 	let { data } = $props();
 	let question = $state(data.questionDetails);
@@ -148,8 +149,10 @@
 			</AlertDialog.Description>
 		</AlertDialog.Header>
 		<AlertDialog.Footer class="mt-8">
-			<Button variant="outline" href="/app/questions/{question.slug}" class="mt-2 sm:mt-0"
-				>Cancel</Button
+			<Button
+				variant="outline"
+				href="/app/interviews/{$page.params.intervewSlug}/questions/{question.slug}"
+				class="mt-2 sm:mt-0">Cancel</Button
 			>
 			<AlertDialog.Action
 				disabled={!audioPermission || !videoPermission}
@@ -165,7 +168,10 @@
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
 		<div class="flex w-full flex-col gap-3">
 			<div class="flex items-center">
-				<a href="/app/questions/{question.slug}" class="group flex items-center gap-2">
+				<a
+					href="/app/interviews/{$page.params.interviewSlug}/questions/{question.slug}"
+					class="group flex items-center gap-2"
+				>
 					<ArrowLeft size="20" class="text-muted-foreground group-hover:text-foreground" />
 					<p class="text-muted-foreground group-hover:text-foreground">Back to all recordings</p>
 				</a>
