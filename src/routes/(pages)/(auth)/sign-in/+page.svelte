@@ -95,7 +95,7 @@
 									/>
 									<Label for="remember_me" class="ml-2 block text-sm">Remember me</Label>
 								</div>
-
+								<!--
 								<div class="text-sm">
 									<a
 										href="/forgot-password"
@@ -104,6 +104,7 @@
 										Forgot your password?
 									</a>
 								</div>
+                                -->
 							</div>
 							<Button disabled={isLoading} type="submit">
 								{#if isLoading}
