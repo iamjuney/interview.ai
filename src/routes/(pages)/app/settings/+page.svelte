@@ -21,6 +21,8 @@
 	let imageFile = $state<File>();
 	let newProfile = $state('');
 
+	console.log(user);
+
 	$effect(() => {
 		animate = true;
 	});
@@ -227,71 +229,73 @@
 			</form>
 		</div>
 
-		<div class="max-w-xl space-y-2">
-			<h2 class="truncate text-xl font-medium tracking-tight">Change Password</h2>
-			<p class="text-muted-foreground">
-				Ensure your account is using a long, random password to stay secure.
-			</p>
+		{#if !user.username}
+			<div class="max-w-xl space-y-2">
+				<h2 class="truncate text-xl font-medium tracking-tight">Change Password</h2>
+				<p class="text-muted-foreground">
+					Ensure your account is using a long, random password to stay secure.
+				</p>
 
-			{#if failedUpdatePassword}
-				<div class="flex items-center justify-center text-destructive">
-					<XCircle class="mr-2 size-4 " />
-					<span class="text-sm">{failedUpdatePassword.message}</span>
-				</div>
-			{/if}
+				{#if failedUpdatePassword}
+					<div class="flex items-center justify-center text-destructive">
+						<XCircle class="mr-2 size-4 " />
+						<span class="text-sm">{failedUpdatePassword.message}</span>
+					</div>
+				{/if}
 
-			<form
-				class="max-w-xl text-muted-foreground"
-				action="?/updatePassword"
-				use:enhance={handleUpdatePasswordSubmit}
-				method="POST"
-			>
-				<input type="hidden" id="email" name="email" value={user.email} />
-				<div class="mt-6">
-					<Label for="current_password">Current Password</Label>
-					<Input
-						id="current_password"
-						name="current_password"
-						type="password"
-						placeholder="Enter your current password"
-					/>
-				</div>
-				<div class="mt-6 grid grid-cols-12 gap-6">
-					<div class="col-span-12 sm:col-span-6">
-						<Label for="new_password">New Password</Label>
+				<form
+					class="max-w-xl text-muted-foreground"
+					action="?/updatePassword"
+					use:enhance={handleUpdatePasswordSubmit}
+					method="POST"
+				>
+					<input type="hidden" id="email" name="email" value={user.email} />
+					<div class="mt-6">
+						<Label for="current_password">Current Password</Label>
 						<Input
-							id="new_password"
-							name="new_password"
+							id="current_password"
+							name="current_password"
 							type="password"
-							placeholder="Enter new password"
+							placeholder="Enter your current password"
 						/>
 					</div>
+					<div class="mt-6 grid grid-cols-12 gap-6">
+						<div class="col-span-12 sm:col-span-6">
+							<Label for="new_password">New Password</Label>
+							<Input
+								id="new_password"
+								name="new_password"
+								type="password"
+								placeholder="Enter new password"
+							/>
+						</div>
 
-					<div class="col-span-12 sm:col-span-6">
-						<Label for="confirm_password">Confirm New Password</Label>
-						<Input
-							id="confirm_password"
-							name="confirm_password"
-							type="password"
-							placeholder="Re-type new password"
-						/>
+						<div class="col-span-12 sm:col-span-6">
+							<Label for="confirm_password">Confirm New Password</Label>
+							<Input
+								id="confirm_password"
+								name="confirm_password"
+								type="password"
+								placeholder="Re-type new password"
+							/>
+						</div>
 					</div>
-				</div>
 
-				<div class="mt-6">
-					<Button type="submit" size="lg" bind:disabled={isUpdatePasswordSubmitting}>
-						{#if isUpdatePasswordSubmitting}
-							<span class="flex items-center space-x-2">
-								<span>Updating...</span>
-								<Loader2 class="size-4 animate-spin" />
-							</span>
-						{:else}
-							<span>Update Password</span>
-						{/if}
-					</Button>
-				</div>
-			</form>
-		</div>
+					<div class="mt-6">
+						<Button type="submit" size="lg" bind:disabled={isUpdatePasswordSubmitting}>
+							{#if isUpdatePasswordSubmitting}
+								<span class="flex items-center space-x-2">
+									<span>Updating...</span>
+									<Loader2 class="size-4 animate-spin" />
+								</span>
+							{:else}
+								<span>Update Password</span>
+							{/if}
+						</Button>
+					</div>
+				</form>
+			</div>
+		{/if}
 
 		<div class="max-w-xl space-y-2">
 			<h2 class="truncate text-xl font-medium tracking-tight">Danger Zone</h2>
