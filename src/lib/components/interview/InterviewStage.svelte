@@ -548,7 +548,7 @@
 	{/if}
 
 	{#if completed && assessmentData}
-		<div class="container mt-12 flex max-w-4xl flex-col gap-12">
+		<div class="mt-12 flex max-w-4xl flex-col gap-12">
 			<div class="mx-auto flex w-full max-w-2xl flex-col md:flex-row md:space-x-12">
 				<div class="flex flex-none flex-col">
 					<h2 class="mb-3 text-left text-lg font-semibold">
@@ -645,6 +645,7 @@
 					</div>
 				</div>
 			</div>
+
 			<div>
 				<div class="flex flex-col items-start justify-between md:flex-row">
 					<h2 class="text-left text-lg font-semibold">Transcript</h2>
