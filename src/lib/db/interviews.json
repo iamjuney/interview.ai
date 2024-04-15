@@ -4,7 +4,7 @@
 		"slug": "senior-python-developer",
 		"position": "Senior Python Developer",
 		"difficulty": "Advanced",
-		"duration": 90,
+		"duration": 25,
 		"description": "The Senior Python Developer is responsible for designing, developing, and maintaining complex Python-based applications. They will work closely with the team to create scalable, efficient, and maintainable solutions."
 	},
 	{
@@ -12,7 +12,7 @@
 		"slug": "android-app-developer",
 		"position": "Android App Developer",
 		"difficulty": "Intermediate",
-		"duration": 60,
+		"duration": 25,
 		"description": "The Android App Developer will be responsible for building high-quality, user-friendly mobile applications for the Android platform. They will work closely with the design team to ensure the app's UI/UX meets the client's requirements."
 	},
 	{
@@ -20,7 +20,7 @@
 		"slug": "senior-net-developer",
 		"position": "Senior .NET Developer",
 		"difficulty": "Advanced",
-		"duration": 90,
+		"duration": 25,
 		"description": "The Senior .NET Developer will be responsible for designing, developing, and maintaining complex .NET-based applications. They will work closely with the team to create scalable, efficient, and maintainable solutions."
 	},
 	{
@@ -28,7 +28,7 @@
 		"slug": "ui-ux-designer",
 		"position": "UI/UX Designer",
 		"difficulty": "Intermediate",
-		"duration": 60,
+		"duration": 25,
 		"description": "The UI/UX Designer will be responsible for creating visually appealing and user-friendly designs for our web and mobile applications. They will work closely with the development team to ensure the design is implemented effectively."
 	},
 	{
@@ -36,7 +36,7 @@
 		"slug": "backend-engineer",
 		"position": "Backend Engineer",
 		"difficulty": "Intermediate",
-		"duration": 75,
+		"duration": 25,
 		"description": "The Backend Engineer will be responsible for designing and implementing the server-side components of our web and mobile applications. They will work closely with the front-end team to ensure a seamless user experience."
 	},
 	{
@@ -44,7 +44,7 @@
 		"slug": "full-stack-developer",
 		"position": "Full-Stack Developer",
 		"difficulty": "Advanced",
-		"duration": 90,
+		"duration": 25,
 		"description": "The Full-Stack Developer will be responsible for designing, developing, and maintaining the complete web application, including both the front-end and back-end components. They will work closely with the team to create scalable, efficient, and maintainable solutions."
 	},
 	{
@@ -52,7 +52,7 @@
 		"slug": "front-end-engineer",
 		"position": "Front-End Engineer",
 		"difficulty": "Intermediate",
-		"duration": 60,
+		"duration": 18,
 		"description": "The Front-End Engineer will be responsible for designing and implementing the user interface of our web and mobile applications. They will work closely with the design team to ensure a seamless and visually appealing user experience."
 	},
 	{
@@ -60,7 +60,7 @@
 		"slug": "data-analyst",
 		"position": "Data Analyst",
 		"difficulty": "Intermediate",
-		"duration": 75,
+		"duration": 25,
 		"description": "The Data Analyst will be responsible for collecting, analyzing, and interpreting data to provide insights and recommendations to the business. They will work closely with the team to identify and solve complex data-related problems."
 	},
 	{
@@ -68,7 +68,7 @@
 		"slug": "devops-engineer",
 		"position": "DevOps Engineer",
 		"difficulty": "Advanced",
-		"duration": 90,
+		"duration": 25,
 		"description": "The DevOps Engineer will be responsible for designing and implementing the infrastructure and deployment processes for our web and mobile applications. They will work closely with the development team to ensure a smooth and efficient development and deployment workflow."
 	},
 	{
@@ -76,7 +76,7 @@
 		"slug": "laravel-developer",
 		"position": "Laravel Developer",
 		"difficulty": "Intermediate",
-		"duration": 75,
+		"duration": 20,
 		"description": "The Laravel Developer will be responsible for building and maintaining web applications using the Laravel framework. They will work closely with the team to create scalable, efficient, and maintainable solutions."
 	},
 	{
@@ -84,7 +84,7 @@
 		"slug": "game-developer",
 		"position": "Game Developer",
 		"difficulty": "Advanced",
-		"duration": 90,
+		"duration": 25,
 		"description": "The Game Developer will be responsible for designing, developing, and implementing interactive games for various platforms. They will work closely with the design and audio teams to create engaging and visually appealing gaming experiences."
 	},
 	{
@@ -92,7 +92,7 @@
 		"slug": "react-developer",
 		"position": "React Developer",
 		"difficulty": "Intermediate",
-		"duration": 75,
+		"duration": 20,
 		"description": "The React Developer will be responsible for building interactive and responsive user interfaces using the React JavaScript library. They will work closely with the design team to ensure the UI/UX meets the client's requirements."
 	},
 	{
@@ -100,7 +100,7 @@
 		"slug": "wordpress-developer",
 		"position": "WordPress Developer",
 		"difficulty": "Intermediate",
-		"duration": 60,
+		"duration": 25,
 		"description": "The WordPress Developer will be responsible for building and customizing WordPress-based websites and applications. They will work closely with the client to understand their requirements and deliver a high-quality, feature-rich solution."
 	},
 	{
@@ -108,7 +108,7 @@
 		"slug": "ruby-on-rails-developer",
 		"position": "Ruby on Rails Developer",
 		"difficulty": "Intermediate",
-		"duration": 75,
+		"duration": 25,
 		"description": "The Ruby on Rails Developer will be responsible for building and maintaining web applications using the Ruby on Rails framework. They will work closely with the team to create scalable, efficient, and maintainable solutions."
 	},
 	{
@@ -116,7 +116,7 @@
 		"slug": "junior-python-developer",
 		"position": "Junior Python Developer",
 		"difficulty": "Basic",
-		"duration": 45,
+		"duration": 25,
 		"description": "The Junior Python Developer will be responsible for developing and maintaining basic Python-based applications under the guidance of senior developers. They will work on a variety of projects to gain hands-on experience in the field."
 	},
 	{
@@ -124,7 +124,7 @@
 		"slug": "android-app-tester",
 		"position": "Android App Tester",
 		"difficulty": "Basic",
-		"duration": 45,
+		"duration": 25,
 		"description": "The Android App Tester will be responsible for testing and validating the functionality of Android-based mobile applications. They will work closely with the development team to identify and report any issues or bugs."
 	},
 	{
@@ -132,7 +132,7 @@
 		"slug": "junior-net-developer",
 		"position": "Junior .NET Developer",
 		"difficulty": "Basic",
-		"duration": 45,
+		"duration": 25,
 		"description": "The Junior .NET Developer will be responsible for developing and maintaining basic .NET-based applications under the guidance of senior developers. They will work on a variety of projects to gain hands-on experience in the field."
 	},
 	{
@@ -140,7 +140,7 @@
 		"slug": "ux-researcher",
 		"position": "UX Researcher",
 		"difficulty": "Intermediate",
-		"duration": 60,
+		"duration": 25,
 		"description": "The UX Researcher will be responsible for conducting user research, analyzing user behavior, and providing insights to the design team. They will work closely with the team to ensure the applications meet the users' needs and expectations."
 	},
 	{
@@ -148,7 +148,7 @@
 		"slug": "junior-full-stack-developer",
 		"position": "Junior Full-Stack Developer",
 		"difficulty": "Intermediate",
-		"duration": 75,
+		"duration": 25,
 		"description": "The Junior Full-Stack Developer will be responsible for assisting the senior full-stack developers in designing, developing, and maintaining web applications. They will work on a variety of projects to gain experience in both front-end and back-end development."
 	},
 	{
@@ -156,7 +156,7 @@
 		"slug": "junior-front-end-engineer",
 		"position": "Junior Front-End Engineer",
 		"difficulty": "Basic",
-		"duration": 45,
+		"duration": 25,
 		"description": "The Junior Front-End Engineer will be responsible for developing and maintaining basic user interfaces using HTML, CSS, and JavaScript. They will work closely with the senior front-end engineers to learn and apply best practices in front-end development."
 	},
 	{
@@ -164,7 +164,7 @@
 		"slug": "data-engineer",
 		"position": "Data Engineer",
 		"difficulty": "Intermediate",
-		"duration": 75,
+		"duration": 25,
 		"description": "The Data Engineer will be responsible for designing, building, and maintaining the data pipelines and infrastructure that power our data-driven applications. They will work closely with the data analysts and scientists to ensure the data is accessible, reliable, and secure."
 	},
 	{
@@ -172,7 +172,7 @@
 		"slug": "devops-specialist",
 		"position": "DevOps Specialist",
 		"difficulty": "Intermediate",
-		"duration": 75,
+		"duration": 25,
 		"description": "The DevOps Specialist will be responsible for automating and streamlining the deployment and infrastructure management processes for our web and mobile applications. They will work closely with the development and operations teams to ensure a seamless and efficient development and deployment workflow."
 	},
 	{
@@ -180,7 +180,7 @@
 		"slug": "junior-laravel-developer",
 		"position": "Junior Laravel Developer",
 		"difficulty": "Basic",
-		"duration": 45,
+		"duration": 25,
 		"description": "The Junior Laravel Developer will be responsible for developing and maintaining basic web applications using the Laravel framework. They will work under the guidance of senior developers to learn and apply best practices in Laravel development."
 	},
 	{
@@ -188,7 +188,7 @@
 		"slug": "junior-game-developer",
 		"position": "Junior Game Developer",
 		"difficulty": "Basic",
-		"duration": 45,
+		"duration": 25,
 		"description": "The Junior Game Developer will be responsible for assisting the senior game developers in designing, developing, and implementing basic interactive games. They will work on a variety of projects to gain hands-on experience in game development."
 	}
 ]

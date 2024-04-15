@@ -1,17 +1,9 @@
 <script lang="ts">
-	import {
-		Button,
-		FeaturesSection,
-		Footer,
-		GetStartedSection,
-		Header,
-		SecondaryFeaturesSection,
-		TestimonialsSection
-	} from '$lib/components';
+	import { Button, FeaturesSection, Footer, Header, TestimonialsSection } from '$lib/components';
 	import { Play } from 'lucide-svelte';
+	import { mode } from 'mode-watcher';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
-	import { mode } from 'mode-watcher';
 
 	const flyOptions = {
 		y: 30,

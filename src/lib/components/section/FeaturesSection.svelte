@@ -8,28 +8,28 @@
 			title: 'Mock Interviews',
 			description:
 				'Practice answering common interview questions. Get access to a library of interview questions tailored to various industries and positions.',
-			image: ''
+			image: '/assets/feature_1.webp'
 		},
 		{
 			id: 1,
 			title: 'Speech Analysis',
 			description:
 				'Analyze your speech for clarity and confidence. Use our AI-powered speech analysis tool to identify areas for improvement, such as filler words, pacing, and vocal variety.',
-			image: ''
+			image: '/assets/feature_2.webp'
 		},
 		{
 			id: 2,
 			title: 'Interview Question Library',
 			description:
 				'Search for specific interview questions. Find relevant questions based on your target industry, position, and experience level.',
-			image: ''
+			image: '/assets/feature_3.webp'
 		},
 		{
 			id: 3,
 			title: 'User Settings',
 			description:
 				'Manage your account settings. Customize your profile, update password, and delete account.',
-			image: ''
+			image: '/assets/feature_4.webp'
 		}
 	];
 </script>
@@ -37,19 +37,8 @@
 <section
 	id="features"
 	aria-label="Features for job interview preparation"
-	class="relative overflow-hidden bg-primary pb-28 pt-20 sm:py-32"
+	class="relative overflow-hidden bg-primary pt-32"
 >
-	<img
-		alt=""
-		loading="lazy"
-		width="2245"
-		height="1636"
-		decoding="async"
-		data-nimg="1"
-		class="absolute left-1/2 top-1/2 max-w-none translate-x-[-44%] translate-y-[-42%]"
-		style="color:transparent"
-		src={features[activeFeature].image}
-	/>
 	<div class="container relative">
 		<div class="max-w-2xl md:mx-auto md:text-center xl:max-w-none">
 			<h2
@@ -62,9 +51,8 @@
 				your interview.
 			</p>
 		</div>
-		<div
-			class="mt-16 grid grid-cols-1 items-center gap-y-2 pt-10 sm:gap-y-6 md:mt-20 lg:grid-cols-12 lg:pt-0"
-		>
+
+		<div class="grid grid-cols-1 items-center gap-y-2 pt-3 sm:gap-y-6 lg:grid-cols-12 lg:pt-0">
 			<div
 				class="-mx-4 flex overflow-x-auto pb-4 sm:mx-0 sm:overflow-visible sm:pb-0 lg:col-span-5"
 			>
@@ -75,7 +63,7 @@
 				>
 					{#each features as feature, idx}
 						<div
-							class="group relative rounded-full px-4 py-1 text-blue-100 hover:bg-white/10 lg:rounded-l-xl lg:rounded-r-none lg:p-6 lg:text-white lg:hover:bg-white/5 {activeFeature ===
+							class="group relative rounded-full px-4 py-1 text-blue-100 hover:bg-white/10 lg:rounded-xl lg:p-6 lg:text-white lg:hover:bg-white/5 {activeFeature ===
 								idx &&
 								'bg-white text-foreground lg:bg-white/10 lg:ring-1 lg:ring-inset lg:ring-white/10'}"
 						>
@@ -121,7 +109,7 @@
 							</p>
 						</div>
 						<div
-							class="mt-10 w-[45rem] overflow-hidden rounded-xl bg-slate-50 shadow-xl shadow-blue-900/20 sm:w-auto lg:mt-0 lg:w-[67.8125rem]"
+							class="mt-10 w-[45rem] overflow-hidden rounded-xl sm:w-auto lg:mt-0 lg:w-[67.8125rem]"
 						>
 							<img
 								alt=""
@@ -130,7 +118,7 @@
 								height="1464"
 								decoding="async"
 								data-nimg="1"
-								class="w-full"
+								class="w-full transition-all"
 								style="color:transparent"
 								sizes="(min-width: 1024px) 67.8125rem, (min-width: 640px) 100vw, 45rem"
 								srcset={feature.image}
