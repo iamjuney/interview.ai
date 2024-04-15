@@ -21,8 +21,6 @@
 	let imageFile = $state<File>();
 	let newProfile = $state('');
 
-	console.log(user);
-
 	$effect(() => {
 		animate = true;
 	});
