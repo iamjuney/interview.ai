@@ -142,7 +142,7 @@
 						Terms of Service
 					</a>{' '}
 					and{' '}
-					<a href="/privacy" class="underline underline-offset-4 hover:text-primary">
+					<a href="/privacy-policy" class="underline underline-offset-4 hover:text-primary">
 						Privacy Policy
 					</a>
 					.
