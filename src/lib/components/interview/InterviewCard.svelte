@@ -20,7 +20,7 @@
 <a
 	href="/app/interviews/{interview.interviewSlug}"
 	data-sveltekit-preload-data
-	class="group relative cursor-pointer rounded-xl border p-4 shadow-sm transition duration-100 hover:bg-secondary"
+	class="group relative cursor-pointer rounded-xl border p-4 shadow-sm transition duration-100 hover:bg-primary/40 md:border-0 md:shadow-none"
 >
 	<div
 		class="relative z-10 mb-4 grid aspect-[16/9] w-full flex-shrink-0 place-items-center rounded-lg shadow-sm"

@@ -117,7 +117,7 @@
 				>
 					{#each currentQuestions() as question}
 						<a
-							class="hover:text-muted-foreground-foreground group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border p-4 font-medium shadow-sm transition duration-100 hover:bg-secondary"
+							class="group relative mb-2 flex h-full max-h-[200px] w-full items-start justify-between rounded-xl border bg-primary/5 p-4 font-medium shadow-sm transition duration-100 hover:bg-primary/40"
 							href="/app/questions/{question.slug}"
 							data-sveltekit-preload-data
 						>
