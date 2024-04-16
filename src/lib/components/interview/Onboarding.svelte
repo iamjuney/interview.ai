@@ -6,7 +6,6 @@
 	import 'driver.js/dist/driver.css';
 
 	let startOnboarding = $state(false);
-	let loaded = $state(false);
 
 	const driverObj = driver({
 		showProgress: true,
@@ -130,13 +129,9 @@
 	$effect(() => {
 		if (startOnboarding) driverObj.drive();
 	});
-
-	$effect(() => {
-		loaded = true;
-	});
 </script>
 
-<AlertDialog.Root bind:open={loaded}>
+<AlertDialog.Root>
 	<AlertDialog.Content>
 		<AlertDialog.Header>
 			<div class="mx-auto">
