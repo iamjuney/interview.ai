@@ -83,6 +83,7 @@ export const actions = {
 					with: {
 						questions: true
 					},
+					orderBy: [asc(interview.position)],
 					where: or(
 						ilike(interview.difficulty, `%${form.data.query}%`),
 						ilike(interview.position, `%${form.data.query}%`),
@@ -94,6 +95,7 @@ export const actions = {
 					with: {
 						questions: true
 					},
+					orderBy: [asc(interview.position)],
 					where: and(
 						notInArray(
 							interview.id,
