@@ -1,10 +1,10 @@
 <script lang="ts">
 	const testimonials = [
 		{
-			name: 'Alice Lee',
-			title: 'Junior',
+			name: 'Xyber Pastoril (@xybr.dev)',
+			title: 'Alumnus',
 			quote:
-				'This platform has been a game-changer for my interview prep! Practicing mock interviews with speech analysis helped me identify areas to improve my delivery, and the community forum provided invaluable support and insights from other students.'
+				'Definitely a big win for those who are wishing to boost their confidence in programming interviews!'
 		},
 		{
 			name: 'David Kim',
