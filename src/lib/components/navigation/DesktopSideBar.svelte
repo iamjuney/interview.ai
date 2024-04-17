@@ -111,7 +111,7 @@
 							{/if}
 						</div>
 						<div class="ml-3 flex flex-col items-start">
-							<p class="text-sm font-medium group-hover:text-muted-foreground">
+							<p class="text-start text-sm font-medium group-hover:text-muted-foreground">
 								{user.first_name}
 								{user.last_name}
 							</p>
