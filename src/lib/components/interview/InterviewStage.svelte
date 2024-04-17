@@ -407,17 +407,24 @@
 			status = 'Converting';
 			await convertProcess();
 
-			// set the status to transcribing
-			status = 'Transcribing';
-			await transcribeProcess();
+			// start uploading video in parallel
+			const videoUploadPromise = uploadVideo();
 
-			// set the status to assessing
+			// set the status to transcribing and assessing in parallel
+			status = 'Transcribing and Assessing';
+			await Promise.all([transcribeProcess(), assessmentProcess()]);
+
+			// set the status to generating feedback
 			status = 'Generating Feedback';
-			await Promise.all([feedbackProcess(), assessmentProcess(), uploadVideo()]);
+			await feedbackProcess();
+
+			// wait for the video upload to complete and set the status to Uploading Video
+			status = 'Uploading Video';
+			await videoUploadPromise;
 
 			const newAnswerID = uuidv4();
 			// set the status to saving
-			status = 'Saving';
+			status = 'Saving Answer and Assessment';
 			await uploadAnswer(newAnswerID);
 			await uploadAssessment(newAnswerID);
 
