@@ -151,7 +151,7 @@
 		<AlertDialog.Footer class="mt-8">
 			<Button
 				variant="outline"
-				href="/app/interviews/{$page.params.intervewSlug}/questions/{question.slug}"
+				href="/app/interviews/{$page.params.interviewSlug}/questions/{question.slug}"
 				class="mt-2 sm:mt-0">Cancel</Button
 			>
 			<AlertDialog.Action
