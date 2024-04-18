@@ -247,7 +247,7 @@
 
 	// function to handle the processing of the recording
 	async function feedbackProcess() {
-		const prompt = `Please give feedback on the following interview question: ${question.question} given the following transcript: ${transcript}`;
+		const prompt = `Please give feedback (in 2nd person pov) on the following interview question: ${question.question} given the following transcript: ${transcript}`;
 
 		const upload = await fetch(`/api/services/openai_chatgpt`, {
 			method: 'POST',
