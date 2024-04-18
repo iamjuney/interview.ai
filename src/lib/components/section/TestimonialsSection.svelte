@@ -7,10 +7,10 @@
 				'Definitely a big win for those who are wishing to boost their confidence in programming interviews!'
 		},
 		{
-			name: 'David Kim',
-			title: 'Senior',
+			name: 'Mojo Jojo',
+			title: '3rd Year Student',
 			quote:
-				'As a graduating student, I found the interview question library incredibly helpful. Being able to search for specific questions based on my target field and tailor my practice sessions made me feel much more confident going into interviews.'
+				'For a web development noob like me, I found the web application very fascinating as there are a lot of things going on in the backend. From video transcription to the response, it is just seamless. However, I could suggest the KKK - Kiss Kick Kiss method for the response part. Thats all, its been a nice experience having to beta-test this website'
 		},
 		{
 			name: 'Maria Garcia',
