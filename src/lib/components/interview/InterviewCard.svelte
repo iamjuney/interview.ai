@@ -46,7 +46,7 @@
 		</div>
 	</div>
 	<div>
-		<div class="mb-2 flex items-center space-x-2 text-sm font-medium md:text-base">
+		<div class="mb-2 flex items-center space-x-2 text-sm font-medium lg:text-base">
 			<span class="flex items-center">
 				<Inbox class="mr-2 size-4 text-primary group-hover:text-secondary-foreground" />
 				{questions.length} questions
@@ -57,7 +57,7 @@
 			</span>
 		</div>
 		<div class="mt-4 items-center">
-			<p class="w-full font-medium">Description</p>
+			<p class="w-full text-sm font-medium lg:text-base">Description</p>
 			<p
 				class="mt-1 line-clamp-4 text-sm font-normal text-foreground/80 group-hover:text-secondary-foreground/80"
 			>
@@ -65,7 +65,7 @@
 			</p>
 		</div>
 
-		<div class="mt-4 flex items-center space-x-2 text-sm font-medium md:text-base">
+		<div class="mt-4 flex items-center space-x-2 text-sm font-medium lg:text-base">
 			<span
 				class="items -center
             flex"

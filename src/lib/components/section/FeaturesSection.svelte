@@ -52,7 +52,7 @@
 			</p>
 		</div>
 
-		<div class="grid grid-cols-1 items-center gap-y-2 pt-3 sm:gap-y-6 lg:grid-cols-12 lg:pt-0">
+		<div class="grid grid-cols-1 items-center gap-y-2 pt-16 sm:gap-y-6 lg:grid-cols-12 lg:pt-0">
 			<div
 				class="-mx-4 flex overflow-x-auto pb-4 sm:mx-0 sm:overflow-visible sm:pb-0 lg:col-span-5"
 			>
@@ -63,9 +63,8 @@
 				>
 					{#each features as feature, idx}
 						<div
-							class="group relative rounded-full px-4 py-1 text-blue-100 hover:bg-white/10 lg:rounded-xl lg:p-6 lg:text-white lg:hover:bg-white/5 {activeFeature ===
-								idx &&
-								'bg-white text-foreground lg:bg-white/10 lg:ring-1 lg:ring-inset lg:ring-white/10'}"
+							class="group relative rounded-full px-4 py-1 text-foreground hover:bg-white/10 lg:rounded-xl lg:p-6 lg:text-white lg:hover:bg-white/5 {activeFeature ===
+								idx && ' lg:bg-white/10 lg:ring-1 lg:ring-inset lg:ring-white/10'}"
 						>
 							<h3>
 								<button
@@ -102,7 +101,7 @@
 					>
 						<div class="relative sm:px-6 lg:hidden">
 							<div
-								class="absolute -inset-x-4 bottom-[-4.25rem] top-[-6.5rem] bg-white/10 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl"
+								class="absolute -inset-x-4 bottom-[-4.25rem] top-[-6.5rem] rounded-xl bg-white/10 ring-1 ring-inset ring-white/10 sm:inset-x-0 sm:rounded-t-xl"
 							></div>
 							<p class="relative mx-auto max-w-2xl text-base text-white sm:text-center">
 								{feature.description}
