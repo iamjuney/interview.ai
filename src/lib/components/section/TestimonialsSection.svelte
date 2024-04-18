@@ -13,10 +13,9 @@
 				'For a web development noob like me, I found the web application very fascinating as there are a lot of things going on in the backend. From video transcription to the response, it is just seamless. However, I could suggest the KKK - Kiss Kick Kiss method for the response part. Thats all, its been a nice experience having to beta-test this website'
 		},
 		{
-			name: 'Maria Garcia',
-			title: 'Sophomore',
-			quote:
-				"I initially felt nervous about technical interviews, but the platform's resources helped me break down complex concepts and practice explaining them clearly. The AI speech analysis gave me feedback on my communication style, making me feel more prepared for technical discussions."
+			name: 'Max R. Tumaob Jr.',
+			title: '4th Year Student',
+			quote: 'This is good practice for an internship interview.'
 		},
 		{
 			name: 'Omar Khan',
