@@ -81,7 +81,11 @@
 									<X class="size-6" />
 								</Button>
 								<div>
-									<div class="fixed inset-0 bg-muted/50" aria-hidden={isOpen}></div>
+									<div
+										class="fixed inset-0 -z-10 bg-muted/50"
+										aria-hidden={isOpen}
+										on:click={() => (isOpen = false)}
+									></div>
 									<div
 										class="absolute inset-x-0 top-full mt-4 flex origin-top flex-col rounded-2xl bg-background p-4 text-lg tracking-tight text-foreground shadow-xl ring-1 ring-ring/5"
 										tabindex="-1"
