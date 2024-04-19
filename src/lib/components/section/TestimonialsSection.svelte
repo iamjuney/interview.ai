@@ -18,16 +18,16 @@
 			quote: 'This is good practice for an internship interview.'
 		},
 		{
-			name: 'Omar Khan',
-			title: 'Freshmen',
+			name: 'Ate Nat',
+			title: '4th Year Student',
 			quote:
-				'This platform is a fantastic resource for early career seekers like me. The variety of mock interview scenarios helped me gain experience and build a strong foundation for my future job search.'
+				'As a graduating student, I found this platform to be useful in preparing for my future endevours.'
 		},
 		{
-			name: 'Sarah Patel',
-			title: "Master's Program",
+			name: 'WIlbert B. Anadia',
+			title: '4th Year Student',
 			quote:
-				"As someone transitioning careers, I found the platform's personalized feedback from coaches incredibly valuable. Their guidance helped me refine my interview approach and tailor my responses to highlight my transferable skills and experience."
+				'This application is very helpful for those students who takes Computer Science or in I.T especially for their future interviews when they are applying their jobs in Tech industry.'
 		},
 		{
 			name: 'Chen Wang',
