@@ -131,17 +131,13 @@ export const actions = {
 
 		try {
 			const answerId = form.data.answer_id;
-			const deletedAnswer = await db.delete(answer).where(eq(answer.id, answerId)).returning();
-
-			// Todo: delete the videos from cloudinary
-
-			if (deletedAnswer) {
-				redirect(303, `/app/questions/${form.data.question_slug}`);
-			}
+			await db.delete(answer).where(eq(answer.id, answerId));
 		} catch (error) {
 			return fail(500, {
 				message: 'Failed to delete answer'
 			});
 		}
+
+		redirect(303, `/app/questions/${form.data.question_slug}`);
 	}
 };
