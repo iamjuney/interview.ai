@@ -28,7 +28,7 @@
 
 	let isMounted = $state(false);
 	let ffmpeg = $state(new FFmpeg());
-	let countdown = $state(150);
+	let countdown = $state(120);
 	let screenStream = $state<MediaStream>();
 	let audioStream = $state<MediaStream>();
 	let recordStream = $state<MediaStream>();
@@ -219,7 +219,7 @@
 	function handleRestartClick() {
 		audioChunks = [];
 		recordedChunks = [];
-		countdown = 150;
+		countdown = 120;
 		hideStartButton = false;
 	}
 
@@ -357,7 +357,7 @@
 	}
 
 	async function uploadAnswer(newAnswerID: string) {
-		duration = 150 - countdown;
+		duration = 120 - countdown;
 
 		const upload = await fetch('/api/db/answers', {
 			method: 'POST',

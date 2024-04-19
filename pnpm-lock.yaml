@@ -151,8 +151,8 @@ devDependencies:
     specifier: ^10.0.0
     version: 10.0.0
   drizzle-kit:
-    specifier: ^0.20.14
-    version: 0.20.14
+    specifier: ^0.20.16
+    version: 0.20.16
   esbuild-register:
     specifier: ^3.5.0
     version: 3.5.0(esbuild@0.20.2)
@@ -283,12 +283,6 @@ packages:
     dependencies:
       '@cloudinary/transformation-builder-sdk': 1.11.0
     dev: false
-
-  /@drizzle-team/studio@0.0.39:
-    resolution: {integrity: sha512-c5Hkm7MmQC2n5qAsKShjQrHoqlfGslB8+qWzsGGZ+2dHMRTNG60UuzalF0h0rvBax5uzPXuGkYLGaQ+TUX3yMw==}
-    dependencies:
-      superjson: 2.2.1
-    dev: true
 
   /@emnapi/core@0.45.0:
     resolution: {integrity: sha512-DPWjcUDQkCeEM4VnljEOEcXdAD7pp8zSZsgOujk/LGIwCXWbXJngin+MO4zbH429lzeC3WbYLGjE2MaUOwzpyw==}
@@ -948,6 +942,21 @@ packages:
   /@floating-ui/utils@0.2.1:
     resolution: {integrity: sha512-9TANp6GPoMtYzQdt54kfAyMmz1+osLlXdg2ENroU7zzrtflTLrrC/lgrIfaSe+Wu0b89GKccT7vxXA0MoAIO+Q==}
     dev: false
+
+  /@hono/node-server@1.11.0:
+    resolution: {integrity: sha512-TLIJq9TMtD1NEG1mVoqNUn1Ita0qSaB5XboZErjFBcO/GJYXwWY4dVdTi9G0lbxtu0x+hJXDItcLaFHb7rlFTw==}
+    engines: {node: '>=18.14.1'}
+    dev: true
+
+  /@hono/zod-validator@0.2.1(hono@4.2.5)(zod@3.22.4):
+    resolution: {integrity: sha512-HFoxln7Q6JsE64qz2WBS28SD33UB2alp3aRKmcWnNLDzEL1BLsWfbdX6e1HIiUprHYTIXf5y7ax8eYidKUwyaA==}
+    peerDependencies:
+      hono: '>=3.9.0'
+      zod: ^3.19.1
+    dependencies:
+      hono: 4.2.5
+      zod: 3.22.4
+    dev: true
 
   /@internationalized/date@3.5.1:
     resolution: {integrity: sha512-LUQIfwU9e+Fmutc/DpRTGXSdgYZLBegi4wygCWDSVmUdLTaMHsQyASDiJtREwanwKuQLq0hY76fCJ9J/9I2xOQ==}
@@ -2372,12 +2381,13 @@ packages:
     resolution: {integrity: sha512-MvUdXbqSgEsgS/H9KyWb5Rxy0aE6BhOVT4cssi2x2XjmXea6qQfgdx32XKVLLSqTaIw7q/uxU5Xl3NV7+cN6FQ==}
     dev: false
 
-  /drizzle-kit@0.20.14:
-    resolution: {integrity: sha512-0fHv3YIEaUcSVPSGyaaBfOi9bmpajjhbJNdPsRMIUvYdLVxBu9eGjH8mRc3Qk7HVmEidFc/lhG1YyJhoXrn5yA==}
+  /drizzle-kit@0.20.16:
+    resolution: {integrity: sha512-WoqV0XDny8mHnVoLYcUs6H3Ae1HBxeV0zi3VXG/mTahIQYfadZmIc3eRqzXjD3yxemj+GdHI1nThddmsoabdIA==}
     hasBin: true
     dependencies:
-      '@drizzle-team/studio': 0.0.39
       '@esbuild-kit/esm-loader': 2.6.5
+      '@hono/node-server': 1.11.0
+      '@hono/zod-validator': 0.2.1(hono@4.2.5)(zod@3.22.4)
       camelcase: 7.0.1
       chalk: 5.3.0
       commander: 9.5.0
@@ -2386,9 +2396,11 @@ packages:
       esbuild-register: 3.5.0(esbuild@0.19.12)
       glob: 8.1.0
       hanji: 0.0.5
+      hono: 4.2.5
       json-diff: 0.9.0
       minimatch: 7.4.6
       semver: 7.5.4
+      superjson: 2.2.1
       zod: 3.22.4
     transitivePeerDependencies:
       - supports-color
@@ -2914,6 +2926,11 @@ packages:
     resolution: {integrity: sha512-QFLV0taWQOZtvIRIAdBChesmogZrtuXvVWsFHZTk2SU+anspqZ2vMnoLg7IE1+Uk16N19APic1BuF8bC8c2m5g==}
     engines: {node: '>=8'}
     dev: false
+
+  /hono@4.2.5:
+    resolution: {integrity: sha512-uonJD3i/yy005kQ7bPZRVfG3rejYJwyPqBmPoUGijS4UB/qM+YlrZ7xzSWy+ByDu9buGHUG+f+SKzz03Y6V1Kw==}
+    engines: {node: '>=16.0.0'}
+    dev: true
 
   /https-proxy-agent@4.0.0:
     resolution: {integrity: sha512-zoDhWrkR3of1l9QAL8/scJZyLu8j/gBkcwcaQOZh7Gyh/+uJQzGVETdgT30akuwkpL8HTRfssqI3BZuV18teDg==}
