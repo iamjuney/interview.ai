@@ -26,6 +26,7 @@
 	let { question, user } = $props<{ question: Question; user: User }>();
 	const uniqueId = uuidv4();
 
+	let isMounted = $state(false);
 	let ffmpeg = $state(new FFmpeg());
 	let countdown = $state(150);
 	let screenStream = $state<MediaStream>();
@@ -56,6 +57,10 @@
 	let duration = $state(0);
 	let videoURL = $state('');
 	let assessmentData = $state<PronunciationAssessmentResult>();
+
+	$effect(() => {
+		isMounted = true;
+	});
 
 	// handles the camera stream
 	$effect(() => {
@@ -449,7 +454,7 @@
 	}
 </script>
 
-{#if cameraLoaded}
+{#if cameraLoaded && isMounted}
 	<div
 		class="relative aspect-[16/9] w-full max-w-4xl overflow-hidden rounded-lg bg-muted shadow-md ring-1 ring-gray-900/5"
 		style="transform: none;"
@@ -532,20 +537,20 @@
 										<Loader2 class="ml-2 size-4 animate-spin" />
 									</Button>
 								{:else}
-									<Button onclick={handleRestartClick}>Restart</Button>
-									<Button onclick={handleProcessClick} class="group" variant="secondary">
+									<Button on:click={handleRestartClick}>Restart</Button>
+									<Button on:click={handleProcessClick} class="group" variant="secondary">
 										Process Transcript
 										<ArrowRight class="ml-2 size-4 transition group-hover:translate-x-2" />
 									</Button>
 								{/if}
 							</div>
 						{:else if cameraRecording}
-							<Button onclick={handleStopCaptureClick} class="group" variant="destructive">
+							<Button on:click={handleStopCaptureClick} class="group" variant="destructive">
 								Stop Recording
 								<Square class="ml-2 size-4 transition group-hover:scale-125" />
 							</Button>
 						{:else if !isTimerBeforeRecordingShowing && !hideStartButton}
-							<Button onclick={handleStartVideoClick} class="group">
+							<Button on:click={handleStartVideoClick} class="group">
 								Start Interview
 								<Play class="ml-2 size-4 transition group-hover:scale-125" />
 							</Button>
@@ -718,22 +723,4 @@
 			</div>
 		</div>
 	{/if}
-{:else}
-	<div
-		class="relative flex w-full flex-col items-center justify-center overflow-hidden rounded-lg bg-muted p-6 shadow-md ring-1 ring-gray-900/5 md:aspect-[16/9]"
-	>
-		<p class="text-center text-lg font-medium text-muted-foreground">
-			Camera permission is denied. We don't store your attempts anywhere, but we understand not
-			wanting to give us access to your camera. Try again by opening this page in an incognito
-			window (or enable permissions in your browser settings).
-		</p>
-	</div>
-	<div class="fixed bottom-0 w-full bg-background px-4">
-		<div class="container flex max-w-4xl justify-center gap-4 border-t py-6 md:justify-end">
-			<Button class="group" onclick={() => location.reload()}>
-				<span class="mr-2">Restart demo</span>
-				<RefreshCw class="size-5 group-hover:animate-spin" />
-			</Button>
-		</div>
-	</div>
 {/if}
