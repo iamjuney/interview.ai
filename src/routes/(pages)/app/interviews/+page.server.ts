@@ -1,7 +1,7 @@
 import { db } from '$lib/db';
-import { answer, userInterview } from '$lib/db/schema';
+import { answer, userInterview, question, user } from '$lib/db/schema';
 import { error, fail, redirect } from '@sveltejs/kit';
-import { eq } from 'drizzle-orm';
+import { and, eq } from 'drizzle-orm';
 import { v4 as uuidv4 } from 'uuid';
 import type { PageServerLoad } from './$types';
 import type { Interview, UserInterview } from '$lib/types';
@@ -96,11 +96,48 @@ export const actions = {
 		redirect(302, `/app/interviews`);
 	},
 
-	delete: async ({ request }) => {
+	delete: async ({ request, locals }) => {
+		const session = await locals.auth.validate();
+		const userId = session?.user.userId;
+
+		if (!userId) {
+			error(401, 'Unauthorized');
+		}
+
 		const form = await request.formData();
 		const userInterviewId = form.get('user_interview_id')!.toString();
 
 		try {
+			const interviewIdQuery = await db.query.userInterview.findFirst({
+				columns: {
+					interviewId: true
+				},
+				where: eq(userInterview.id, userInterviewId)
+			});
+
+			if (!interviewIdQuery) {
+				return fail(500, {
+					message: 'Failed to delete interview'
+				});
+			}
+
+			// get all question ids associated with the interview
+			const questions = await db.query.question.findMany({
+				columns: {
+					id: true
+				},
+				where: eq(question.interviewId, interviewIdQuery!.interviewId)
+			});
+
+			// delete all answers associated with the interview
+			for (const q of questions) {
+				if (!q.id) {
+					continue;
+				}
+				await db.delete(answer).where(and(eq(answer.questionId, q.id), eq(answer.userId, userId)));
+			}
+
+			// delete the interview
 			await db.delete(userInterview).where(eq(userInterview.id, userInterviewId));
 
 			// TODO: delete all videos and answers associated with the interview
