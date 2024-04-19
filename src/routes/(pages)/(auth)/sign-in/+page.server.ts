@@ -49,11 +49,16 @@ export const actions = {
 				auth.createSessionCookie(session);
 			}
 		} catch (e) {
-			if (e instanceof LuciaError && e.message === 'AUTH_INVALID_KEY_ID') {
+			if (
+				(e instanceof LuciaError && e.message === 'AUTH_INVALID_KEY_ID') ||
+				(e instanceof Error && e.message === 'AUTH_INVALID_PASSWORD')
+			) {
 				return fail(400, {
 					message: 'Invalid credentials'
 				});
 			}
+
+			console.error(e);
 		}
 
 		redirect(303, '/app');
