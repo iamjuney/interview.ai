@@ -141,7 +141,7 @@
 		<AlertDialog.Header>
 			<div class="mx-auto">
 				<LottiePlayer
-					src="https://lottie.host/4b836bf7-ae16-41fc-b06f-0860256a437c/niM3eQh9v8.json"
+					src="/assets/biking.json"
 					autoplay={true}
 					loop={true}
 					controls={false}

@@ -20,7 +20,7 @@
 
 <div class="mt-8 grid h-full w-full place-content-center gap-3 text-center">
 	<LottiePlayer
-		src="https://lottie.host/2bce075b-fa10-490e-b66e-2e430b4f746e/QIUboIznMb.json"
+		src="/assets/box_empty.json"
 		autoplay={true}
 		loop={true}
 		controls={false}
