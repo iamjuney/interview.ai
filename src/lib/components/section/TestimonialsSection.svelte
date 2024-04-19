@@ -30,10 +30,15 @@
 				'This application is very helpful for those students who takes Computer Science or in I.T especially for their future interviews when they are applying their jobs in Tech industry.'
 		},
 		{
-			name: 'Chen Wang',
-			title: 'International Student',
+			name: 'Anonymous',
+			title: 'Pero 4th Year Student',
 			quote:
-				'This platform has been instrumental in helping me overcome my language barrier. Practicing speaking in English through mock interviews and receiving feedback on my clarity and pronunciation boosted my confidence significantly.'
+				'It is very good for practicing interview especially it has pronunciation scoring system and evaluation where it checks your pronunciation if correct. It is helpful since the occurence of mispronounced words are lessen in which having this in an actual interview is annoying and embarrassing.'
+		},
+		{
+			name: 'Juan dela Cruz',
+			title: '4th Year Student',
+			quote: 'As a graduating student, I found this platform to be a fantastic resource.'
 		}
 	];
 </script>
@@ -92,7 +97,7 @@
 
 			<li>
 				<ul role="list" class="flex flex-col gap-y-6 sm:gap-y-8">
-					{#each testimonials.slice(2, 4) as testimonial}
+					{#each testimonials.slice(2, 5) as testimonial}
 						{@render testimonialCard(testimonial)}
 					{/each}
 				</ul>
@@ -100,7 +105,7 @@
 
 			<li>
 				<ul role="list" class="flex flex-col gap-y-6 sm:gap-y-8">
-					{#each testimonials.slice(4, 6) as testimonial}
+					{#each testimonials.slice(5, 7) as testimonial}
 						{@render testimonialCard(testimonial)}
 					{/each}
 				</ul>
