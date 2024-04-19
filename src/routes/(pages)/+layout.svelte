@@ -1,10 +1,10 @@
 <script lang="ts">
 	import { navigating } from '$app/stores';
 	import { LayoutBackground } from '$lib/components';
+	import '$src/app.pcss';
 	import { ModeWatcher } from 'mode-watcher';
 	import NProgress from 'nprogress';
 	import 'nprogress/nprogress.css';
-	import '../../app.pcss';
 
 	NProgress.configure({
 		// Full list: https://github.com/rstacruz/nprogress#configuration
