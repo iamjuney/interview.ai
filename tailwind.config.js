@@ -55,7 +55,7 @@ const config = {
 				sm: 'calc(var(--radius) - 4px)'
 			},
 			fontFamily: {
-				sans: ['DM Sans', 'Geist', ...fontFamily.sans]
+				sans: ['DM Sans', ...fontFamily.sans]
 			},
 			scale: {
 				'-1': '-1'
