@@ -9,7 +9,15 @@
 	import { FFmpeg } from '@ffmpeg/ffmpeg';
 	import { fetchFile, toBlobURL } from '@ffmpeg/util';
 	import type { User } from 'lucia';
-	import { AlertTriangle, ArrowRight, HelpCircle, Loader2, RefreshCw } from 'lucide-svelte';
+	import {
+		AlertTriangle,
+		ArrowRight,
+		HelpCircle,
+		Loader2,
+		RefreshCw,
+		Play,
+		Square
+	} from 'lucide-svelte';
 	import { untrack } from 'svelte';
 	import { CldVideoPlayer } from 'svelte-cloudinary';
 	import { v4 as uuidv4 } from 'uuid';
@@ -39,6 +47,7 @@
 	let avatarVideoFinished = $state(false);
 	let isTimerBeforeRecordingShowing = $state(false);
 	let timerBeforeRecording = $state(4);
+	let hideStartButton = $state(false);
 
 	let videoFile = $state<File>();
 	let audioFile = $state<File>();
@@ -170,6 +179,7 @@
 
 	function handleStartVideoClick() {
 		if (avatarVideoRef) avatarVideoRef.play();
+		hideStartButton = true;
 	}
 
 	// function to handle the start of the recording
@@ -205,6 +215,7 @@
 		audioChunks = [];
 		recordedChunks = [];
 		countdown = 150;
+		hideStartButton = false;
 	}
 
 	// function to handle the processing of the recording
@@ -529,17 +540,15 @@
 								{/if}
 							</div>
 						{:else if cameraRecording}
-							<button
-								onclick={handleStopCaptureClick}
-								class="flex size-10 scale-100 cursor-pointer flex-col items-center justify-center rounded-full bg-transparent text-white ring-4 ring-white duration-75 hover:shadow-xl active:scale-95"
-							>
-								<div class="size-5 cursor-pointer rounded bg-red-500"></div>
-							</button>
-						{:else}
-							<button
-								onclick={handleStartVideoClick}
-								class="flex size-8 scale-100 flex-col items-center justify-center rounded-full bg-red-500 ring-4 ring-white ring-offset-2 ring-offset-gray-500 duration-75 hover:shadow-xl active:scale-95 sm:h-8 sm:w-8"
-							></button>
+							<Button onclick={handleStopCaptureClick} class="group" variant="destructive">
+								Stop Recording
+								<Square class="ml-2 size-4 transition group-hover:scale-125" />
+							</Button>
+						{:else if !isTimerBeforeRecordingShowing && !hideStartButton}
+							<Button onclick={handleStartVideoClick} class="group">
+								Start Interview
+								<Play class="ml-2 size-4 transition group-hover:scale-125" />
+							</Button>
 						{/if}
 					{/if}
 				</div>
