@@ -463,7 +463,7 @@
 			{#if completed}
 				<!-- svelte-ignore a11y-media-has-caption -->
 				<video
-					controls
+					controls={true}
 					class="absolute z-10 h-full w-full object-cover"
 					src={videoFile ? URL.createObjectURL(videoFile) : ''}
 				>
