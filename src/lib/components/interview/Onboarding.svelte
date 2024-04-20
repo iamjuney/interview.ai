@@ -100,8 +100,7 @@
 			{
 				popover: {
 					title: 'Congratulations!',
-					description:
-						'You have completed the tour, you can always start it again from the settings.',
+					description: 'You have completed the tour.',
 					side: 'left',
 					align: 'start'
 				}
