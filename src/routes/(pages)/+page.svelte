@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Button, FeaturesSection, Footer, Header, TestimonialsSection } from '$lib/components';
-	import { Play } from 'lucide-svelte';
+	import { Github } from 'lucide-svelte';
 	import { mode } from 'mode-watcher';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -45,16 +45,23 @@
 			</p>
 			<div class="mt-10 flex justify-center gap-x-3 md:gap-x-6">
 				<Button size="lg" variant="solid" href="/sign-up">Get Started</Button>
-				<Button size="lg" variant="outline" href="/">
-					<Play class="mr-2 size-4" />
-					Watch demo
+				<Button
+					size="lg"
+					variant="outline"
+					href="https://github.com/iamjuney/interview.ai"
+					target="_blank"
+				>
+					<Github class="mr-2 size-4" />
+					View Source
 				</Button>
 			</div>
 			<div class="mt-24 lg:mt-44">
 				<p class="text-base font-medium text-muted-foreground">
 					<span
 						>This is a thesis project of
-						<a class="underline" href="https://www.linkedin.com/in/aljon-lerios/">Aljon Lerios</a>.
+						<a class="underline" href="https://www.linkedin.com/in/aljon-lerios/" target="_blank"
+							>Aljon Lerios</a
+						>.
 					</span>
 				</p>
 				<ul role="list" class="mt-8 flex items-center justify-center">
