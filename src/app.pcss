@@ -73,4 +73,36 @@
 	body::-webkit-scrollbar-thumb {
 		background-color: hsl(var(--primary));
 	}
+
+	.driver-popover.driverjs-theme {
+		min-width: 300px;
+		max-width: 350px;
+	}
+
+	.driver-popover.driverjs-theme .driver-popover-title {
+		font-size: 20px;
+		font-family: 'DM Sans', sans-serif;
+	}
+
+	.driver-popover.driverjs-theme .driver-popover-description,
+	.driver-popover.driverjs-theme .driver-popover-progress-text {
+		font-family: 'DM Sans', sans-serif;
+		color: hsl(var(--muted-foreground) / var(--tw-text-opacity));
+		font-size: 0.875rem;
+		line-height: 1.25rem;
+	}
+
+	.driver-popover.driverjs-theme button {
+		font-family: 'DM Sans', sans-serif;
+		text-shadow: none;
+		@apply inline-flex h-9 items-center justify-center whitespace-nowrap rounded-full text-sm font-medium transition-colors focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50;
+	}
+
+	.driver-popover.driverjs-theme .driver-popover-prev-btn {
+		@apply bg-secondary px-4 py-2 text-secondary-foreground shadow-sm hover:bg-secondary/80;
+	}
+
+	.driver-popover.driverjs-theme .driver-popover-next-btn {
+		@apply bg-primary px-4 py-2 text-primary-foreground shadow hover:bg-primary/90;
+	}
 }

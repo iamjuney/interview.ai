@@ -9,6 +9,7 @@
 	let showOnboarding = $state(false);
 
 	const driverObj = driver({
+		popoverClass: 'driverjs-theme',
 		showProgress: true,
 		steps: [
 			{
@@ -44,7 +45,7 @@
 				popover: {
 					title: 'Interviews',
 					description:
-						'Here you can see all the interviews you have completed and the feedback you have received. Click it to see more details.',
+						'Here you can see all the interviews you have completed and the feedback you have received. <strong>Click it</strong> to see more details.',
 					side: 'left',
 					align: 'start'
 				}
@@ -53,7 +54,7 @@
 				element: '#StartNewInterview',
 				popover: {
 					title: 'Lets Start New Interview',
-					description: 'Click the button to start a new interview.',
+					description: '<strong>Click the button</strong> to start a new interview.',
 					side: 'left',
 					align: 'start'
 				}
@@ -72,7 +73,7 @@
 				popover: {
 					title: 'Questions',
 					description:
-						'You can practice your interview skills by answering questions here. Click it to see more details.',
+						'You can practice your interview skills by answering questions here. <strong>Click it</strong> to see more details.',
 					side: 'left',
 					align: 'start'
 				}
@@ -90,7 +91,8 @@
 				element: '#Settings',
 				popover: {
 					title: 'Settings',
-					description: 'You can update your profile and account settings here.',
+					description:
+						'You can update your profile and account settings here. <strong>Click it</strong> to see more details.',
 					side: 'left',
 					align: 'start'
 				}
