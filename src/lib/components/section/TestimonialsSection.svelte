@@ -1,46 +1,14 @@
 <script lang="ts">
-	const testimonials = [
-		{
-			name: 'Xyber Pastoril (@xybr.dev)',
-			title: 'Alumnus',
-			quote:
-				'Definitely a big win for those who are wishing to boost their confidence in programming interviews!'
-		},
-		{
-			name: 'Mojo Jojo',
-			title: '3rd Year Student',
-			quote:
-				'For a web development noob like me, I found the web application very fascinating as there are a lot of things going on in the backend. From video transcription to the response, it is just seamless. However, I could suggest the KKK - Kiss Kick Kiss method for the response part. Thats all, its been a nice experience having to beta-test this website'
-		},
-		{
-			name: 'Max R. Tumaob Jr.',
-			title: '4th Year Student',
-			quote: 'This is good practice for an internship interview.'
-		},
-		{
-			name: 'Ate Nat',
-			title: '4th Year Student',
-			quote:
-				'As a graduating student, I found this platform to be useful in preparing for my future endevours.'
-		},
-		{
-			name: 'WIlbert B. Anadia',
-			title: '4th Year Student',
-			quote:
-				'This application is very helpful for those students who takes Computer Science or in I.T especially for their future interviews when they are applying their jobs in Tech industry.'
-		},
-		{
-			name: 'Anonymous',
-			title: 'Pero 4th Year Student',
-			quote:
-				'It is very good for practicing interview especially it has pronunciation scoring system and evaluation where it checks your pronunciation if correct. It is helpful since the occurence of mispronounced words are lessen in which having this in an actual interview is annoying and embarrassing.'
-		},
-		{
-			name: 'Juan dela Cruz',
-			title: '4th Year Student',
-			quote: 'As a graduating student, I found this platform to be a fantastic resource.'
-		}
-	];
+	type Testimonial = {
+		name: string;
+		title: string;
+		quote: string;
+	};
+
+	let { testimonials } = $props<{ testimonials: Testimonial[] }>();
+	let firstColumn = testimonials.slice(0, 6);
+	let secondColumn = testimonials.slice(6, 10);
+	let thirdColumn = testimonials.slice(10, 14);
 </script>
 
 {#snippet testimonialCard(testimonial)}
@@ -89,7 +57,7 @@
 		>
 			<li>
 				<ul role="list" class="flex flex-col gap-y-6 sm:gap-y-8">
-					{#each testimonials.slice(0, 2) as testimonial}
+					{#each firstColumn as testimonial}
 						{@render testimonialCard(testimonial)}
 					{/each}
 				</ul>
@@ -97,7 +65,7 @@
 
 			<li>
 				<ul role="list" class="flex flex-col gap-y-6 sm:gap-y-8">
-					{#each testimonials.slice(2, 5) as testimonial}
+					{#each secondColumn as testimonial}
 						{@render testimonialCard(testimonial)}
 					{/each}
 				</ul>
@@ -105,7 +73,7 @@
 
 			<li>
 				<ul role="list" class="flex flex-col gap-y-6 sm:gap-y-8">
-					{#each testimonials.slice(5, 7) as testimonial}
+					{#each thirdColumn as testimonial}
 						{@render testimonialCard(testimonial)}
 					{/each}
 				</ul>

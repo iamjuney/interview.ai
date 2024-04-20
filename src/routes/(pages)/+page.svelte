@@ -82,7 +82,7 @@
 
 		<!-- <SecondaryFeaturesSection /> -->
 
-		<TestimonialsSection />
+		<TestimonialsSection testimonials={data.testimonials} />
 
 		<!-- <GetStartedSection /> -->
 	</main>
