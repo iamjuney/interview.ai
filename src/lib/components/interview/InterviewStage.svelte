@@ -9,15 +9,7 @@
 	import { FFmpeg } from '@ffmpeg/ffmpeg';
 	import { fetchFile, toBlobURL } from '@ffmpeg/util';
 	import type { User } from 'lucia';
-	import {
-		AlertTriangle,
-		ArrowRight,
-		HelpCircle,
-		Loader2,
-		RefreshCw,
-		Play,
-		Square
-	} from 'lucide-svelte';
+	import { AlertTriangle, ArrowRight, HelpCircle, Loader2, Play, Square } from 'lucide-svelte';
 	import { untrack } from 'svelte';
 	import { CldVideoPlayer } from 'svelte-cloudinary';
 	import { v4 as uuidv4 } from 'uuid';
@@ -463,8 +455,8 @@
 			{#if completed}
 				<!-- svelte-ignore a11y-media-has-caption -->
 				<video
-					controls={true}
-					class="absolute z-10 h-full w-full object-cover"
+					controls
+					class="absolute z-50 h-full w-full"
 					src={videoFile ? URL.createObjectURL(videoFile) : ''}
 				>
 				</video>
