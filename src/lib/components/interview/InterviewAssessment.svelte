@@ -90,6 +90,7 @@
 												<input type="hidden" name="question_slug" value={question?.slug} />
 												<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
 												<AlertDialog.Action
+													on:click={() => (isOpen = false)}
 													type="submit"
 													class="bg-destructive text-destructive-foreground hover:bg-destructive/80"
 													>Continue</AlertDialog.Action
