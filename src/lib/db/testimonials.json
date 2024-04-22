@@ -30,6 +30,11 @@
 		"quote": "This application is very helpful for those students who takes Computer Science or in I.T especially for their future interviews when they are applying their jobs in Tech industry."
 	},
 	{
+		"name": "Juan dela Cruz",
+		"title": "4th Year Student",
+		"quote": "As a graduating student, I found this platform to be a fantastic resource."
+	},
+	{
 		"name": "Rienhard Baquerfo",
 		"title": "Computer Programmer @VSU-MIS",
 		"quote": "The UI is simple but still looks elegant and very responsive to other devices. For the functionality, I was amazed with the outcome or result of every virtual interview that I tested. Although I found few bugs/errors along the way, I'm still impressed on how the logic and the idea in developing such web application like this. There's still a large room for improvement such as user-friendliness and optimizing certain features for smoother user experience. But all in all, the application is great and has a lot of potential!"
@@ -60,13 +65,13 @@
 		"quote": "It is very good for practicing interview especially it has pronunciation scoring system and evaluation where it checks your pronunciation if correct. It is helpful since the occurence of mispronounced words are lessen in which having this in an actual interview is annoying and embarrassing."
 	},
 	{
-		"name": "Juan dela Cruz",
-		"title": "4th Year Student",
-		"quote": "As a graduating student, I found this platform to be a fantastic resource."
-	},
-	{
 		"name": "Chris John Rex Pajal",
 		"title": "3rd Year Student",
 		"quote": "The platform provides an excellent opportunity for me to practice answering questions in preparation for my upcoming OJT training. Additionally, it assists me in getting ready for interviews."
+	},
+	{
+		"name": "Keana Samantha Laraga",
+		"title": "3rd Year Student",
+		"quote": "As we approach our upcoming internship or on-the-job training, this platform serves as an invaluable resource for honing our speaking abilities. It provides us with a structured environment to practice and refine our responses to interview questions, thereby enhancing our professional communication skills and preparing us for successful interactions in the corporate world."
 	}
 ]

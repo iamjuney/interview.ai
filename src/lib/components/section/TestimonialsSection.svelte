@@ -6,9 +6,9 @@
 	};
 
 	let { testimonials } = $props<{ testimonials: Testimonial[] }>();
-	let firstColumn = testimonials.slice(0, 6);
-	let secondColumn = testimonials.slice(6, 10);
-	let thirdColumn = testimonials.slice(10, 14);
+	let firstColumn = testimonials.slice(0, 7);
+	let secondColumn = testimonials.slice(7, 11);
+	let thirdColumn = testimonials.slice(11, 15);
 </script>
 
 {#snippet testimonialCard(testimonial)}
