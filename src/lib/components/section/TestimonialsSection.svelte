@@ -6,9 +6,9 @@
 	};
 
 	let { testimonials } = $props<{ testimonials: Testimonial[] }>();
-	let firstColumn = testimonials.slice(0, 7);
-	let secondColumn = testimonials.slice(7, 11);
-	let thirdColumn = testimonials.slice(11, 15);
+	let firstColumn = $derived(testimonials.slice(0, 7));
+	let secondColumn = $derived(testimonials.slice(7, 11));
+	let thirdColumn = $derived(testimonials.slice(11, 16));
 </script>
 
 {#snippet testimonialCard(testimonial)}
@@ -44,7 +44,7 @@
 	<div class="container">
 		<div class="mx-auto max-w-2xl md:text-center">
 			<h2 class="font-display text-3xl tracking-tight sm:text-4xl">
-				Loved by computer science students from Visayas State University.
+				Loved by computer science students.
 			</h2>
 			<p class="mt-4 text-lg tracking-tight text-muted-foreground">
 				Our platform provides a comprehensive suite of tools and resources to help you excel in your
