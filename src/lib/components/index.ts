@@ -13,9 +13,12 @@ export { default as MobileSideBar } from './navigation/MobileSideBar.svelte';
 
 /* Interview Components */
 export { default as DoughnutChart } from './interview/DoughnutChart.svelte';
+export { default as BarChart } from './interview/BarChart.svelte';
+export { default as Metric } from './interview/Metric.svelte';
 export { default as InterviewAssessment } from './interview/InterviewAssessment.svelte';
 export { default as InterviewCard } from './interview/InterviewCard.svelte';
 export { default as InterviewStage } from './interview/InterviewStage.svelte';
+export { default as LineGraph } from './interview/LineGraph.svelte';
 export { default as NotFound } from './interview/NotFound.svelte';
 export { default as Onboarding } from './interview/Onboarding.svelte';
 

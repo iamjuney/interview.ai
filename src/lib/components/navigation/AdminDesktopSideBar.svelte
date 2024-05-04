@@ -13,7 +13,7 @@
 	let newProfile = $state('');
 	let pathName = $derived(() => {
 		const path = $page.url.pathname.split('/')[2];
-		return '/app' + (path ? `/${path}` : '');
+		return '/admin' + (path ? `/${path}` : '');
 	});
 
 	$effect(() => {
@@ -122,7 +122,7 @@
 					<DropdownMenu.Group>
 						<DropdownMenu.Label>My Account</DropdownMenu.Label>
 						<DropdownMenu.Separator />
-						<DropdownMenu.Item href="/app/settings">Profile</DropdownMenu.Item>
+						<DropdownMenu.Item href="/admin/settings">Profile</DropdownMenu.Item>
 						<DropdownMenu.Item role="button">
 							<form id="myForm" action="/logout?/logout" class="w-full" method="post" use:enhance>
 								<button tabindex={-1} class="flex w-full cursor-default justify-start" type="submit"
