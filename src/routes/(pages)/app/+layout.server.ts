@@ -3,12 +3,14 @@ import type { LayoutServerLoad } from './$types';
 
 export const load = (async ({ locals }: { locals: any }) => {
 	const session = await locals.auth.validate();
-	const showOnboarding = session?.user.show_onboarding;
+	const user = session?.user;
+	const showOnboarding = user.show_onboarding;
 
 	if (!session) redirect(303, '/sign-in');
+	if (user?.username === 'admin') redirect(303, '/admin');
 
 	return {
-		user: session.user,
-		showOnboarding: showOnboarding
+		user,
+		showOnboarding
 	};
 }) satisfies LayoutServerLoad;
