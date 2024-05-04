@@ -3,15 +3,23 @@ import { json } from '@sveltejs/kit';
 import OpenAI from 'openai';
 import type { RequestHandler } from './$types';
 
-// Create an OpenAI API client
+/**
+ * Configuration for the OpenAI ChatGPT API server.
+ */
 const openai = new OpenAI({
 	apiKey: OPENAI_API_KEY || ''
 });
 
+/**
+ * Handles the POST request to the OpenAI ChatGPT API server.
+ * @param request - The incoming request object.
+ * @returns The response object containing the feedback from the OpenAI model.
+ */
 export const POST = (async ({ request }) => {
-	const { prompt } = await request.json();
+	const { prompt } = await request.json(); // Parse the incoming JSON data
 
 	try {
+		// Call the OpenAI API to generate feedback
 		const response = await openai.chat.completions.create({
 			model: 'gpt-3.5-turbo-0125',
 			stream: false,
@@ -25,7 +33,7 @@ export const POST = (async ({ request }) => {
 			]
 		});
 
-		// Return the response from OpenAI
+		// Return the feedback from the OpenAI model
 		return json({ feedback: response.choices[0].message.content }, { status: 200 });
 	} catch (error) {
 		return json(
