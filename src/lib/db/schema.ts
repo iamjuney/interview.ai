@@ -16,6 +16,7 @@ import {
 /** Enums */
 
 export const statusEnum = pgEnum('status', ['in-progress', 'completed']);
+export const roleEnum = pgEnum('role', ['user', 'admin']);
 
 /** TABLES */
 
@@ -26,6 +27,7 @@ export const user = pgTable(
 		id: varchar('id', {
 			length: 36 // uuid
 		}).primaryKey(),
+		role: roleEnum('role').default('user').notNull(),
 		username: varchar('username', {
 			length: 255
 		}).unique(),

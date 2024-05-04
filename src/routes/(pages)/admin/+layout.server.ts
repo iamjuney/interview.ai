@@ -6,7 +6,7 @@ export const load = (async ({ locals }: { locals: any }) => {
 	const user = session?.user;
 
 	if (!session) redirect(303, '/sign-in');
-	if (user?.username !== 'admin') redirect(303, '/app');
+	if (user?.role !== 'admin') redirect(303, '/app');
 
 	return {
 		user

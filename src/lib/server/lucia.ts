@@ -14,6 +14,7 @@ export const auth = lucia({
 	}),
 	env: dev ? 'DEV' : 'PROD',
 	getUserAttributes: (userData) => ({
+		role: userData.role,
 		username: userData.username,
 		first_name: userData.first_name,
 		last_name: userData.last_name,
