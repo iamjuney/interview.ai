@@ -52,7 +52,9 @@ export const actions = {
 				},
 				// this is the user attributes we put into model of user, this data gonna be saved in the collection of users in the database
 				attributes: {
+					role: 'user',
 					email: form.data.email,
+					show_onboarding: true,
 
 					// my custom fields
 					first_name: form.data.first_name,

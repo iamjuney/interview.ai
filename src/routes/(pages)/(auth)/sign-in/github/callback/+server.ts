@@ -22,6 +22,7 @@ export const GET = async ({ url, cookies, locals }) => {
 			console.log(githubUser);
 			const user = await createUser({
 				attributes: {
+					role: 'user',
 					username: githubUser.login,
 					first_name: githubUser.name!.split(' ')[0],
 					last_name: githubUser.name!.split(' ')[1],

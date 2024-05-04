@@ -16,7 +16,7 @@ declare global {
 		// we omit the id property because lucia automatically generate it for us when we create a user
 		type DatabaseUserAttributes = {
 			role: string;
-			username: string;
+			username?: string;
 			first_name: string;
 			last_name: string;
 			email: string;
