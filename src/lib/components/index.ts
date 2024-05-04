@@ -3,6 +3,8 @@ export { default as SeoHead } from './seo/SeoHead.svelte';
 export { default as Twitter } from './seo/Twitter.svelte';
 
 /* Navigation */
+export { default as AdminDesktopSideBar } from './navigation/AdminDesktopSideBar.svelte';
+export { default as AdminMobileSideBar } from './navigation/AdminMobileSideBar.svelte';
 export { default as DesktopSideBar } from './navigation/DesktopSideBar.svelte';
 export { default as Footer } from './navigation/Footer.svelte';
 export { default as Header } from './navigation/Header.svelte';
@@ -14,8 +16,8 @@ export { default as DoughnutChart } from './interview/DoughnutChart.svelte';
 export { default as InterviewAssessment } from './interview/InterviewAssessment.svelte';
 export { default as InterviewCard } from './interview/InterviewCard.svelte';
 export { default as InterviewStage } from './interview/InterviewStage.svelte';
-export { default as Onboarding } from './interview/Onboarding.svelte';
 export { default as NotFound } from './interview/NotFound.svelte';
+export { default as Onboarding } from './interview/Onboarding.svelte';
 
 /* Layout */
 export { default as LayoutBackground } from './layout/LayoutBackground.svelte';
