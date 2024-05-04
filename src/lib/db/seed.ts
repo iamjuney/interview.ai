@@ -1,53 +1,35 @@
-import { auth } from '$lib/server/lucia';
 import type { Question } from '$lib/types';
-import { fail } from '@sveltejs/kit';
-import { LuciaError } from 'lucia';
 import slugify from 'slugify';
 import { v4 as uuidv4 } from 'uuid';
 import { db } from './index';
 import interviews from './interviews.json';
 import questions from './questions.json';
-import { interview, question } from './schema';
+import { interview, key, question, user } from './schema';
 
 async function seed() {
+	await insertAdminUser();
 	await insertInterviews();
 	await insertQuestions();
-	await insertAdminUser();
 }
 
 async function insertAdminUser() {
-	try {
-		// this does two things:
-		// 1. create a user in the database
-		// 2. create a key in the database
-		const user = await auth.createUser({
-			key: {
-				providerId: 'email',
-				providerUserId: 'dcst@vsu.edu.ph',
-				// lucia gonna hash the password automatically for you and saved it in the collection of keys in the database
-				password: 'password123'
-			},
-			// this is the user attributes we put into model of user, this data gonna be saved in the collection of users in the database
-			attributes: {
-				role: 'user',
-				email: 'dcst@vsu.edu.ph',
-				show_onboarding: false,
-
-				// my custom fields
-				first_name: 'Admin',
-				last_name: 'Admin',
-				image: ''
-			}
-		});
-
-		console.log('Admin user inserted');
-	} catch (e) {
-		if (e instanceof LuciaError && e.message === `AUTH_DUPLICATE_KEY_ID`) {
-			return fail(400, {
-				message: 'User already exists'
-			});
-		}
-	}
+	const adminID = uuidv4();
+	await db.insert(user).values({
+		id: adminID,
+		email: 'dcst@vsu.edu.ph',
+		role: 'admin',
+		show_onboarding: false,
+		first_name: 'Admin',
+		last_name: 'Admin',
+		image: ''
+	});
+	console.log('Admin user inserted');
+	await db.insert(key).values({
+		id: 'email:dcst@vsu.edu.ph',
+		userId: adminID,
+		hashedPassword:
+			's2:j6iquv3dc6wzg85g:5e71d3f4b5f90f5d14d88f072291a82b8cab93509a4d22f66a6abf1cfb30d778e9ad95680db08a4b656edaa64d0b3a26eb426f70b4eb0dc31707ace651d78769'
+	});
 }
 
 async function insertInterviews() {
