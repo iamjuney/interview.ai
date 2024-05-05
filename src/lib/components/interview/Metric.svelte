@@ -27,7 +27,7 @@
 <VisXYContainer
 	class="vis-xy-container"
 	{data}
-	height={200}
+	height={128}
 	margin={{ top: 5, right: 10, left: 10, bottom: 0 }}
 >
 	<VisTooltip />
