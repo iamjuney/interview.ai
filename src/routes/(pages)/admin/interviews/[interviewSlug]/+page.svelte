@@ -56,15 +56,13 @@
 </script>
 
 {#snippet questionCard(q:Question)}
-	<a
+	<div
 		class="mb-2 flex w-full items-center justify-between rounded-md border border-border p-3 font-medium"
-		href="/admin/interviews/{$page.params.interviewSlug}"
 	>
-		<div class="flex w-full items-center justify-between gap-2 text-left">
-			<div class="ml-3 grow">{q.question}</div>
+		<div class="flex w-full items-center justify-between gap-3 text-left">
 			<div class="grid grid-flow-col gap-2">
 				<Button
-					href="/admin/interviews/{interview.interviewSlug}"
+					href="/admin/interviews/{interview.interviewSlug}/questions/{q.slug}"
 					class="hover:opacity-90"
 					size="icon"
 					title="Edit Question"
@@ -86,14 +84,14 @@
 						<AlertDialog.Header>
 							<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
 							<AlertDialog.Description>
-								This action cannot be undone. This will permanently <strong>delete</strong> this interview
+								This action cannot be undone. This will permanently <strong>delete</strong> this question
 								and all the data will be lost.
 							</AlertDialog.Description>
 						</AlertDialog.Header>
 						<AlertDialog.Footer>
 							<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
 							<form
-								action="/admin/interviews?/delete"
+								action="/admin/questions?/delete"
 								use:enhance={() => {
 									isDeleteQuestionSubmitting = true;
 									return async ({ result }) => {
@@ -106,7 +104,7 @@
 								}}
 								method="post"
 							>
-								<input type="hidden" name="interview_id" value={interview.id} />
+								<input type="hidden" name="question_id" value={q.id} />
 								<AlertDialog.Action
 									type="submit"
 									class="bg-destructive text-destructive-foreground hover:bg-destructive/80"
@@ -117,8 +115,9 @@
 					</AlertDialog.Content>
 				</AlertDialog.Root>
 			</div>
+			<div class="grow">{q.question}</div>
 		</div>
-	</a>
+	</div>
 {/snippet}
 
 {#if animate}
@@ -230,6 +229,10 @@
 		<div class="w-full md:w-7/12">
 			<div class="mb-5 mt-1">
 				<div class="text-lg font-semibold">Questions</div>
+				<p class="text-muted-foreground">
+					These are the questions that will be asked in the interview. You can edit or delete them
+					below.
+				</p>
 			</div>
 			{#each questions as question}
 				{@render questionCard(question)}
