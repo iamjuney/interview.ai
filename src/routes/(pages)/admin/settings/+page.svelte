@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
-	import { AlertDialog, Button, Input, Label } from '$lib/components';
+	import { Button, Input, Label } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import type { User } from 'lucia';
 	import { Loader2, XCircle } from 'lucide-svelte';
@@ -13,7 +13,6 @@
 	let animate = $state(false);
 	let isUpdateNameSubmitting = $state(false);
 	let isUpdatePasswordSubmitting = $state(false);
-	let isDeleteAccountSubmitting = $state(false);
 	let failedUpdateName = $state<Record<string, any>>();
 	let failedUpdatePassword = $state<Record<string, any>>();
 	let mobileUserPhoto = $state<HTMLInputElement>();
@@ -68,18 +67,6 @@
 			await applyAction(result);
 		};
 	};
-
-	const handleDeleteAccountSubmit: SubmitFunction = async () => {
-		isDeleteAccountSubmitting = true;
-
-		return async ({ result }) => {
-			if (result.type === 'failure') {
-				isDeleteAccountSubmitting = false;
-				return;
-			}
-			await applyAction(result);
-		};
-	};
 </script>
 
 {#if animate}
@@ -106,7 +93,7 @@
 			>
 				<input type="hidden" id="user_id" name="user_id" value={user.userId} />
 				<div class="mt-4">
-					<p class="text-sm font-medium text-muted-foreground" aria-hidden="true">Photo</p>
+					<p class="text-sm font-medium" aria-hidden="true">Photo</p>
 					<div class="mt-1 lg:hidden">
 						<div class="flex items-center">
 							<div
@@ -202,12 +189,12 @@
 
 				<div class="mt-6 grid grid-cols-12 gap-6">
 					<div class="col-span-12 sm:col-span-6">
-						<Label for="first_name" class="text-muted-foreground">First name</Label>
+						<Label for="first_name">First name</Label>
 						<Input id="first_name" name="first_name" value={user.first_name} required />
 					</div>
 
 					<div class="col-span-12 sm:col-span-6">
-						<Label for="last_name" class="text-muted-foreground">Last name</Label>
+						<Label for="last_name">Last name</Label>
 						<Input id="last_name" name="last_name" value={user.last_name} required />
 					</div>
 				</div>
@@ -229,9 +216,7 @@
 
 		<div class="max-w-xl space-y-2">
 			<h2 class="truncate text-xl font-medium tracking-tight">Change Password</h2>
-			<p class="text-muted-foreground">
-				Ensure your account is using a long, random password to stay secure.
-			</p>
+			<p>Ensure your account is using a long, random password to stay secure.</p>
 
 			{#if failedUpdatePassword}
 				<div class="flex items-center justify-center text-destructive">
@@ -241,7 +226,7 @@
 			{/if}
 
 			<form
-				class="max-w-xl text-muted-foreground"
+				class="max-w-xl"
 				action="?/updatePassword"
 				use:enhance={handleUpdatePasswordSubmit}
 				method="POST"

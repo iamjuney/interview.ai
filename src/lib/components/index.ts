@@ -12,13 +12,13 @@ export { default as Logo } from './navigation/Logo.svelte';
 export { default as MobileSideBar } from './navigation/MobileSideBar.svelte';
 
 /* Interview Components */
-export { default as DoughnutChart } from './interview/DoughnutChart.svelte';
 export { default as BarChart } from './interview/BarChart.svelte';
-export { default as Metric } from './interview/Metric.svelte';
+export { default as DoughnutChart } from './interview/DoughnutChart.svelte';
 export { default as InterviewAssessment } from './interview/InterviewAssessment.svelte';
 export { default as InterviewCard } from './interview/InterviewCard.svelte';
 export { default as InterviewStage } from './interview/InterviewStage.svelte';
 export { default as LineGraph } from './interview/LineGraph.svelte';
+export { default as Metric } from './interview/Metric.svelte';
 export { default as NotFound } from './interview/NotFound.svelte';
 export { default as Onboarding } from './interview/Onboarding.svelte';
 
@@ -36,6 +36,7 @@ export * as Alert from './ui/alert';
 export * as AlertDialog from './ui/alert-dialog';
 export { Badge } from './ui/badge';
 export { Button } from './ui/button';
+export * as Card from './ui/card';
 export * as Collapsible from './ui/collapsible';
 export * as Dialog from './ui/dialog';
 export * as DropdownMenu from './ui/dropdown-menu';
@@ -44,8 +45,9 @@ export { Label } from './ui/label';
 export * as Pagination from './ui/pagination';
 export { Progress } from './ui/progress';
 export * as RadioGroup from './ui/radio-group';
+export * as Select from './ui/select';
+export * as Table from './ui/table';
 export * as Tabs from './ui/tabs';
+export { Textarea } from './ui/textarea';
 export * as ToggleGroup from './ui/toggle-group';
 export * as Tooltip from './ui/tooltip';
-export * as Card from './ui/card';
-export * as Table from './ui/table';

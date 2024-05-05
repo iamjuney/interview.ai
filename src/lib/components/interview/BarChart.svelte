@@ -64,6 +64,6 @@
 </script>
 
 <VisXYContainer {data} height={80}>
-	<VisGroupedBar {x} {y} roundedCorners={4} color={color()} />
+	<VisGroupedBar {x} {y} roundedCorners={16} color={color()} />
 	<VisTooltip {triggers} />
 </VisXYContainer>
