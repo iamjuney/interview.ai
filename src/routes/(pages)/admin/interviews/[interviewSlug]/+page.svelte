@@ -1,10 +1,11 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
+	import { goto } from '$app/navigation';
 	import { page } from '$app/stores';
-	import { Button, Input, Label, Textarea, Select } from '$lib/components';
+	import { AlertDialog, Button, Input, Label, Select, Textarea } from '$lib/components';
 	import type { Question } from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { ArrowLeft, CheckCircle, Loader2, PlayCircle, XCircle } from 'lucide-svelte';
+	import { ArrowLeft, Loader2, Pencil, Trash, XCircle } from 'lucide-svelte';
 	import slugify from 'slugify';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -14,12 +15,14 @@
 	let animate = $state(false);
 	let questions = $derived<Question[]>(data.questions);
 	let isUpdateInterviewSubmitting = $state(false);
+	let isDeleteQuestionSubmitting = $state(false);
 	let failedUpdateInterview = $state<Record<string, any>>();
 
 	let position = $state(interview.position);
 	let interviewSlug = $derived(slugGenerator(position));
 	let description = $state(interview.description);
 	let difficulty = $state({ value: interview.difficulty, label: interview.difficulty });
+	let duration = $state(interview.duration);
 
 	$effect(() => {
 		animate = true;
@@ -54,13 +57,66 @@
 
 {#snippet questionCard(q:Question)}
 	<a
-		class="mb-2 flex w-full items-center justify-between rounded-md border border-border p-3 font-medium transition-all duration-200 hover:ml-3"
+		class="mb-2 flex w-full items-center justify-between rounded-md border border-border p-3 font-medium"
 		href="/admin/interviews/{$page.params.interviewSlug}"
 	>
-		<div class="flex items-center text-left">
-			<CheckCircle size="20" class="flex-none text-green-500" />
-			<PlayCircle size="20" class="flex-none text-primary" />
+		<div class="flex w-full items-center justify-between gap-2 text-left">
 			<div class="ml-3 grow">{q.question}</div>
+			<div class="grid grid-flow-col gap-2">
+				<Button
+					href="/admin/interviews/{interview.interviewSlug}"
+					class="hover:opacity-90"
+					size="icon"
+					title="Edit Question"
+				>
+					<Pencil class="size-4" />
+				</Button>
+				<AlertDialog.Root>
+					<AlertDialog.Trigger>
+						<Button
+							class="group cursor-pointer"
+							variant="destructive"
+							size="icon"
+							title="Delete Question"
+						>
+							<Trash class="size-4" />
+						</Button>
+					</AlertDialog.Trigger>
+					<AlertDialog.Content>
+						<AlertDialog.Header>
+							<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+							<AlertDialog.Description>
+								This action cannot be undone. This will permanently <strong>delete</strong> this interview
+								and all the data will be lost.
+							</AlertDialog.Description>
+						</AlertDialog.Header>
+						<AlertDialog.Footer>
+							<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+							<form
+								action="/admin/interviews?/delete"
+								use:enhance={() => {
+									isDeleteQuestionSubmitting = true;
+									return async ({ result }) => {
+										if (result.type === 'redirect') {
+											goto(result.location);
+										} else {
+											await applyAction(result);
+										}
+									};
+								}}
+								method="post"
+							>
+								<input type="hidden" name="interview_id" value={interview.id} />
+								<AlertDialog.Action
+									type="submit"
+									class="bg-destructive text-destructive-foreground hover:bg-destructive/80"
+									bind:disabled={isDeleteQuestionSubmitting}>Continue</AlertDialog.Action
+								>
+							</form>
+						</AlertDialog.Footer>
+					</AlertDialog.Content>
+				</AlertDialog.Root>
+			</div>
 		</div>
 	</a>
 {/snippet}
@@ -128,25 +184,32 @@
 					<Label for="description">Description</Label>
 					<Textarea
 						id="description"
-						class="min-h-24"
+						class="min-h-32"
 						name="description"
 						value={description}
 						required
 					/>
 				</div>
 
-				<div class="mt-6 grid gap-3">
-					<Label for="difficulty">Difficulty</Label>
-					<Select.Root required selected={difficulty}>
-						<Select.Trigger class="w-[180px]">
-							<Select.Value placeholder="Choose Difficulty" />
-						</Select.Trigger>
-						<Select.Content>
-							<Select.Item value="Basic">Basic</Select.Item>
-							<Select.Item value="Intermediate">Intermediate</Select.Item>
-							<Select.Item value="Advanced">Advanced</Select.Item>
-						</Select.Content>
-					</Select.Root>
+				<div class="mt-6 grid grid-cols-12 gap-6">
+					<div class="col-span-12 grid gap-3 sm:col-span-6">
+						<Label for="difficulty">Difficulty</Label>
+						<Select.Root required selected={difficulty}>
+							<Select.Trigger class="w-full">
+								<Select.Value placeholder="Choose Difficulty" />
+							</Select.Trigger>
+							<Select.Content>
+								<Select.Item value="Basic">Basic</Select.Item>
+								<Select.Item value="Intermediate">Intermediate</Select.Item>
+								<Select.Item value="Advanced">Advanced</Select.Item>
+							</Select.Content>
+						</Select.Root>
+					</div>
+
+					<div class="col-span-12 grid gap-3 sm:col-span-6">
+						<Label for="duration">Duration (estimate in mins.)</Label>
+						<Input type="number" id="duration" name="duration" value={duration} required />
+					</div>
 				</div>
 
 				<div class="mt-6">
