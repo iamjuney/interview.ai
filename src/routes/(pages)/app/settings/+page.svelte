@@ -105,7 +105,7 @@
 				enctype="multipart/form-data"
 			>
 				<input type="hidden" id="user_id" name="user_id" value={user.userId} />
-				<div class="mt-4">
+				<div class="mt-4 grid gap-3">
 					<p class="text-sm font-medium text-muted-foreground" aria-hidden="true">Photo</p>
 					<div class="mt-1 lg:hidden">
 						<div class="flex items-center">
@@ -201,12 +201,12 @@
 				</div>
 
 				<div class="mt-6 grid grid-cols-12 gap-6">
-					<div class="col-span-12 sm:col-span-6">
+					<div class="col-span-12 grid gap-3 sm:col-span-6">
 						<Label for="first_name" class="text-muted-foreground">First name</Label>
 						<Input id="first_name" name="first_name" value={user.first_name} required />
 					</div>
 
-					<div class="col-span-12 sm:col-span-6">
+					<div class="col-span-12 grid gap-3 sm:col-span-6">
 						<Label for="last_name" class="text-muted-foreground">Last name</Label>
 						<Input id="last_name" name="last_name" value={user.last_name} required />
 					</div>
@@ -248,7 +248,7 @@
 					method="POST"
 				>
 					<input type="hidden" id="email" name="email" value={user.email} />
-					<div class="mt-6">
+					<div class="mt-6 grid gap-3">
 						<Label for="current_password">Current Password</Label>
 						<Input
 							id="current_password"
@@ -258,7 +258,7 @@
 						/>
 					</div>
 					<div class="mt-6 grid grid-cols-12 gap-6">
-						<div class="col-span-12 sm:col-span-6">
+						<div class="col-span-12 grid gap-3 sm:col-span-6">
 							<Label for="new_password">New Password</Label>
 							<Input
 								id="new_password"
@@ -268,7 +268,7 @@
 							/>
 						</div>
 
-						<div class="col-span-12 sm:col-span-6">
+						<div class="col-span-12 grid gap-3 sm:col-span-6">
 							<Label for="confirm_password">Confirm New Password</Label>
 							<Input
 								id="confirm_password"
