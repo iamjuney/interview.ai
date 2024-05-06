@@ -54,7 +54,7 @@
 								<span class="sr-only">Close menu</span>
 								<X class="size-6" />
 							</Button>
-							<div class="flex items-center justify-between border-b border-accent pb-6">
+							<div class="flex items-start justify-between gap-3 border-b border-accent pb-6">
 								<h3 class="text-xl font-semibold">{question?.question}</h3>
 								<AlertDialog.Root>
 									<AlertDialog.Trigger>
