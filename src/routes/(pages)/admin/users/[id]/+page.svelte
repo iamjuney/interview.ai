@@ -46,7 +46,7 @@
 
 		<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
 			<div
-				class="col-span-1 flex items-center justify-center rounded-lg border bg-gradient-to-br from-primary/30 to-secondary shadow"
+				class="flex items-center justify-center py-4 rounded-lg border bg-gradient-to-br from-primary/30 to-secondary shadow"
 			>
 				<div class="flex items-center space-x-4">
 					{#if user.image}
@@ -83,7 +83,7 @@
 				</div>
 			</div>
 
-			<div class="col-span-2 rounded-lg">
+			<div class="md:col-span-2 rounded-lg">
 				<h2 class="mb-4 text-xl font-medium tracking-tight">Statistics</h2>
 				<div class="grid grid-cols-2 gap-4 md:grid-cols-4">
 					<div class="rounded-lg border bg-background p-4 shadow">

@@ -31,42 +31,9 @@
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
 		<h2 class="truncate text-3xl font-medium tracking-tight">Dashboard</h2>
 
-		<!-- <div class="grid gap-4 md:grid-cols-3 lg:grid-cols-3" id="Analytics">
-			<div class="rounded-xl border bg-primary text-primary-foreground shadow">
-				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-					<h3 class="font-medium tracking-tight text-primary-foreground/80">
-						Completed Interviews
-					</h3>
-					<MonitorCheck class="size-5" />
-				</div>
-				<div class="p-6 pt-0">
-					<div class="text-3xl font-bold">{data.completed}</div>
-				</div>
-			</div>
-			<div class="rounded-xl border bg-primary text-primary-foreground shadow">
-				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-					<h3 class="font-medium tracking-tight text-primary-foreground/80">
-						Total Interview Time
-					</h3>
-					<Hourglass class="size-5" />
-				</div>
-				<div class="p-6 pt-0">
-					<div class="text-3xl font-bold">{data.interviewTime}</div>
-				</div>
-			</div>
-			<div class="rounded-xl border bg-primary text-primary-foreground shadow">
-				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-					<h3 class="font-medium tracking-tight text-primary-foreground/80">Daily Streak</h3>
-					<TrendingUp class="size-5" />
-				</div>
-				<div class="p-6 pt-0">
-					<div class="text-3xl font-bold">{data.dailyStreak} day(s)</div>
-				</div>
-			</div>
-		</div> -->
 		<div class="grid grid-cols-1 gap-6 md:grid-cols-3" id="Statistics">
 			<div
-				class="col-span-1 flex items-center justify-center rounded-lg border bg-gradient-to-br from-primary/30 to-secondary shadow"
+				class="flex items-center justify-center py-4 rounded-lg border bg-gradient-to-br from-primary/30 to-secondary shadow"
 			>
 				<div class="flex items-center space-x-4">
 					{#if data.user.image}
@@ -103,7 +70,7 @@
 				</div>
 			</div>
 
-			<div class="col-span-2 rounded-lg">
+			<div class="md:col-span-2 rounded-lg">
 				<h2 class="mb-4 text-xl font-medium tracking-tight">Statistics</h2>
 				<div class="grid grid-cols-2 gap-4 md:grid-cols-4">
 					<div class="rounded-lg border bg-background p-4 shadow">
