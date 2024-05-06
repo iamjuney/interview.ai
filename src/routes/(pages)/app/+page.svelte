@@ -98,9 +98,7 @@
 							<p class="ml-2 text-muted-foreground">{data.user.email}</p>
 						</div>
 
-						{#if data.user.createdAt}
-							<p class="text-muted-foreground">Joined on {readableDate(data.user.createdAt)}</p>
-						{/if}
+						<p class="text-muted-foreground">Joined on {readableDate(data.user.created_at)}</p>
 					</div>
 				</div>
 			</div>

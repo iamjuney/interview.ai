@@ -15,6 +15,7 @@ export { default as MobileSideBar } from './navigation/MobileSideBar.svelte';
 export { default as BarChart } from './interview/BarChart.svelte';
 export { default as DoughnutChart } from './interview/DoughnutChart.svelte';
 export { default as InterviewAssessment } from './interview/InterviewAssessment.svelte';
+export { default as UserInterviewSummary } from './interview/UserInterviewSummary.svelte';
 export { default as InterviewCard } from './interview/InterviewCard.svelte';
 export { default as InterviewStage } from './interview/InterviewStage.svelte';
 export { default as LineGraph } from './interview/LineGraph.svelte';

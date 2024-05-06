@@ -20,7 +20,8 @@ export const auth = lucia({
 		last_name: userData.last_name,
 		email: userData.email,
 		image: userData.image,
-		show_onboarding: userData.show_onboarding
+		show_onboarding: userData.show_onboarding,
+		created_at: userData.created_at
 	}),
 	middleware: sveltekit()
 });

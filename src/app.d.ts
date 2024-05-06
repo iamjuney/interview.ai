@@ -22,6 +22,7 @@ declare global {
 			email: string;
 			image: string;
 			show_onboarding: boolean;
+			created_at: string;
 		};
 		type DatabaseSessionAttributes = {};
 	}

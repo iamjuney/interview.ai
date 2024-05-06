@@ -59,7 +59,8 @@ export const actions = {
 					// my custom fields
 					first_name: form.data.first_name,
 					last_name: form.data.last_name,
-					image: ''
+					image: '',
+					created_at: new Date().toISOString()
 				}
 			});
 		} catch (e) {

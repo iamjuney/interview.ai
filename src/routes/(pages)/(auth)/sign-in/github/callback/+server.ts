@@ -28,7 +28,8 @@ export const GET = async ({ url, cookies, locals }) => {
 					last_name: githubUser.name!.split(' ')[1],
 					email: githubUser.email!,
 					image: githubUser.avatar_url,
-					show_onboarding: true
+					show_onboarding: true,
+					created_at: new Date().toISOString()
 				}
 			});
 			return user;

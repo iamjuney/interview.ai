@@ -44,7 +44,7 @@ export const user = pgTable(
 			.unique(),
 		image: text('image').default(''),
 		show_onboarding: boolean('show_onboarding').default(true),
-		createdAt: timestamp('createdAt').defaultNow()
+		createdAt: timestamp('created_at').defaultNow()
 	},
 	(users) => {
 		return {
@@ -106,7 +106,7 @@ export const interview = pgTable('interviews', {
 		.notNull(),
 	duration: integer('duration').default(0).notNull(),
 	description: text('description').notNull(),
-	createdAt: timestamp('createdAt').defaultNow().notNull()
+	createdAt: timestamp('created_at').defaultNow().notNull()
 });
 
 // user_interviews table
@@ -125,7 +125,7 @@ export const userInterview = pgTable('user_interviews', {
 		.notNull()
 		.references(() => interview.id, { onDelete: 'cascade' }),
 	status: statusEnum('status').default('in-progress').notNull(),
-	createdAt: timestamp('createdAt').defaultNow().notNull()
+	createdAt: timestamp('created_at').defaultNow().notNull()
 });
 
 // questions table
@@ -165,7 +165,7 @@ export const answer = pgTable('answers', {
 	answer: text('answer').notNull(),
 	duration: integer('duration').default(0).notNull(),
 	videoUrl: text('video_url').default('').notNull(),
-	createdAt: timestamp('createdAt').defaultNow().notNull()
+	createdAt: timestamp('created_at').defaultNow().notNull()
 });
 
 // assessment table
