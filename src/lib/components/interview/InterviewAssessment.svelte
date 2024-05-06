@@ -262,7 +262,7 @@
 									<div
 										class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-base leading-6 text-secondary-foreground"
 									>
-										<p class="prose prose-sm max-w-none">{assessment?.feedback}</p>
+										<p class="max-w-none">{assessment?.feedback}</p>
 									</div>
 								</div>
 							</div>

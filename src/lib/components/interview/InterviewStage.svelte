@@ -710,7 +710,7 @@
 				<div
 					class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-base leading-6 text-secondary-foreground"
 				>
-					<p class="prose prose-sm max-w-none">{generatedFeedback}</p>
+					<p class="max-w-none">{generatedFeedback}</p>
 				</div>
 			</div>
 		</div>
