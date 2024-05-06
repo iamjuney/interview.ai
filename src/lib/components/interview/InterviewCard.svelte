@@ -66,15 +66,9 @@
 		</div>
 
 		<div class="mt-4 flex items-center space-x-2 text-sm font-medium lg:text-base">
-			<span
-				class="items -center
-            flex"
-			>
-				<div class="text-primary group-hover:text-secondary-foreground">
-					Read more
-					<div />
-				</div></span
-			>
+			<span class="flex items-center">
+				<div class="text-primary group-hover:text-secondary-foreground">Read more</div>
+			</span>
 		</div>
 	</div>
 </a>

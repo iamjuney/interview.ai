@@ -1,9 +1,8 @@
 <script lang="ts">
-	import { applyAction, enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
-	import { AlertDialog, Button, Input, NotFound } from '$lib/components';
+	import { enhance } from '$app/forms';
+	import { Input, NotFound } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { Inbox, Loader2, Pencil, Search, Timer, Trash } from 'lucide-svelte';
+	import { CheckCircle, FileQuestion, Gauge, Loader2, Search } from 'lucide-svelte';
 	import { CldImage } from 'svelte-cloudinary';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -16,7 +15,6 @@
 	let timeoutId = $state<NodeJS.Timeout>();
 	let isSearching = $state(false);
 	let failedSearchData = $state<Record<string, any>>();
-	let isSubmitting = $state(false);
 
 	$effect(() => {
 		animate = true;
@@ -107,21 +105,33 @@
 					class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
 				>
 					{#each users as user}
-						<div class="relative rounded-xl border p-4 shadow-sm transition duration-100">
+						<a
+							href="/admin/users/{user.id}"
+							data-sveltekit-preload-data
+							class="group relative cursor-pointer rounded-xl border p-4 shadow-sm transition duration-100 hover:bg-accent md:border-0 md:shadow-none"
+						>
 							<div
 								class="relative z-10 mb-4 grid min-h-32 w-full flex-shrink-0 place-items-center rounded-lg shadow-sm"
 							>
 								<div class="relative h-full w-full rounded-lg border bg-primary/10">
 									<div class="absolute right-4 top-4 z-20 size-12">
 										{#if user.image}
-											<CldImage
-												crop="fill"
-												width={48 * 4}
-												height={48 * 4}
-												src={user.image}
-												sizes="100vw"
-												alt="Description of my image"
-											/>
+											{#if user.image.includes('github')}
+												<img
+													class="size-12 rounded-full"
+													src={user.image}
+													alt="Photo of {user.first_name} {user.last_name}"
+												/>
+											{:else}
+												<CldImage
+													src={user.image}
+													crop="fill"
+													width={48 * 4}
+													height={48 * 4}
+													sizes="100vw"
+													alt="Photo of {user.first_name} {user.last_name}"
+												/>
+											{/if}
 										{:else}
 											<img src="/assets/poddle.webp" alt="avatar" class="size-12 rounded-full" />
 										{/if}
@@ -130,36 +140,33 @@
 										<p class="text-xl font-semibold">{user.first_name} {user.last_name}</p>
 										<div class="flex flex-row items-center">
 											<div class="h-4 w-[2px] bg-primary"></div>
-											<p class="ml-2 font-semibold">{user.email}</p>
+											<p class="ml-2 text-muted-foreground">{user.email}</p>
 										</div>
 									</div>
 								</div>
 							</div>
 							<div>
-								<div
-									class="mb-2 flex flex-col items-start space-y-2 text-sm font-medium lg:text-base"
-								>
+								<div class="mb-2 flex flex-col items-start space-y-2 text-sm lg:text-base">
 									<span class="flex items-center">
-										<Inbox class="mr-2 size-4 text-primary" />
+										<CheckCircle class="mr-2 size-4 text-primary" />
 										12 completed interviews
 									</span>
 									<span class="flex items-center">
-										<Timer class="mr-2 size-4 text-primary" />
+										<FileQuestion class="mr-2 size-4 text-primary" />
 										34 answered questions
 									</span>
 									<span class="flex items-center">
-										<Timer class="mr-2 size-4 text-primary" />
+										<Gauge class="mr-2 size-4 text-primary" />
 										98 average pronunciation score
 									</span>
 								</div>
-								<!-- <div class="mt-4 items-center">
-									<p class="w-full text-sm font-medium lg:text-base">Description</p>
-									<p class="mt-1 line-clamp-3 text-sm font-normal text-foreground/80">
-										{interview.description}
-									</p>
-								</div> -->
 							</div>
-						</div>
+							<div class="mt-4 flex items-center space-x-2 text-sm font-medium lg:text-base">
+								<span class="flex items-center">
+									<div class="text-primary group-hover:text-secondary-foreground">View more</div>
+								</span>
+							</div>
+						</a>
 					{/each}
 				</div>
 			{/if}
