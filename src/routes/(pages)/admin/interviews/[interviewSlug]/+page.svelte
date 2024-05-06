@@ -233,9 +233,16 @@
 					below.
 				</p>
 			</div>
+
 			{#each questions as question}
 				{@render questionCard(question)}
 			{/each}
+
+			<div class="mt-6">
+				<Button href="/admin/interviews/{interview.interviewSlug}/new-question" size="lg">
+					<span>Add New Question</span>
+				</Button>
+			</div>
 		</div>
 	</div>
 {/if}

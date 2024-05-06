@@ -4,11 +4,12 @@
 	import { AlertDialog, Button, Input, NotFound } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { Inbox, Loader2, Pencil, Search, Timer, Trash } from 'lucide-svelte';
+	import { CldImage } from 'svelte-cloudinary';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
 	let { data } = $props();
-	let interviews = $state(data.interviews);
+	let users = $state(data.users);
 	let animate = $state(false);
 	let searchForm = $state<HTMLFormElement>();
 	let query = $state('');
@@ -52,7 +53,7 @@
 			// if the result is a failure, set the failedSearchData to the result data
 			// else, set the interviews to the result data
 			if (result.type === 'failure') failedSearchData = result.data;
-			else if (result.type === 'success') interviews = result.data?.interviews;
+			else if (result.type === 'success') users = result.data?.users;
 
 			isSearching = false;
 		};
@@ -63,8 +64,7 @@
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
 		<div class="flex w-full flex-col gap-3">
 			<div class="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between">
-				<h2 class="text-3xl font-medium tracking-tight">Interviews</h2>
-				<Button size="lg" href="/admin/interviews">Create Custom Interview</Button>
+				<h2 class="text-3xl font-medium tracking-tight">Users</h2>
 			</div>
 		</div>
 
@@ -100,100 +100,64 @@
 				<p class="text-muted-foreground">{failedSearchData.message}</p>
 			{/if}
 
-			{#if interviews.length === 0}
+			{#if users.length === 0}
 				<NotFound message="No interviews found." />
 			{:else}
 				<div
 					class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
 				>
-					{#each interviews as interview}
+					{#each users as user}
 						<div class="relative rounded-xl border p-4 shadow-sm transition duration-100">
 							<div
 								class="relative z-10 mb-4 grid min-h-32 w-full flex-shrink-0 place-items-center rounded-lg shadow-sm"
 							>
 								<div class="relative h-full w-full rounded-lg border bg-primary/10">
-									<div class="absolute right-4 top-4 z-20 flex gap-2">
-										<Button
-											href="/admin/interviews/{interview.interviewSlug}"
-											class="hover:opacity-90"
-											size="icon"
-											title="Edit Interview"
-										>
-											<Pencil class="size-4" />
-										</Button>
-										<AlertDialog.Root>
-											<AlertDialog.Trigger>
-												<Button
-													class="group cursor-pointer"
-													variant="destructive"
-													size="icon"
-													title="Delete Interview"
-												>
-													<Trash class="size-4" />
-												</Button>
-											</AlertDialog.Trigger>
-											<AlertDialog.Content>
-												<AlertDialog.Header>
-													<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
-													<AlertDialog.Description>
-														This action cannot be undone. This will permanently <strong
-															>delete</strong
-														> this interview and all the data will be lost.
-													</AlertDialog.Description>
-												</AlertDialog.Header>
-												<AlertDialog.Footer>
-													<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-													<form
-														action="/admin/interviews?/delete"
-														use:enhance={() => {
-															isSubmitting = true;
-															return async ({ result }) => {
-																if (result.type === 'redirect') {
-																	goto(result.location);
-																} else {
-																	await applyAction(result);
-																}
-															};
-														}}
-														method="post"
-													>
-														<input type="hidden" name="interview_id" value={interview.id} />
-														<AlertDialog.Action
-															type="submit"
-															class="bg-destructive text-destructive-foreground hover:bg-destructive/80"
-															bind:disabled={isSubmitting}>Continue</AlertDialog.Action
-														>
-													</form>
-												</AlertDialog.Footer>
-											</AlertDialog.Content>
-										</AlertDialog.Root>
+									<div class="absolute right-4 top-4 z-20 size-12">
+										{#if user.image}
+											<CldImage
+												crop="fill"
+												width={48 * 4}
+												height={48 * 4}
+												src={user.image}
+												sizes="100vw"
+												alt="Description of my image"
+											/>
+										{:else}
+											<img src="/assets/poddle.webp" alt="avatar" class="size-12 rounded-full" />
+										{/if}
 									</div>
 									<div class="absolute bottom-2 left-4 right-4 top-8 flex flex-col gap-3">
+										<p class="text-xl font-semibold">{user.first_name} {user.last_name}</p>
 										<div class="flex flex-row items-center">
 											<div class="h-4 w-[2px] bg-primary"></div>
-											<p class="ml-2 font-semibold">{interview.difficulty}</p>
+											<p class="ml-2 font-semibold">{user.email}</p>
 										</div>
-										<p class="text-xl font-semibold">{interview.position}</p>
 									</div>
 								</div>
 							</div>
 							<div>
-								<div class="mb-2 flex items-center space-x-2 text-sm font-medium lg:text-base">
+								<div
+									class="mb-2 flex flex-col items-start space-y-2 text-sm font-medium lg:text-base"
+								>
 									<span class="flex items-center">
 										<Inbox class="mr-2 size-4 text-primary" />
-										{interview.questions.length} questions
+										12 completed interviews
 									</span>
 									<span class="flex items-center">
 										<Timer class="mr-2 size-4 text-primary" />
-										about {interview.duration} minutes
+										34 answered questions
+									</span>
+									<span class="flex items-center">
+										<Timer class="mr-2 size-4 text-primary" />
+										98 average pronunciation score
 									</span>
 								</div>
-								<div class="mt-4 items-center">
+								<!-- <div class="mt-4 items-center">
 									<p class="w-full text-sm font-medium lg:text-base">Description</p>
 									<p class="mt-1 line-clamp-3 text-sm font-normal text-foreground/80">
 										{interview.description}
 									</p>
-								</div>
+								</div> -->
 							</div>
 						</div>
 					{/each}
