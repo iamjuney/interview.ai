@@ -1,4 +1,5 @@
 import { db } from '$lib/db';
+import { error } from '@sveltejs/kit';
 import type { PageServerLoad } from './$types';
 
 export const load = (async ({ params }) => {
@@ -7,10 +8,7 @@ export const load = (async ({ params }) => {
 	});
 
 	if (!userDetails) {
-		return {
-			status: 404,
-			error: new Error('User not found')
-		};
+		return error(404, 'User not found');
 	}
 
 	return {

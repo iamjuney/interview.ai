@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Badge, Progress } from '$lib/components';
 	import type { Interview, Question } from '$lib/types';
-	import { Inbox, Timer } from 'lucide-svelte';
+	import { Inbox, MoveRight, Timer } from 'lucide-svelte';
 
 	let { interview, status } = $props<{ interview: Interview; status?: string }>();
 	let progress = $state(0);
@@ -67,7 +67,8 @@
 
 		<div class="mt-4 flex items-center space-x-2 text-sm font-medium lg:text-base">
 			<span class="flex items-center">
-				<div class="text-primary group-hover:text-secondary-foreground">Read more</div>
+				<span class="text-primary group-hover:text-secondary-foreground"> Read more </span>
+				<MoveRight class="ml-2 size-4 text-primary transition-all group-hover:ml-4" />
 			</span>
 		</div>
 	</div>

@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { Input, NotFound } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { CheckCircle, FileQuestion, Gauge, Loader2, Search } from 'lucide-svelte';
+	import { CheckCircle, FileQuestion, Gauge, Loader2, MoveRight, Search } from 'lucide-svelte';
 	import { CldImage } from 'svelte-cloudinary';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -163,7 +163,10 @@
 							</div>
 							<div class="mt-4 flex items-center space-x-2 text-sm font-medium lg:text-base">
 								<span class="flex items-center">
-									<div class="text-primary group-hover:text-secondary-foreground">View more</div>
+									<span class="text-primary group-hover:text-secondary-foreground">
+										View more
+									</span>
+									<MoveRight class="ml-2 size-4 text-primary transition-all group-hover:ml-4" />
 								</span>
 							</div>
 						</a>
