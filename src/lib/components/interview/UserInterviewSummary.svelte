@@ -1,10 +1,6 @@
 <script lang="ts">
-	import { enhance } from '$app/forms';
-	import { AlertDialog, Button, DoughnutChart, Progress, Tooltip } from '$lib/components';
-	import type { Answer, Question } from '$lib/types';
-	import { countMispronunciations, countMonotone, getWPM } from '$lib/utils';
-	import { HelpCircle, Loader2, Trash, X } from 'lucide-svelte';
-	import { CldVideoPlayer } from 'svelte-cloudinary';
+	import { Accordion, Button } from '$lib/components';
+	import { Gauge, X } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -50,169 +46,91 @@
 							</Button>
 
 							<div class="flex flex-col space-y-6">
-								<div class="flex flex-col">
-									<p class="mb-3 text-lg font-semibold">Recorded Answer</p>
-									<!-- Typescript error below is expected -->
-									<!-- <CldVideoPlayer
-										width={640}
-										height={480}
-										src={answer.videoUrl}
-										class="lg:rounded-xl"
-									/> -->
-								</div>
-								<div class="mx-auto flex w-full flex-col md:flex-row md:space-x-12">
-									<!-- <div class="flex flex-none flex-col">
-										<h2 class="mb-3 text-left text-lg font-semibold">
-											Pronunciation Score
-											<Tooltip.Root>
-												<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
-												<Tooltip.Content class="max-w-sm">
-													<p>
-														Overall score indicating the pronunciation quality of the given speech.
-														This is aggregated from AccuracyScore, FluencyScore, and ProsodyScore.
-													</p>
-												</Tooltip.Content>
-											</Tooltip.Root>
-										</h2>
-										<DoughnutChart score={assessment!.pronunciation_score} />
-									</div> -->
-
-									<!-- <div class="mt-12 grow md:mt-0">
-										<h2 class="text-lg font-semibold">Score breakdown</h2>
-										<div class="mt-3 flex flex-col space-y-6 text-sm font-medium">
-											<div class="flex flex-col gap-1">
-												<p class="flex items-center justify-between">
-													<span>
-														Accuracy score
-														<Tooltip.Root>
-															<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
-															<Tooltip.Content class="max-w-sm">
-																<p>
-																	Accuracy indicates how closely the phonemes match a native
-																	speaker's pronunciation. Word and full text accuracy scores are
-																	aggregated from phoneme-level accuracy score.
-																</p>
-															</Tooltip.Content>
-														</Tooltip.Root>
-													</span>
-
-													<span> {assessment?.accuracy_score} / 100</span>
-												</p>
-												<Progress class="w-full bg-gray-200" value={assessment?.accuracy_score} />
-											</div>
-											<div class="flex flex-col gap-1">
-												<p class="flex items-center justify-between">
-													<span>
-														Fluency score
-														<Tooltip.Root>
-															<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
-															<Tooltip.Content class="max-w-sm">
-																<p>
-																	Fluency indicates how closely the speech matches a native
-																	speaker's use of silent breaks between words.
-																</p>
-															</Tooltip.Content>
-														</Tooltip.Root>
-													</span>
-													<span> {assessment?.fluency_score} / 100</span>
-												</p>
-												<Progress class="w-full bg-gray-200" value={assessment?.fluency_score} />
-											</div>
-											<div class="flex flex-col gap-1">
-												<p class="flex items-center justify-between">
-													<span>
-														Prosody score
-														<Tooltip.Root>
-															<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
-															<Tooltip.Content class="max-w-sm">
-																<p>
-																	Prosody indicates how nature of the given speech, including
-																	stress, intonation, speaking speed and rhythm.
-																</p>
-															</Tooltip.Content>
-														</Tooltip.Root>
-													</span>
-													<span> {assessment?.prosody_score} / 100</span>
-												</p>
-												<Progress class="w-full bg-gray-200" value={assessment?.prosody_score} />
-											</div>
-											<div class="flex flex-col gap-1">
-												<p class="flex items-center justify-between">
-													<span>
-														WPM
-														<Tooltip.Root>
-															<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
-															<Tooltip.Content class="max-w-sm">
-																<p>
-																	WPM indicates the number of words spoken per minute. A great WPM
-																	during job interviews is around 120-150 WPM.
-																</p>
-															</Tooltip.Content>
-														</Tooltip.Root>
-													</span>
-													{#if answer?.answer}
-														<span> {getWPM(answer?.answer, answer?.duration)}</span>
-													{:else}
-														<span> 0</span>
-													{/if}
-												</p>
-											</div>
-										</div>
-									</div> -->
-								</div>
-								<div>
-									<!-- <div class="flex flex-col items-start justify-between md:flex-row">
-										<h2 class="text-left text-lg font-semibold">Transcript</h2>
-
-										<div class="flex gap-6 text-xs text-muted-foreground sm:text-sm">
-											<div class="flex items-center gap-2">
-												<div class="size-4 rounded bg-yellow-500"></div>
-												<p>
-													Mispronunciations: <span class="font-semibold text-foreground"
-														>{countMispronunciations(assessment!.data)}</span
-													>
-												</p>
-											</div>
-											<div class="flex items-center gap-2">
-												<div class="size-4 rounded bg-primary"></div>
-												<p>
-													Monotone: <span class="font-semibold text-foreground"
-														>{countMonotone(assessment!.data)}</span
-													>
-												</p>
-											</div>
-										</div>
-									</div> -->
-									<!-- <div
-										class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-base leading-6 text-secondary-foreground"
-									>
-										<p class="w-full whitespace-normal text-wrap">
-											{#each answer?.answer.split(' ') as word, idx}
-												{#if transcript[idx]?.errorType === 'Mispronunciation'}
-													<span
-														class="me-[3px] inline-block font-semibold underline decoration-yellow-500 decoration-2"
-														>{word}
-													</span>
-												{:else if transcript[idx]?.errorType === 'Monotone'}
-													<span
-														class="me-[3px] inline-block font-semibold underline decoration-primary decoration-wavy decoration-2"
-														>{word}
-													</span>
-												{:else}
-													<span class="me-[3px] inline-block">{word}</span>
-												{/if}
-											{/each}
-										</p>
-									</div> -->
-								</div>
+								<p class="text-xl font-semibold">Android App Developer</p>
+								<hr />
 
 								<div>
-									<h2 class="text-left text-lg font-semibold">Feedback</h2>
-									<div
-										class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-base leading-6 text-secondary-foreground"
-									>
-										<!-- <p class="prose prose-sm max-w-none">{assessment?.feedback}</p> -->
-									</div>
+									<h2 class="text-left text-xl font-semibold">
+										1. What attracted you to a career in Laravel development, and what are your
+										goals in this field?
+									</h2>
+									<Accordion.Root class="pl-6">
+										<Accordion.Item value="item-1">
+											<Accordion.Trigger class="text-start text-lg">Recording (1)</Accordion.Trigger
+											>
+											<Accordion.Content class="pl-6">
+												<div>
+													<h2 class="text-left font-semibold">Speech Assessment Scores</h2>
+													<div class="mt-3 grid grid-cols-3 gap-2 text-sm">
+														<div class="flex items-center gap-2">
+															<Gauge class="size-4 text-primary" />
+															<span class="font-medium">88</span>
+															<span>Pronunciation Score</span>
+														</div>
+														<div class="flex items-center gap-2">
+															<Gauge class="size-4 text-primary" />
+															<span class="font-medium">78</span>
+
+															<span>Clarity Score</span>
+														</div>
+														<div class="flex items-center gap-2">
+															<Gauge class="size-4 text-primary" />
+															<span class="font-medium">120</span>
+															<span>WPM</span>
+														</div>
+														<div class="flex items-center gap-2">
+															<Gauge class="size-4 text-primary" />
+															<span class="font-medium">56</span>
+															<span>Fluency Score</span>
+														</div>
+														<div class="flex items-center gap-2">
+															<Gauge class="size-4 text-primary" />
+															<span class="font-medium">67</span>
+															<span>Prosody Score</span>
+														</div>
+													</div>
+												</div>
+												<div>
+													<h2 class="text-left font-semibold">User Transcript</h2>
+													<div
+														class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-sm leading-6 text-secondary-foreground"
+													>
+														<p>
+															As someone deeply passionate about web development, Laravel's elegant
+															syntax and expressive design principles instantly drew me in. The
+															framework's emphasis on pragmatic simplicity while offering robust
+															features resonates with my desire to craft efficient and maintainable
+															applications. My goal is to become a versatile Laravel developer,
+															proficient in building scalable and secure web applications. I aim to
+															continuously expand my knowledge of Laravel's ecosystem, including its
+															ORM, routing, and testing capabilities. Ultimately, I aspire to
+															contribute to open-source Laravel projects and share my expertise with
+															the community.
+														</p>
+													</div>
+												</div>
+
+												<div>
+													<h2 class="text-left font-semibold">Feedback</h2>
+													<div
+														class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-sm leading-6 text-secondary-foreground"
+													>
+														<p>
+															The candidate provided a strong response that highlights their passion
+															for web development, appreciation for Laravel's features, and clear
+															career goals within the field. To further improve, consider mentioning
+															specific projects or experiences that have shaped your interest in
+															Laravel development. Additionally, you could elaborate on how you plan
+															to stay updated with the latest trends and advancements in the Laravel
+															ecosystem. Your response can be enhanced by providing concrete
+															examples of how you plan to contribute to open-source Laravel projects
+															and engage with the community.
+														</p>
+													</div>
+												</div>
+											</Accordion.Content>
+										</Accordion.Item>
+									</Accordion.Root>
 								</div>
 							</div>
 						</div>

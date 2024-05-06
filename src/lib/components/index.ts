@@ -15,13 +15,13 @@ export { default as MobileSideBar } from './navigation/MobileSideBar.svelte';
 export { default as BarChart } from './interview/BarChart.svelte';
 export { default as DoughnutChart } from './interview/DoughnutChart.svelte';
 export { default as InterviewAssessment } from './interview/InterviewAssessment.svelte';
-export { default as UserInterviewSummary } from './interview/UserInterviewSummary.svelte';
 export { default as InterviewCard } from './interview/InterviewCard.svelte';
 export { default as InterviewStage } from './interview/InterviewStage.svelte';
 export { default as LineGraph } from './interview/LineGraph.svelte';
 export { default as Metric } from './interview/Metric.svelte';
 export { default as NotFound } from './interview/NotFound.svelte';
 export { default as Onboarding } from './interview/Onboarding.svelte';
+export { default as UserInterviewSummary } from './interview/UserInterviewSummary.svelte';
 
 /* Layout */
 export { default as LayoutBackground } from './layout/LayoutBackground.svelte';
@@ -33,6 +33,7 @@ export { default as SecondaryFeaturesSection } from './section/SecondaryFeatures
 export { default as TestimonialsSection } from './section/TestimonialsSection.svelte';
 
 /* Shadcn UI */
+export * as Accordion from './ui/accordion';
 export * as Alert from './ui/alert';
 export * as AlertDialog from './ui/alert-dialog';
 export { Badge } from './ui/badge';
