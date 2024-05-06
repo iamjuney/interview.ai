@@ -99,7 +99,7 @@
 			{/if}
 
 			{#if users.length === 0}
-				<NotFound message="No interviews found." />
+				<NotFound message="No users found." />
 			{:else}
 				<div
 					class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
