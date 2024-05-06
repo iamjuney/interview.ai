@@ -129,7 +129,7 @@
 					data-sveltekit-preload-data
 				>
 					<ArrowLeft size="20" class="text-muted-foreground group-hover:text-foreground" />
-					<p class="text-muted-foreground group-hover:text-foreground">Back to interviews</p>
+					<p class="text-muted-foreground group-hover:text-foreground">Back to all interviews</p>
 				</a>
 			</div>
 		</div>

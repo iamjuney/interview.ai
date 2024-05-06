@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { Input, NotFound } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
-	import { CheckCircle, FileQuestion, Gauge, Loader2, MoveRight, Search } from 'lucide-svelte';
+	import { CheckCircle, FileQuestion, Loader2, MoveRight, Search } from 'lucide-svelte';
 	import { CldImage } from 'svelte-cloudinary';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -154,10 +154,6 @@
 									<span class="flex items-center">
 										<FileQuestion class="mr-2 size-4 text-primary" />
 										34 answered questions
-									</span>
-									<span class="flex items-center">
-										<Gauge class="mr-2 size-4 text-primary" />
-										98 average pronunciation score
 									</span>
 								</div>
 							</div>

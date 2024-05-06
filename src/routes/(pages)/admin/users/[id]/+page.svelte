@@ -3,6 +3,7 @@
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 	import { Badge } from '$lib/components';
+	import { CldImage } from 'svelte-cloudinary';
 
 	let { data } = $props();
 	let user = $state(data.userDetails);
@@ -33,7 +34,7 @@
 			<div class="flex items-center">
 				<a href="/admin/users" class="group flex items-center gap-2" data-sveltekit-preload-data>
 					<ArrowLeft size="20" class="text-muted-foreground group-hover:text-foreground" />
-					<p class="text-muted-foreground group-hover:text-foreground">Back to users</p>
+					<p class="text-muted-foreground group-hover:text-foreground">Back to all users</p>
 				</a>
 			</div>
 		</div>
@@ -45,11 +46,26 @@
 				class="col-span-1 flex items-center justify-center rounded-lg border bg-gradient-to-br from-primary/30 to-secondary shadow"
 			>
 				<div class="flex items-center space-x-4">
-					<span class="relative flex h-16 w-16 shrink-0 overflow-hidden rounded-full"
-						><span class="flex h-full w-full items-center justify-center rounded-full bg-muted"
-							>JP</span
-						></span
-					>
+					{#if user.image}
+						{#if user.image.includes('github')}
+							<img
+								class="size-16 rounded-full"
+								src={user.image}
+								alt="Photo of {user.first_name} {user.last_name}"
+							/>
+						{:else}
+							<CldImage
+								src={user.image}
+								crop="fill"
+								width={64 * 4}
+								height={64 * 4}
+								sizes="100vw"
+								alt="Photo of {user.first_name} {user.last_name}"
+							/>
+						{/if}
+					{:else}
+						<img src="/assets/poddle.webp" alt="avatar" class="size-12 rounded-full" />
+					{/if}
 					<div>
 						<h2 class="text-xl font-semibold">{user.first_name} {user.last_name}</h2>
 						<div class="flex flex-row items-center">

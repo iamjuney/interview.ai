@@ -5,58 +5,15 @@ import { error } from '@sveltejs/kit';
 import { eq, notInArray, sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
-// Function to convert the duration of the answers to a readable format
+// Function to convert the duration of the answers to a readable format (ex. 1hrs 3m 45s)
 function readableDuration(duration: number) {
 	const hours = Math.floor(duration / 3600);
 	const minutes = Math.floor((duration % 3600) / 60);
+	const seconds = duration % 60;
 	return (
-		`${hours ? `${hours} hour(s)` : ''} ${minutes ? `${minutes} min(s)` : ''}`.trim() || '0 min(s)'
+		`${hours ? `${hours} h` : ''} ${minutes ? `${minutes} m` : ''} ${seconds ? `${seconds} s` : ''}`.trim() ||
+		'0 s'
 	);
-}
-
-// Function to calculate the daily streak (eg. 5 days)
-function calculateDailyStreak(answers: Answer[]) {
-	// return if the user has not answered any questions
-	if (answers.length === 0) {
-		return 0;
-	}
-
-	// get all the dates of the answers
-	const dates = [];
-	for (let i = 0; i < answers.length; i++) {
-		dates.push(new Date(answers[i].createdAt).toDateString());
-	}
-
-	// get the unique dates
-	const uniqueDates = [...new Set(dates)];
-
-	// sort the unique dates
-	uniqueDates.sort();
-
-	// get the current date
-	const currentDate = new Date().toDateString();
-
-	// get the last date
-	const lastDate = new Date(answers[answers.length - 1].createdAt).toDateString();
-
-	// check if the user has answered today
-	const answeredToday = currentDate === lastDate;
-
-	if (!answeredToday) {
-		return 0;
-	}
-
-	// loop through the unique dates from current date decreasingly and check if the user has answered on each day and count
-	let streak = 0;
-	for (let i = uniqueDates.length - 1; i >= 0; i--) {
-		if (uniqueDates[i] === currentDate) {
-			streak++;
-		} else {
-			break;
-		}
-	}
-
-	return streak;
 }
 
 export const load = (async ({ locals }) => {
@@ -69,7 +26,20 @@ export const load = (async ({ locals }) => {
 
 	// Get count of completed interviews
 	const userInterviews = await db.query.userInterview.findMany({
-		where: eq(userInterview.userId, userId)
+		where: eq(userInterview.userId, userId),
+		with: {
+			interview: {
+				with: {
+					questions: {
+						with: {
+							answers: {
+								where: eq(answer.userId, userId)
+							}
+						}
+					}
+				}
+			}
+		}
 	});
 
 	if (userInterviews.length === 0) {
@@ -84,8 +54,9 @@ export const load = (async ({ locals }) => {
 		return {
 			suggestedInterviews: suggestedInterviews as Interview[],
 			completed: 0,
-			interviewTime: '0 min(s)',
-			dailyStreak: 0
+			in_progress: 0,
+			totalQuestionsAnswered: 0,
+			averageAnswerDuration: 0
 		};
 	}
 
@@ -96,6 +67,8 @@ export const load = (async ({ locals }) => {
 			completed++;
 		}
 	}
+
+	const in_progress = userInterviews.length - completed;
 
 	// This is a query to the database to get a random interview with its questions
 	const suggestedInterviews = (await db.query.interview.findMany({
@@ -110,29 +83,28 @@ export const load = (async ({ locals }) => {
 		orderBy: sql`RANDOM()`
 	})) as Interview[];
 
-	// Get the duration of the answers
-	const answers = (await db.query.answer.findMany({
-		columns: {
-			duration: true,
-			createdAt: true
-		},
-		with: {
-			assessment: true
-		},
-		where: eq(answer.userId, userId)
-	})) as Answer[];
+	let totalQuestionsAnswered = 0;
+	let totalAnswerDuration = 0;
 
-	// Calculate the total duration of the answers
-	const totalDuration = answers.reduce((acc, answer) => acc + answer.duration, 0);
-	const interviewTime = readableDuration(totalDuration);
+	for (let i = 0; i < userInterviews.length; i++) {
+		for (let j = 0; j < userInterviews[i].interview.questions.length; j++) {
+			if (userInterviews[i].interview.questions[j].answers.length > 0) {
+				totalQuestionsAnswered++;
 
-	// Calculate the daily streak
-	const dailyStreak = calculateDailyStreak(answers);
+				for (let k = 0; k < userInterviews[i].interview.questions[j].answers.length; k++) {
+					totalAnswerDuration += userInterviews[i].interview.questions[j].answers[k].duration;
+				}
+			}
+		}
+	}
+
+	const averageAnswerDuration = readableDuration(totalAnswerDuration);
 
 	return {
 		suggestedInterviews,
 		completed,
-		interviewTime,
-		dailyStreak
+		in_progress,
+		totalQuestionsAnswered,
+		averageAnswerDuration
 	};
 }) satisfies PageServerLoad;
