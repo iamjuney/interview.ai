@@ -1,16 +1,23 @@
 <script lang="ts">
-	import { page } from '$app/stores';
-	import { Button, InterviewAssessment, NotFound } from '$lib/components';
-	import type { Answer } from '$lib/types.js';
-	import { ArrowLeft } from 'lucide-svelte';
-	import { CldVideoPlayer } from 'svelte-cloudinary';
+	import { applyAction, enhance } from '$app/forms';
+	import { Button, Label, Input, Textarea } from '$lib/components';
+	import type { Question } from '$lib/types';
+	import type { SubmitFunction } from '@sveltejs/kit';
+	import { ArrowLeft, Loader2, XCircle } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
+	import { page } from '$app/stores';
+	import slugify from 'slugify';
+	import { CldUploadButton } from 'svelte-cloudinary';
 
 	let { data } = $props();
 	let animate = $state(false);
-	let isOpen = $state(false);
-	let selectedAnswer = $state<Answer>();
+	let isUpdateQuestionSubmitting = $state(false);
+	let failedUpdateQuestion = $state<Record<string, any>>();
+
+	let question = $state(data.questionDetails.question);
+	let slug = $derived(slugGenerator(question));
+	let videoUrl = $state(data.questionDetails.videoUrl);
 
 	$effect(() => {
 		animate = true;
@@ -22,100 +29,98 @@
 		easing: backOut
 	};
 
-	function readableDate(date: Date) {
-		return new Date(date).toLocaleDateString('en-US', {
-			year: 'numeric',
-			month: 'long',
-			day: 'numeric'
+	const handleUpdateQuestionSubmit: SubmitFunction = async () => {
+		isUpdateQuestionSubmitting = true;
+
+		return async ({ result }) => {
+			if (result.type === 'failure') {
+				failedUpdateQuestion = result.data;
+				isUpdateQuestionSubmitting = false;
+				return;
+			}
+			await applyAction(result);
+		};
+	};
+
+	function slugGenerator(str: string) {
+		return slugify(str, {
+			lower: true,
+			strict: true
 		});
 	}
-
-	function readableTime(duration: number) {
-		const minutes = Math.floor(duration / 60);
-		const seconds = duration % 60;
-		return `${minutes}:${seconds}`;
-	}
 </script>
-
-{#if selectedAnswer}
-	<InterviewAssessment bind:isOpen answer={selectedAnswer} question={data.questionDetails} />
-{/if}
 
 {#if animate}
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
 		<div class="flex w-full flex-col gap-3">
 			<div class="flex items-center">
 				<a
-					href="/app/interviews/{$page.params.interviewSlug}"
-					data-sveltekit-preload-data
+					href="/admin/interviews/{$page.params.interviewSlug}"
 					class="group flex items-center gap-2"
+					data-sveltekit-preload-data
 				>
 					<ArrowLeft size="20" class="text-muted-foreground group-hover:text-foreground" />
 					<p class="text-muted-foreground group-hover:text-foreground">Back to interview</p>
 				</a>
 			</div>
-
-			<div class="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between">
-				<h2 class="max-w-3xl text-3xl font-medium tracking-tight">
-					{data.questionDetails?.question}
-				</h2>
-				<Button
-					size="lg"
-					href="/app/interviews/{$page.params.interviewSlug}/questions/{data.questionDetails
-						?.slug}/record"
-					data-sveltekit-preload-data="hover">Record New Answer</Button
-				>
-			</div>
 		</div>
 
-		<div class="h-full w-full">
-			<h4 class="text-lg font-semibold">Recordings & Feedback</h4>
+		<h1 class="truncate text-3xl font-medium tracking-tight">Edit Question</h1>
 
-			{#if data.answers.length === 0}
-				<NotFound message="No recordings available." />
-			{:else}
-				<div
-					class="mt-3 grid grid-cols-1 gap-3 sm:grid-cols-2 md:grid-cols-2 lg:grid-cols-2 xl:grid-cols-3"
-				>
-					{#each data.answers as answer (answer.id)}
-						<button
-							onclick={() => {
-								isOpen = true;
-								selectedAnswer = answer;
-							}}
-							class="group relative cursor-pointer rounded-xl border border-input p-4 hover:bg-secondary"
-						>
-							<div class="relative mb-4 grid w-full flex-shrink-0 place-items-center rounded-lg">
-								<div class="relative h-full w-full rounded">
-									<CldVideoPlayer
-										width={326}
-										height={244}
-										controls={false}
-										src={answer.videoUrl}
-										class="rounded-xl"
-									/>
-									<div
-										class="absolute right-2 top-2 z-30 flex items-center justify-center rounded bg-gray-900 bg-opacity-50 px-1.5 py-0.5 text-[11px] font-medium text-white"
-									>
-										{readableTime(answer.duration)}
-									</div>
-								</div>
-							</div>
-							<div class="flex items-center justify-between">
-								<div class="flex flex-col text-start">
-									<p class="font-semibold">
-										<span>Overall Score: </span>
-										<span> {answer.assessment?.pronunciation_score}</span>
-									</p>
-									<p class="text-sm">
-										Recorded on {readableDate(answer.createdAt)}
-									</p>
-								</div>
-							</div>
-						</button>
-					{/each}
+		<div class="max-w-xl space-y-2">
+			<h2 class="truncate text-xl font-medium tracking-tight">Question Details</h2>
+			<p class="text-muted-foreground">Edit the details of the question below.</p>
+
+			{#if failedUpdateQuestion}
+				<div class="flex items-center justify-center text-destructive">
+					<XCircle class="mr-2 size-4 " />
+					<span class="text-sm">{failedUpdateQuestion.message}</span>
 				</div>
 			{/if}
+
+			<form
+				class="max-w-xl"
+				action="/admin/questions?/updateQuestion"
+				method="post"
+				use:enhance={handleUpdateQuestionSubmit}
+			>
+				<input type="hidden" id="question_id" name="question_id" value={data.questionDetails.id} />
+
+				<div class="mt-6 grid gap-3">
+					<Label for="question">Question</Label>
+					<Textarea id="question" class="min-h-24" name="question" bind:value={question} required />
+				</div>
+
+				<div class="mt-6 grid gap-3">
+					<Label for="slug">Slug (Auto-generated)</Label>
+					<Textarea id="slug" class="min-h-24" name="slug" value={slug} required disabled />
+				</div>
+
+				<div class="mt-6 grid gap-3">
+					<Label for="videoUrl">Video URL (Auto-generated)</Label>
+					<div class="flex items-center justify-between gap-3">
+						<Input class="grow" id="videoUrl" name="videoUrl" value={videoUrl} required disabled />
+						<CldUploadButton
+							class="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-full bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm transition-colors hover:bg-secondary/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
+							uploadPreset="<Upload Preset>">Upload new video</CldUploadButton
+						>
+					</div>
+					<div></div>
+				</div>
+
+				<div class="mt-6">
+					<Button type="submit" size="lg" bind:disabled={isUpdateQuestionSubmitting}>
+						{#if isUpdateQuestionSubmitting}
+							<span class="flex items-center space-x-2">
+								<span>Saving...</span>
+								<Loader2 class="size-4 animate-spin" />
+							</span>
+						{:else}
+							<span>Save Changes</span>
+						{/if}
+					</Button>
+				</div>
+			</form>
 		</div>
 	</div>
 {/if}

@@ -1,32 +1,21 @@
 import { db } from '$lib/db';
-import { question, user, answer } from '$lib/db/schema';
-import { and, eq } from 'drizzle-orm';
-import type { PageServerLoad } from './$types';
-import type { Answer } from '$lib/types';
+import { question } from '$lib/db/schema';
 import { error } from '@sveltejs/kit';
+import { eq } from 'drizzle-orm';
+import type { PageServerLoad } from './$types';
 
-export const load = (async ({ params, locals }) => {
+export const load = (async ({ params }) => {
 	const slug = params.slug;
-	const session = await locals.auth.validate();
-	const userId = session?.user.userId;
-
-	if (!userId) {
-		error(401, 'Unauthorized');
-	}
 
 	const questionDetails = await db.query.question.findFirst({
 		where: eq(question.slug, slug)
 	});
 
-	const answers = (await db.query.answer.findMany({
-		with: {
-			assessment: true
-		},
-		where: and(eq(answer.questionId, questionDetails!.id), eq(answer.userId, userId))
-	})) as Answer[];
+	if (!questionDetails) {
+		return error(404, 'Question not found');
+	}
 
 	return {
-		questionDetails,
-		answers
+		questionDetails
 	};
 }) satisfies PageServerLoad;

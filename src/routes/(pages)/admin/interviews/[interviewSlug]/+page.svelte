@@ -1,7 +1,6 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
 	import { goto } from '$app/navigation';
-	import { page } from '$app/stores';
 	import { AlertDialog, Button, Input, Label, Select, Textarea } from '$lib/components';
 	import type { Question } from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
@@ -55,7 +54,7 @@
 	}
 </script>
 
-{#snippet questionCard(q:Question)}
+{#snippet questionCard(q: Question)}
 	<div
 		class="mb-2 flex w-full items-center justify-between rounded-md border border-border p-3 font-medium"
 	>
@@ -168,7 +167,7 @@
 					</div>
 
 					<div class="col-span-12 grid gap-3 sm:col-span-6">
-						<Label for="interview_slug">Interview Slug</Label>
+						<Label for="interview_slug">Interview Slug (Auto-generated)</Label>
 						<Input
 							id="interview_slug"
 							name="interview_slug"
