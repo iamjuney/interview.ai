@@ -40,13 +40,14 @@
 					<p class="text-muted-foreground group-hover:text-foreground">Back to all users</p>
 				</a>
 			</div>
+			<div class="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between">
+				<h2 class="text-3xl font-medium tracking-tight">User Data</h2>
+			</div>
 		</div>
-
-		<h1 class="truncate text-3xl font-medium tracking-tight">User Data</h1>
 
 		<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
 			<div
-				class="flex items-center justify-center py-4 rounded-lg border bg-gradient-to-br from-primary/30 to-secondary shadow"
+				class="flex items-center justify-center rounded-lg border bg-gradient-to-br from-primary/30 to-secondary py-4 shadow"
 			>
 				<div class="flex items-center space-x-4">
 					{#if user.image}
@@ -83,7 +84,7 @@
 				</div>
 			</div>
 
-			<div class="md:col-span-2 rounded-lg">
+			<div class="rounded-lg md:col-span-2">
 				<h2 class="mb-4 text-xl font-medium tracking-tight">Statistics</h2>
 				<div class="grid grid-cols-2 gap-4 md:grid-cols-4">
 					<div class="rounded-lg border bg-background p-4 shadow">

@@ -106,7 +106,7 @@
 				>
 					<label for="query" class="sr-only">Search</label>
 					<div class="relative">
-						<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-0">
+						<div class="pointer-events-none absolute inset-y-0 left-0 flex items-center pl-3">
 							{#if isSearching}
 								<Loader2 size="20" class="animate-spin text-muted-foreground" />
 							{:else}
@@ -118,7 +118,7 @@
 							oninput={handleInput}
 							id="query"
 							name="query"
-							class="max-w-sm border-0 pl-8 text-base"
+							class="max-w-sm border-0 bg-transparent pl-12 text-base"
 							placeholder="Search"
 						/>
 					</div>

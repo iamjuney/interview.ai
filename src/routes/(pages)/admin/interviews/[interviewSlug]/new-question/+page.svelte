@@ -61,9 +61,10 @@
 					<p class="text-muted-foreground group-hover:text-foreground">Back to interview</p>
 				</a>
 			</div>
+			<div class="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between">
+				<h2 class="text-3xl font-medium tracking-tight">New Question</h2>
+			</div>
 		</div>
-
-		<h1 class="truncate text-3xl font-medium tracking-tight">New Question</h1>
 
 		<div class="max-w-xl space-y-2">
 			<h2 class="truncate text-xl font-medium tracking-tight">Question Details</h2>
