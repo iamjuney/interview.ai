@@ -13,9 +13,13 @@ export const load = (async () => {
 			first_name: true,
 			last_name: true,
 			email: true,
-			image: true
+			image: true,
+			createdAt: true
 		}
 	});
+
+	let completed = 0;
+	let totalQuestionsAnswered = 0;
 
 	return {
 		users

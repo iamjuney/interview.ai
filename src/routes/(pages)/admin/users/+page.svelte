@@ -56,6 +56,14 @@
 			isSearching = false;
 		};
 	};
+
+	function readableDate(date: Date) {
+		return new Date(date).toLocaleDateString('en-US', {
+			year: 'numeric',
+			month: 'long',
+			day: 'numeric'
+		});
+	}
 </script>
 
 {#if animate}
@@ -136,25 +144,20 @@
 											<img src="/assets/poddle.webp" alt="avatar" class="size-12 rounded-full" />
 										{/if}
 									</div>
-									<div class="absolute bottom-2 left-4 right-4 top-8 flex flex-col gap-3">
+									<div class="absolute bottom-2 left-4 right-4 top-4 flex flex-col gap-3">
 										<p class="text-xl font-semibold">{user.first_name} {user.last_name}</p>
-										<div class="flex flex-row items-center">
-											<div class="h-4 w-[2px] bg-primary"></div>
-											<p class="ml-2 text-muted-foreground">{user.email}</p>
+										<div>
+											<div class="flex flex-row items-center">
+												<div class="h-4 w-[2px] bg-primary"></div>
+												<p class="ml-2 text-muted-foreground">{user.email}</p>
+											</div>
+											{#if user.createdAt}
+												<p class="text-muted-foreground">
+													Joined on {readableDate(user.createdAt)}
+												</p>
+											{/if}
 										</div>
 									</div>
-								</div>
-							</div>
-							<div>
-								<div class="mb-2 flex flex-col items-start space-y-2 text-sm lg:text-base">
-									<span class="flex items-center">
-										<CheckCircle class="mr-2 size-4 text-primary" />
-										12 completed interviews
-									</span>
-									<span class="flex items-center">
-										<FileQuestion class="mr-2 size-4 text-primary" />
-										34 answered questions
-									</span>
 								</div>
 							</div>
 							<div class="mt-4 flex items-center space-x-2 text-sm font-medium lg:text-base">
