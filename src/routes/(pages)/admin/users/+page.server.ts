@@ -18,9 +18,6 @@ export const load = (async () => {
 		}
 	});
 
-	let completed = 0;
-	let totalQuestionsAnswered = 0;
-
 	return {
 		users
 	};
