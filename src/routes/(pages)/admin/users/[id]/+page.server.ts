@@ -22,6 +22,9 @@ export const load = (async ({ params }) => {
 					questions: {
 						with: {
 							answers: {
+								with: {
+									assessment: true
+								},
 								where: eq(answer.userId, userDetails.id)
 							}
 						}

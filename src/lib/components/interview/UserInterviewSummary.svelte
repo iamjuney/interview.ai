@@ -4,6 +4,7 @@
 	import { Gauge, X } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
+	import { countMispronunciations, countMonotone, getWPM } from '$lib/utils';
 
 	const flyOptions = {
 		x: 30,
@@ -54,92 +55,92 @@
 							</Button>
 
 							<div class="flex flex-col space-y-6">
-								<p class="text-xl font-semibold">Android App Developer</p>
+								<p class="text-xl font-semibold">{userInterview.interview?.position}</p>
 								<hr />
 
-								<div>
-									<h2 class="text-left text-xl font-semibold">
-										1. What attracted you to a career in Laravel development, and what are your
-										goals in this field?
-									</h2>
-									<Accordion.Root class="pl-6">
-										<Accordion.Item value="item-1">
-											<Accordion.Trigger class="text-start text-lg">Recording (1)</Accordion.Trigger
-											>
-											<Accordion.Content class="pl-6">
-												<div>
-													<h2 class="text-left font-semibold">Speech Assessment Scores</h2>
-													<div class="mt-3 grid grid-cols-3 gap-2 text-sm">
-														<div class="flex items-center gap-2">
-															<Gauge class="size-4 text-primary" />
-															<span class="font-medium">88</span>
-															<span>Pronunciation Score</span>
-														</div>
-														<div class="flex items-center gap-2">
-															<Gauge class="size-4 text-primary" />
-															<span class="font-medium">78</span>
+								{#each userInterview.interview!.questions as question}
+									{#if question.answers && question.answers.length > 0}
+										<div>
+											<h2 class="text-left text-xl font-semibold">
+												{question.question}
+											</h2>
 
-															<span>Clarity Score</span>
-														</div>
-														<div class="flex items-center gap-2">
-															<Gauge class="size-4 text-primary" />
-															<span class="font-medium">120</span>
-															<span>WPM</span>
-														</div>
-														<div class="flex items-center gap-2">
-															<Gauge class="size-4 text-primary" />
-															<span class="font-medium">56</span>
-															<span>Fluency Score</span>
-														</div>
-														<div class="flex items-center gap-2">
-															<Gauge class="size-4 text-primary" />
-															<span class="font-medium">67</span>
-															<span>Prosody Score</span>
-														</div>
-													</div>
-												</div>
-												<div>
-													<h2 class="text-left font-semibold">User Transcript</h2>
-													<div
-														class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-sm leading-6 text-secondary-foreground"
-													>
-														<p>
-															As someone deeply passionate about web development, Laravel's elegant
-															syntax and expressive design principles instantly drew me in. The
-															framework's emphasis on pragmatic simplicity while offering robust
-															features resonates with my desire to craft efficient and maintainable
-															applications. My goal is to become a versatile Laravel developer,
-															proficient in building scalable and secure web applications. I aim to
-															continuously expand my knowledge of Laravel's ecosystem, including its
-															ORM, routing, and testing capabilities. Ultimately, I aspire to
-															contribute to open-source Laravel projects and share my expertise with
-															the community.
-														</p>
-													</div>
-												</div>
+											{#each question.answers as answer, idx}
+												<Accordion.Root class="pl-6">
+													<Accordion.Item value="item-1">
+														<Accordion.Trigger class="text-start text-lg"
+															>Recording ({idx + 1})</Accordion.Trigger
+														>
+														<Accordion.Content class="pl-6">
+															<div>
+																<h2 class="text-left font-semibold">Speech Assessment Scores</h2>
+																<div class="mt-3 grid grid-cols-3 gap-2 text-sm">
+																	<div class="flex items-center gap-2">
+																		<Gauge class="size-4 text-primary" />
+																		<span class="font-medium"
+																			>{answer.assessment?.pronunciation_score}</span
+																		>
+																		<span>Pronunciation Score</span>
+																	</div>
+																	<div class="flex items-center gap-2">
+																		<Gauge class="size-4 text-primary" />
+																		<span class="font-medium"
+																			>{answer.assessment?.accuracy_score}</span
+																		>
 
-												<div>
-													<h2 class="text-left font-semibold">Feedback</h2>
-													<div
-														class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-sm leading-6 text-secondary-foreground"
-													>
-														<p>
-															The candidate provided a strong response that highlights their passion
-															for web development, appreciation for Laravel's features, and clear
-															career goals within the field. To further improve, consider mentioning
-															specific projects or experiences that have shaped your interest in
-															Laravel development. Additionally, you could elaborate on how you plan
-															to stay updated with the latest trends and advancements in the Laravel
-															ecosystem. Your response can be enhanced by providing concrete
-															examples of how you plan to contribute to open-source Laravel projects
-															and engage with the community.
-														</p>
-													</div>
-												</div>
-											</Accordion.Content>
-										</Accordion.Item>
-									</Accordion.Root>
-								</div>
+																		<span>Clarity Score</span>
+																	</div>
+																	<div class="flex items-center gap-2">
+																		<Gauge class="size-4 text-primary" />
+																		<span class="font-medium">
+																			{getWPM(answer?.answer, answer?.duration)}
+																		</span>
+																		<span>WPM</span>
+																	</div>
+																	<div class="flex items-center gap-2">
+																		<Gauge class="size-4 text-primary" />
+																		<span class="font-medium"
+																			>{answer.assessment?.fluency_score}</span
+																		>
+																		<span>Fluency Score</span>
+																	</div>
+																	<div class="flex items-center gap-2">
+																		<Gauge class="size-4 text-primary" />
+																		<span class="font-medium"
+																			>{answer.assessment?.prosody_score}</span
+																		>
+																		<span>Prosody Score</span>
+																	</div>
+																</div>
+															</div>
+															<div>
+																<h2 class="text-left font-semibold">User Transcript</h2>
+																<div
+																	class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-sm leading-6 text-secondary-foreground"
+																>
+																	<p>
+																		{answer.answer}
+																	</p>
+																</div>
+															</div>
+
+															<div>
+																<h2 class="text-left font-semibold">Feedback</h2>
+																<div
+																	class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-sm leading-6 text-secondary-foreground"
+																>
+																	<p>
+																		{answer.assessment?.feedback}
+																	</p>
+																</div>
+															</div>
+														</Accordion.Content>
+													</Accordion.Item>
+												</Accordion.Root>
+											{/each}
+										</div>
+									{/if}
+								{/each}
 							</div>
 						</div>
 					</div>
