@@ -1,7 +1,7 @@
 <script lang="ts">
 	import { Accordion, Button } from '$lib/components';
 	import type { UserInterview } from '$lib/types';
-	import { getWPM } from '$lib/utils';
+	import { getWPM, countMispronunciations } from '$lib/utils';
 	import { Gauge, X } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -63,20 +63,20 @@
 									{#each userInterview.interview.questions as question}
 										{#if question.answers && question.answers.length > 0}
 											<div>
-												<h2 class="text-left text-xl font-semibold">
+												<h2 class="text-left text-base font-semibold md:text-lg">
 													{question.question}
 												</h2>
 
 												{#each question.answers as answer, idx}
-													<Accordion.Root class="pl-6">
+													<Accordion.Root class="pl-3 md:pl-6">
 														<Accordion.Item value="item-1">
 															<Accordion.Trigger class="text-start text-lg"
 																>Recording ({idx + 1})</Accordion.Trigger
 															>
-															<Accordion.Content class="pl-6">
+															<Accordion.Content class="pl-3 md:pl-6">
 																<div>
 																	<h2 class="text-left font-semibold">Speech Assessment Scores</h2>
-																	<div class="mt-3 grid grid-cols-3 gap-2 text-sm">
+																	<div class="mt-3 grid grid-cols-2 gap-2 text-sm md:grid-cols-3">
 																		<div class="flex items-center gap-2">
 																			<Gauge class="size-4 text-primary" />
 																			<span class="font-medium"
@@ -115,13 +115,45 @@
 																		</div>
 																	</div>
 																</div>
+
 																<div>
-																	<h2 class="text-left font-semibold">User Transcript</h2>
+																	<div class="flex items-start justify-between">
+																		<h2 class="text-left font-semibold">User Transcript</h2>
+
+																		<div class="flex gap-6 text-muted-foreground sm:text-sm">
+																			<div class="flex items-center gap-2">
+																				<div class="size-4 rounded bg-yellow-500"></div>
+																				<p>
+																					Mispronunciations:
+																					{#if answer.assessment}
+																						<span class="font-semibold text-foreground"
+																							>{countMispronunciations(answer.assessment.data)}
+																						</span>
+																					{/if}
+																				</p>
+																			</div>
+																		</div>
+																	</div>
+
 																	<div
 																		class="mt-3 flex min-h-[100px] gap-2.5 rounded-lg bg-secondary p-4 text-sm leading-6 text-secondary-foreground"
 																	>
-																		<p>
+																		<!-- <p>
 																			{answer.answer}
+																		</p> -->
+																		<p class="w-full whitespace-normal text-wrap">
+																			{#if answer.assessment}
+																				{#each answer.answer.split(' ') as word, idx}
+																					{#if answer.assessment.data[idx]?.errorType === 'Mispronunciation'}
+																						<span
+																							class="me-[3px] inline-block font-semibold underline decoration-yellow-500 decoration-2"
+																							>{word}
+																						</span>
+																					{:else}
+																						<span class="me-[3px] inline-block">{word}</span>
+																					{/if}
+																				{/each}
+																			{/if}
 																		</p>
 																	</div>
 																</div>
