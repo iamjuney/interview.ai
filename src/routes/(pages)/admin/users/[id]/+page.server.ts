@@ -39,6 +39,7 @@ export const load = (async ({ params }) => {
 	let totalQuestionsAnswered = 0;
 	let totalAnswerDuration = 0;
 	let averageAnswerDuration = '0 s';
+	let totalAnswers = 0;
 
 	// Calculate the completed interviews
 	for (const userInterview of userInterviews) {
@@ -54,6 +55,7 @@ export const load = (async ({ params }) => {
 				totalQuestionsAnswered++;
 
 				for (const answer of question.answers) {
+					totalAnswers++;
 					totalAnswerDuration += answer.duration;
 				}
 			}
@@ -61,7 +63,7 @@ export const load = (async ({ params }) => {
 	}
 
 	in_progress = userInterviews.length - completed; // Calculate the in progress interviews
-	averageAnswerDuration = readableDuration(totalAnswerDuration); // Calculate the average answer duration
+	averageAnswerDuration = readableDuration(totalAnswerDuration / totalAnswers); // Calculate the average answer duration
 
 	return {
 		userDetails,
@@ -76,14 +78,7 @@ export const load = (async ({ params }) => {
 }) satisfies PageServerLoad;
 
 const readableDuration = (duration: number) => {
-	const hours = Math.floor(duration / 3600);
 	const minutes = Math.floor((duration % 3600) / 60);
 	const seconds = duration % 60;
-	return (
-		(
-			(hours ? hours + ' h ' : '') +
-			(minutes ? minutes + ' m ' : '') +
-			(seconds ? seconds + ' s' : '')
-		).trim() || '0 s'
-	);
+	return ((minutes ? minutes + ' m ' : '') + (seconds ? seconds + ' s' : '')).trim() || '0 s';
 };

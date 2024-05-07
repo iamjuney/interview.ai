@@ -31,7 +31,7 @@
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
 		<h2 class="truncate text-3xl font-medium tracking-tight">Dashboard</h2>
 
-		<div class="grid grid-cols-1 gap-6 xl:grid-cols-3" id="Statistics">
+		<div class="grid grid-cols-1 gap-4 xl:grid-cols-3" id="Statistics">
 			<div
 				class="flex items-center justify-center rounded-lg border bg-gradient-to-br from-primary/30 to-secondary py-4 shadow"
 			>

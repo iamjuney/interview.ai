@@ -5,20 +5,6 @@ import { error } from '@sveltejs/kit';
 import { eq, notInArray, sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
-// Function to convert the duration of the answers to a readable format (ex. 1hrs 3m 45s)
-function readableDuration(duration: number) {
-	const hours = Math.floor(duration / 3600);
-	const minutes = Math.floor((duration % 3600) / 60);
-	const seconds = duration % 60;
-	return (
-		(
-			(hours ? hours + ' h ' : '') +
-			(minutes ? minutes + ' m ' : '') +
-			(seconds ? seconds + ' s' : '')
-		).trim() || '0 s'
-	);
-}
-
 export const load = (async ({ locals }) => {
 	const session = await locals.auth.validate();
 	const userId = session?.user.userId;
@@ -88,6 +74,7 @@ export const load = (async ({ locals }) => {
 
 	let totalQuestionsAnswered = 0;
 	let totalAnswerDuration = 0;
+	let totalAnswers = 0;
 
 	for (const userInterview of userInterviews) {
 		for (const question of userInterview.interview.questions) {
@@ -95,13 +82,14 @@ export const load = (async ({ locals }) => {
 				totalQuestionsAnswered++;
 
 				for (const answer of question.answers) {
+					totalAnswers++;
 					totalAnswerDuration += answer.duration;
 				}
 			}
 		}
 	}
 
-	const averageAnswerDuration = readableDuration(totalAnswerDuration);
+	const averageAnswerDuration = readableDuration(totalAnswerDuration / totalAnswers);
 
 	return {
 		suggestedInterviews,
@@ -111,3 +99,9 @@ export const load = (async ({ locals }) => {
 		averageAnswerDuration
 	};
 }) satisfies PageServerLoad;
+
+const readableDuration = (duration: number) => {
+	const minutes = Math.floor((duration % 3600) / 60);
+	const seconds = duration % 60;
+	return ((minutes ? minutes + ' m ' : '') + (seconds ? seconds + ' s' : '')).trim() || '0 s';
+};
