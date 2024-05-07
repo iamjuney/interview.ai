@@ -1,6 +1,6 @@
 import { db } from '$lib/db';
 import { answer, interview, userInterview } from '$lib/db/schema';
-import type { Answer, Interview } from '$lib/types';
+import type { Interview } from '$lib/types';
 import { error } from '@sveltejs/kit';
 import { eq, notInArray, sql } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
@@ -11,8 +11,11 @@ function readableDuration(duration: number) {
 	const minutes = Math.floor((duration % 3600) / 60);
 	const seconds = duration % 60;
 	return (
-		`${hours ? `${hours} h` : ''} ${minutes ? `${minutes} m` : ''} ${seconds ? `${seconds} s` : ''}`.trim() ||
-		'0 s'
+		(
+			(hours ? hours + ' h ' : '') +
+			(minutes ? minutes + ' m ' : '') +
+			(seconds ? seconds + ' s' : '')
+		).trim() || '0 s'
 	);
 }
 
@@ -62,8 +65,8 @@ export const load = (async ({ locals }) => {
 
 	// loop through the user interviews and get the completed ones
 	let completed = 0;
-	for (let i = 0; i < userInterviews.length; i++) {
-		if (userInterviews[i].status === 'completed') {
+	for (const userInterview of userInterviews) {
+		if (userInterview.status === 'completed') {
 			completed++;
 		}
 	}
@@ -86,13 +89,13 @@ export const load = (async ({ locals }) => {
 	let totalQuestionsAnswered = 0;
 	let totalAnswerDuration = 0;
 
-	for (let i = 0; i < userInterviews.length; i++) {
-		for (let j = 0; j < userInterviews[i].interview.questions.length; j++) {
-			if (userInterviews[i].interview.questions[j].answers.length > 0) {
+	for (const userInterview of userInterviews) {
+		for (const question of userInterview.interview.questions) {
+			if (question.answers.length > 0) {
 				totalQuestionsAnswered++;
 
-				for (let k = 0; k < userInterviews[i].interview.questions[j].answers.length; k++) {
-					totalAnswerDuration += userInterviews[i].interview.questions[j].answers[k].duration;
+				for (const answer of question.answers) {
+					totalAnswerDuration += answer.duration;
 				}
 			}
 		}

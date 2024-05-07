@@ -141,7 +141,7 @@
 							</div>
 							<div class="ml-3 flex flex-col items-start">
 								<p class="text-start text-sm font-medium group-hover:text-muted-foreground">
-									Welcome admin!
+									Welcome admin 👋
 								</p>
 								<p class="text-xs font-medium group-hover:text-muted-foreground">View profile</p>
 							</div>

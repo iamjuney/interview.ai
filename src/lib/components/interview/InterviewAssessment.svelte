@@ -19,12 +19,18 @@
 		question?: Question;
 	}>();
 
+	let isMounted = $state(false);
+
+	$effect(() => {
+		isMounted = true;
+	});
+
 	let assessment = $state(answer.assessment);
 	let transcript = $state(assessment?.data ?? []);
 	let isSubmitting = $state(false);
 </script>
 
-{#if isOpen}
+{#if isOpen && isMounted}
 	<div
 		class="fixed inset-0 z-50 overflow-hidden"
 		aria-labelledby="slide-over-title"

@@ -1,5 +1,6 @@
 <script lang="ts">
 	import { Accordion, Button } from '$lib/components';
+	import type { UserInterview } from '$lib/types';
 	import { Gauge, X } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -9,12 +10,19 @@
 		easing: backOut
 	};
 
-	let { isOpen } = $props<{
+	let { isOpen, userInterview } = $props<{
 		isOpen: boolean;
+		userInterview: UserInterview;
 	}>();
+
+	let isMounted = $state(false);
+
+	$effect(() => {
+		isMounted = true;
+	});
 </script>
 
-{#if isOpen}
+{#if isOpen && isMounted}
 	<div
 		class="fixed inset-0 z-50 overflow-hidden"
 		aria-labelledby="slide-over-title"
