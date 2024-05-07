@@ -12,6 +12,7 @@
 	let animate = $state(false);
 	let isOpen = $state(false);
 	let selectedUserInterview = $state<UserInterview | null>(null);
+	let isTotalQuestionsAnsweredZero = $state(false);
 
 	$effect(() => {
 		animate = true;
@@ -30,10 +31,62 @@
 			day: 'numeric'
 		});
 	}
+
+	const getTotalQuestionsAnswered = (i: UserInterview) => {
+		let total = 0;
+
+		if (!i.interview) {
+			return total;
+		}
+
+		for (const question of i.interview.questions) {
+			if (!question.answers) {
+				continue;
+			}
+
+			if (question.answers.length > 0) {
+				total++;
+			}
+		}
+
+		return total;
+	};
+
+	const getAveragePronunciationScore = (i: UserInterview) => {
+		let total = 0;
+		let count = 0;
+
+		if (!i.interview) {
+			return total;
+		}
+
+		for (const question of i.interview.questions) {
+			if (!question.answers) {
+				continue;
+			}
+
+			for (const answer of question.answers) {
+				if (answer.assessment) {
+					count++;
+					total += answer.assessment.pronunciation_score;
+				}
+			}
+		}
+
+		if (count === 0) {
+			return total;
+		}
+
+		return total / count;
+	};
 </script>
 
 {#if selectedUserInterview}
-	<UserInterviewSummary bind:isOpen userInterview={selectedUserInterview} />
+	<UserInterviewSummary
+		bind:isOpen
+		userInterview={selectedUserInterview}
+		noAnswers={isTotalQuestionsAnsweredZero}
+	/>
 {/if}
 
 {#if animate}
@@ -50,7 +103,7 @@
 			</div>
 		</div>
 
-		<div class="grid grid-cols-1 gap-6 md:grid-cols-3">
+		<div class="grid grid-cols-1 gap-6 xl:grid-cols-3">
 			<div
 				class="flex items-center justify-center rounded-lg border bg-gradient-to-br from-primary/30 to-secondary py-4 shadow"
 			>
@@ -89,24 +142,24 @@
 				</div>
 			</div>
 
-			<div class="rounded-lg md:col-span-2">
+			<div class="rounded-lg xl:col-span-2">
 				<h2 class="mb-4 text-xl font-medium tracking-tight">Statistics</h2>
 				<div class="grid grid-cols-2 gap-4 md:grid-cols-4">
 					<div class="rounded-lg border bg-background p-4 shadow">
 						<h3 class="text-xl font-semibold">{data.stats.in_progress}</h3>
-						<p class="text-muted-foreground">Ongoing Interviews</p>
+						<p class="text-sm text-muted-foreground lg:text-base">Ongoing Interviews</p>
 					</div>
 					<div class="rounded-lg border bg-background p-4 shadow">
 						<h3 class="text-xl font-semibold">{data.stats.completed}</h3>
-						<p class="text-muted-foreground">Completed Interviews</p>
+						<p class="text-sm text-muted-foreground lg:text-base">Completed Interviews</p>
 					</div>
 					<div class="rounded-lg border bg-background p-4 shadow">
 						<h3 class="text-xl font-semibold">{data.stats.totalQuestionsAnswered}</h3>
-						<p class="text-muted-foreground">Total Questions Answered</p>
+						<p class="text-sm text-muted-foreground lg:text-base">Total Questions Answered</p>
 					</div>
 					<div class="rounded-lg border bg-background p-4 shadow">
 						<h3 class="text-xl font-semibold">{data.stats.averageAnswerDuration}</h3>
-						<p class="text-muted-foreground">Average Answer Duration</p>
+						<p class="text-sm text-muted-foreground lg:text-base">Average Answer Duration</p>
 					</div>
 				</div>
 			</div>
@@ -120,13 +173,14 @@
 				{#each userInterviews as userInterview}
 					<button
 						onclick={() => {
-							isOpen = true;
 							selectedUserInterview = userInterview;
+							isTotalQuestionsAnsweredZero = getTotalQuestionsAnswered(userInterview) === 0;
+							isOpen = true;
 						}}
 						class="group relative cursor-pointer rounded-xl border p-4 shadow-sm transition duration-100 hover:bg-accent md:border-0 md:shadow-none"
 					>
 						<div
-							class="relative z-10 mb-4 grid min-h-24 w-full flex-shrink-0 place-items-center rounded-lg shadow-sm"
+							class="relative z-10 mb-4 grid min-h-28 w-full flex-shrink-0 place-items-center rounded-lg shadow-sm"
 						>
 							<div class="relative h-full w-full rounded-lg border bg-primary/10">
 								<Badge class="absolute right-4 top-4 capitalize">{userInterview.status}</Badge>
@@ -136,7 +190,14 @@
 										<div class="h-4 w-[2px] bg-primary"></div>
 										<p class="ml-2 text-muted-foreground">{userInterview.interview.difficulty}</p>
 									</div>
-									<p class="text-left text-xl font-semibold">{userInterview.interview.position}</p>
+									<div>
+										<p class="text-left text-xl font-semibold">
+											{userInterview.interview.position}
+										</p>
+										<p class="text-left text-sm text-muted-foreground">
+											Date Started: {readableDate(userInterview.createdAt)}
+										</p>
+									</div>
 								</div>
 							</div>
 						</div>
@@ -144,11 +205,11 @@
 							<div class="mb-2 flex flex-col items-start space-y-2 text-sm lg:text-base">
 								<span class="flex items-center">
 									<FileQuestion class="mr-2 size-4 text-primary" />
-									3 answered questions
+									{getTotalQuestionsAnswered(userInterview)} answered questions
 								</span>
 								<span class="flex items-center">
 									<Gauge class="mr-2 size-4 text-primary" />
-									98 average pronunciation score
+									{getAveragePronunciationScore(userInterview)} average pronunciation score
 								</span>
 							</div>
 						</div>

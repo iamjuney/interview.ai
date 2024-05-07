@@ -31,9 +31,9 @@
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
 		<h2 class="truncate text-3xl font-medium tracking-tight">Dashboard</h2>
 
-		<div class="grid grid-cols-1 gap-6 md:grid-cols-3" id="Statistics">
+		<div class="grid grid-cols-1 gap-6 xl:grid-cols-3" id="Statistics">
 			<div
-				class="flex items-center justify-center py-4 rounded-lg border bg-gradient-to-br from-primary/30 to-secondary shadow"
+				class="flex items-center justify-center rounded-lg border bg-gradient-to-br from-primary/30 to-secondary py-4 shadow"
 			>
 				<div class="flex items-center space-x-4">
 					{#if data.user.image}
@@ -70,24 +70,24 @@
 				</div>
 			</div>
 
-			<div class="md:col-span-2 rounded-lg">
+			<div class="rounded-lg xl:col-span-2">
 				<h2 class="mb-4 text-xl font-medium tracking-tight">Statistics</h2>
 				<div class="grid grid-cols-2 gap-4 md:grid-cols-4">
 					<div class="rounded-lg border bg-background p-4 shadow">
 						<h3 class="text-xl font-semibold">{data.in_progress}</h3>
-						<p class="text-muted-foreground">Ongoing Interviews</p>
+						<p class="text-sm text-muted-foreground lg:text-base">Ongoing Interviews</p>
 					</div>
 					<div class="rounded-lg border bg-background p-4 shadow">
 						<h3 class="text-xl font-semibold">{data.completed}</h3>
-						<p class="text-muted-foreground">Completed Interviews</p>
+						<p class="text-sm text-muted-foreground lg:text-base">Completed Interviews</p>
 					</div>
 					<div class="rounded-lg border bg-background p-4 shadow">
 						<h3 class="text-xl font-semibold">{data.totalQuestionsAnswered}</h3>
-						<p class="text-muted-foreground">Total Questions Answered</p>
+						<p class="text-sm text-muted-foreground lg:text-base">Total Questions Answered</p>
 					</div>
 					<div class="rounded-lg border bg-background p-4 shadow">
 						<h3 class="text-xl font-semibold">{data.averageAnswerDuration}</h3>
-						<p class="text-muted-foreground">Average Answer Duration</p>
+						<p class="text-sm text-muted-foreground lg:text-base">Average Answer Duration</p>
 					</div>
 				</div>
 			</div>
