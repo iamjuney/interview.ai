@@ -1,26 +1,33 @@
 <script lang="ts">
-	import { VisLine, VisScatter, VisXYContainer } from '@unovis/svelte';
-	import { color, scatterPointColors, scatterPointStrokeColors } from '../helpers';
+	import { VisLine, VisScatter, VisXYContainer, VisTooltip, VisCrosshair } from '@unovis/svelte';
+	import {
+		color,
+		scatterPointColors,
+		scatterPointStrokeColors,
+		crosshairPointColors,
+		tooltipTemplate
+	} from '../helpers';
 
 	const data = [
-		{ id: 1, points: 10400 },
-		{ id: 2, points: 14405 },
-		{ id: 3, points: 9400 },
-		{ id: 4, points: 8200 },
-		{ id: 5, points: 7000 },
-		{ id: 6, points: 9600 },
-		{ id: 7, points: 11244 },
-		{ id: 8, points: 26475 },
-		{ id: 9, points: 14400 },
-		{ id: 10, points: 10400 },
-		{ id: 11, points: 14405 },
-		{ id: 12, points: 9400 }
+		{ id: 1, users: 10400 },
+		{ id: 2, users: 14405 },
+		{ id: 3, users: 9400 },
+		{ id: 4, users: 8200 },
+		{ id: 5, users: 7000 },
+		{ id: 6, users: 9600 },
+		{ id: 7, users: 11244 },
+		{ id: 8, users: 26475 },
+		{ id: 9, users: 14400 },
+		{ id: 10, users: 10400 },
+		{ id: 11, users: 14405 },
+		{ id: 12, users: 9400 }
 	];
-	const x = (d: { points: number; id: number }) => d.id;
-	const y = (d: { points: number; id: number }) => d.points;
+	const x = (d: { users: number; id: number }) => d.id;
+	const y = (d: { users: number; id: number }) => d.users;
 </script>
 
-<VisXYContainer {data} height="80">
+<VisXYContainer {data} height="128">
+	<VisTooltip />
 	<VisLine {x} {y} color={color()} />
 	<VisScatter
 		{x}
@@ -30,4 +37,5 @@
 		strokeColor={scatterPointStrokeColors}
 		strokeWidth={2}
 	/>
+	<!-- <VisCrosshair template={tooltipTemplate} color={crosshairPointColors} /> -->
 </VisXYContainer>

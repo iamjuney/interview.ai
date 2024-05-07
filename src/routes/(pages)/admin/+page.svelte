@@ -1,5 +1,5 @@
 <script lang="ts">
-	import { Metric } from '$lib/components';
+	import { Metric, BarChart, LineGraph } from '$lib/components';
 	import { MonitorCheck } from 'lucide-svelte';
 	import { CldImage } from 'svelte-cloudinary';
 	import { backOut } from 'svelte/easing';
@@ -102,7 +102,7 @@
 					<p class="text-xs text-muted-foreground">+20.1% from last month</p>
 				</div>
 				<div class="h-32 px-6">
-					<Metric />
+					<LineGraph />
 				</div>
 			</div>
 			<div class="rounded-xl border bg-background pb-6 shadow">
@@ -113,11 +113,10 @@
 					<MonitorCheck class="size-5" />
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-3xl font-bold">30</div>
-					<p class="text-xs text-muted-foreground">+20.1% from last month</p>
+					<div class="text-3xl font-bold">Laravel Developer</div>
 				</div>
 				<div class="h-32 px-6">
-					<Metric />
+					<BarChart />
 				</div>
 			</div>
 		</div>

@@ -63,7 +63,7 @@
 	const triggers = { [GroupedBar.selectors.bar]: (d: any) => d.subscription };
 </script>
 
-<VisXYContainer {data} height={80}>
+<VisXYContainer {data} height={128}>
 	<VisGroupedBar {x} {y} roundedCorners={16} color={color()} />
 	<VisTooltip {triggers} />
 </VisXYContainer>

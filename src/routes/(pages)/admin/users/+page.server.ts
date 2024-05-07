@@ -52,7 +52,8 @@ export const actions = {
 					first_name: true,
 					last_name: true,
 					email: true,
-					image: true
+					image: true,
+					createdAt: true
 				}
 			});
 			return {
@@ -60,7 +61,7 @@ export const actions = {
 			};
 		} catch (error) {
 			return fail(500, {
-				message: 'Failed to search interviews'
+				message: 'Failed to search users.'
 			});
 		}
 	}
