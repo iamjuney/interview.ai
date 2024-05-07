@@ -92,7 +92,7 @@
 		</div>
 
 		<div class="h-full">
-			<div class="flex items-center justify-between">
+			<div class="flex items-center justify-between gap-3">
 				<form
 					bind:this={searchForm}
 					class="w-full"
