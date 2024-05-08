@@ -1,6 +1,6 @@
 <script lang="ts">
-	import { Metric, BarChart, LineGraph } from '$lib/components';
-	import { MonitorCheck, Users, BarChart2 } from 'lucide-svelte';
+	import { BarChart, LineGraph } from '$lib/components';
+	import { Library, TrendingDown, TrendingUp, Users } from 'lucide-svelte';
 	import { CldImage } from 'svelte-cloudinary';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -18,6 +18,14 @@
 		} else {
 			return ((thisMonth - lastMonth) / lastMonth) * 100;
 		}
+	});
+
+	let topJobPositionsData = $derived(() => {
+		return data.topJobPositions.map((d: any, i: number) => ({
+			id: i,
+			count: d.count,
+			position: d.position
+		}));
 	});
 
 	$effect(() => {
@@ -74,8 +82,6 @@
 							<div class="h-4 w-[2px] bg-primary"></div>
 							<p class="ml-2 text-muted-foreground">{data.user.email}</p>
 						</div>
-
-						<p class="text-muted-foreground">Joined on {readableDate(data.user.created_at)}</p>
 					</div>
 				</div>
 			</div>
@@ -113,7 +119,14 @@
 				</div>
 				<div class="p-6 pt-0">
 					<div class="text-3xl font-bold">{thisMonth}</div>
-					<p class="text-xs text-muted-foreground">{percentage()}% from last month</p>
+					<p class="inline-flex text-sm text-muted-foreground">
+						{#if percentage() > 0}
+							<TrendingUp class="mr-2 size-5 text-green-500" />
+						{:else}
+							<TrendingDown class="mr-2 size-5 text-red-500" />
+						{/if}
+						{percentage()}% from last month
+					</p>
 				</div>
 				<div class="h-32 px-6">
 					<LineGraph data={data.totalActiveUsersEveryMonth} />
@@ -122,15 +135,17 @@
 			<div class="rounded-xl border bg-background pb-6 shadow">
 				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
 					<h3 class="font-medium tracking-tight text-muted-foreground">
-						Top Job Position Practiced
+						Top 10 Job Position Most Practiced
 					</h3>
-					<BarChart2 class="size-6" />
+					<Library class="size-6" />
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-3xl font-bold">Laravel Developer</div>
+					<div class="text-3xl font-bold">
+						{data.topJobPositions[0].position} - {data.topJobPositions[0].count}
+					</div>
 				</div>
 				<div class="h-32 px-6">
-					<BarChart />
+					<BarChart data={topJobPositionsData()} />
 				</div>
 			</div>
 		</div>

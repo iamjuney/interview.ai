@@ -1,6 +1,6 @@
 import { db } from '$lib/db';
-import { answer, user, userInterview, log } from '$lib/db/schema';
-import { and, avg, count, eq, gte, lt } from 'drizzle-orm';
+import { answer, user, userInterview, log, interview } from '$lib/db/schema';
+import { and, avg, count, desc, eq, gte, lt } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load = (async () => {
@@ -45,12 +45,22 @@ export const load = (async () => {
 		totalActiveUsersEveryMonth.push({ id: i, month: readbleTempMonth, users: activeUsers.length });
 	}
 
+	// Get top job positions
+	const topJobPositions = await db
+		.select({ count: count(userInterview.id), position: interview.position })
+		.from(userInterview)
+		.leftJoin(interview, eq(userInterview.interviewId, interview.id))
+		.groupBy(interview.position)
+		.orderBy(desc(count(userInterview.id)))
+		.limit(10);
+
 	return {
 		newUsersThisMonth: newUsersThisMonth[0].count,
 		totalCompletedInterviews: totalCompletedInterviews[0].count,
 		totalQuestionsAnswered: totalQuestionsAnswered.length,
 		averageAnswerDuration: readableDuration(averageAnswerDuration),
-		totalActiveUsersEveryMonth
+		totalActiveUsersEveryMonth,
+		topJobPositions
 	};
 }) as PageServerLoad;
 

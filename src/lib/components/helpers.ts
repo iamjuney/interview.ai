@@ -4,6 +4,12 @@ export function color(opacity: string = '1') {
 
 export type Data = { id: number; month: string; users: number };
 
+export type DataRecord = {
+	id: number;
+	count: number;
+	position: string;
+};
+
 /**
  * If you want to set color for multiple lines at once, you'll have to define a colors array in your component and reference colors by index in the accessor function.
  * For example, in this instance below, we know that we only have 2 lines, so we can hardcode the colors array to return 2 colors for the 2 indexes i.e. 2 lines.
@@ -46,6 +52,31 @@ export function tooltipTemplate(d: Data) {
       </span>
       <span class="font-bold text-foreground">
         ${d.users}
+      </span>
+    </div>
+  </div>
+</div>
+`;
+}
+
+export function tooltipTemplateForBarGraph(d: DataRecord) {
+	return `
+<div class="rounded-lg border bg-background p-2 shadow-sm">
+  <div class="grid grid-cols-2 gap-2">
+    <div class="flex flex-col">
+      <span class="text-[0.70rem] uppercase text-muted-foreground">
+        Position
+      </span>
+      <span class="font-bold text-muted-foreground">
+        ${d.position}
+      </span>
+    </div>
+    <div class="flex flex-col">
+      <span class="text-[0.70rem] uppercase text-muted-foreground">
+        Count
+      </span>
+      <span class="font-bold text-foreground">
+        ${d.count}
       </span>
     </div>
   </div>
