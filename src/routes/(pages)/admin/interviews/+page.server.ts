@@ -2,12 +2,11 @@ import { db } from '$lib/db';
 import { interview } from '$lib/db/schema';
 import type { Interview } from '$lib/types';
 import { fail, redirect } from '@sveltejs/kit';
-import { asc, eq, ilike, or } from 'drizzle-orm';
+import { and, asc, eq, ilike, not, or } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
+import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
-import { v4 as uuidv4 } from 'uuid';
-import { goto } from '$app/navigation';
 
 export const load = (async () => {
 	let interviews = (await db.query.interview.findMany({
@@ -51,7 +50,7 @@ export const actions = {
 
 		if (existingInterview) {
 			return fail(400, {
-				message: 'Interview position already exists'
+				message: 'Job position already exists'
 			});
 		}
 
@@ -71,6 +70,69 @@ export const actions = {
 		}
 
 		redirect(302, '/admin/interviews');
+	},
+
+	update: async ({ request }) => {
+		const form = await superValidate(
+			request,
+			z.object({ interview_id: z.string() }).merge(interviewSchema)
+		);
+
+		if (!form.valid) {
+			return fail(400, {
+				message: 'Invalid interview data'
+			});
+		}
+
+		console.log(form.data);
+
+		// check if interview position already exists and is not the current interview
+		const existingInterview = await db.query.interview.findFirst({
+			where: and(
+				eq(interview.position, form.data.position),
+				not(eq(interview.id, form.data.interview_id))
+			)
+		});
+
+		if (existingInterview) {
+			return fail(400, {
+				message: 'Job position already exists'
+			});
+		}
+
+		try {
+			await db
+				.update(interview)
+				.set({
+					position: form.data.position,
+					interviewSlug: form.data.interview_slug,
+					description: form.data.description,
+					difficulty: form.data.difficulty,
+					duration: form.data.duration
+				})
+				.where(eq(interview.id, form.data.interview_id));
+		} catch (error) {
+			return fail(500, {
+				message: 'Failed to update interview'
+			});
+		}
+
+		redirect(301, '/admin/interviews');
+	},
+
+	delete: async ({ request }) => {
+		const form = await superValidate(request, z.object({ interview_id: z.string() }));
+
+		try {
+			// delete the interview
+			await db.delete(interview).where(eq(interview.id, form.data.interview_id));
+		} catch (error) {
+			return fail(500, {
+				message: 'Failed to delete interview'
+			});
+		}
+
+		redirect(301, '/admin/interviews');
 	},
 
 	search: async ({ request }) => {
@@ -103,20 +165,5 @@ export const actions = {
 				message: 'Failed to search interviews'
 			});
 		}
-	},
-
-	delete: async ({ request }) => {
-		const form = await superValidate(request, z.object({ interview_id: z.string() }));
-
-		try {
-			// delete the interview
-			await db.delete(interview).where(eq(interview.id, form.data.interview_id));
-		} catch (error) {
-			return fail(500, {
-				message: 'Failed to delete interview'
-			});
-		}
-
-		redirect(301, '/admin/interviews');
 	}
 };

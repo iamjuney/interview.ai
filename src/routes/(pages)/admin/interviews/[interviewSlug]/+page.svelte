@@ -42,6 +42,7 @@
 				isUpdateInterviewSubmitting = false;
 				return;
 			}
+
 			await applyAction(result);
 		};
 	};
@@ -150,7 +151,7 @@
 
 			<form
 				class="max-w-xl"
-				action="/admin/interviews?/updateInterview"
+				action="/admin/interviews?/update"
 				method="post"
 				use:enhance={handleUpdateInterviewSubmit}
 			>
@@ -202,6 +203,7 @@
 								<Select.Item value="Intermediate">Intermediate</Select.Item>
 								<Select.Item value="Advanced">Advanced</Select.Item>
 							</Select.Content>
+							<Select.Input name="difficulty" />
 						</Select.Root>
 					</div>
 

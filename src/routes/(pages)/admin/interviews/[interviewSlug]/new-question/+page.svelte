@@ -90,7 +90,7 @@
 
 				<div class="mt-6 grid gap-3">
 					<Label for="slug">Slug (Auto-generated)</Label>
-					<Textarea id="slug" class="min-h-24" name="slug" value={slug} required disabled />
+					<Textarea id="slug" class="min-h-24" name="slug" value={slug} required readonly />
 				</div>
 
 				<div class="mt-6 grid gap-3">
