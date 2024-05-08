@@ -52,11 +52,13 @@ export const actions = {
 				auth.createSessionCookie(session);
 			}
 
-			await db.insert(log).values({
-				id: uuidv4(),
-				userId: key.userId,
-				message: 'User logged in'
-			});
+			if (session.user.role === 'user') {
+				await db.insert(log).values({
+					id: uuidv4(),
+					userId: key.userId,
+					message: 'User logged in'
+				});
+			}
 		} catch (e) {
 			if (
 				(e instanceof LuciaError && e.message === 'AUTH_INVALID_KEY_ID') ||
