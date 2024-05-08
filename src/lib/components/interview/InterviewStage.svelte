@@ -585,14 +585,14 @@
 						<div class="flex flex-col gap-1">
 							<p class="flex items-center justify-between">
 								<span>
-									Accuracy score
+									Clarity score
 									<Tooltip.Root>
 										<Tooltip.Trigger><HelpCircle class="ml-2 size-3" /></Tooltip.Trigger>
 										<Tooltip.Content class="max-w-sm">
 											<p>
-												Accuracy indicates how closely the phonemes match a native speaker's
+												Clarity indicates how closely the phonemes match a native speaker's
 												pronunciation. Word and full text accuracy scores are aggregated from
-												phoneme-level accuracy score.
+												phoneme-level clarity score.
 											</p>
 										</Tooltip.Content>
 									</Tooltip.Root>
@@ -672,14 +672,14 @@
 								>
 							</p>
 						</div>
-						<div class="flex items-center gap-2">
+						<!-- <div class="flex items-center gap-2">
 							<div class="size-4 rounded bg-primary"></div>
 							<p>
 								Monotone: <span class="font-semibold text-foreground"
 									>{countMonotone(assessmentData.data)}</span
 								>
 							</p>
-						</div>
+						</div> -->
 					</div>
 				</div>
 				<div
@@ -692,11 +692,11 @@
 									class="me-[3px] inline-block font-semibold underline decoration-yellow-500 decoration-2"
 									>{word}
 								</span>
-							{:else if assessmentData.data[idx]?.errorType === 'Monotone'}
+								<!-- {:else if assessmentData.data[idx]?.errorType === 'Monotone'}
 								<span
 									class="me-[3px] inline-block font-semibold underline decoration-primary decoration-wavy decoration-2"
 									>{word}
-								</span>
+								</span> -->
 							{:else}
 								<span class="me-[3px] inline-block">{word}</span>
 							{/if}

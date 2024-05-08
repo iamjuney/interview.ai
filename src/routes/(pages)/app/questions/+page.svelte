@@ -2,7 +2,7 @@
 	import { enhance } from '$app/forms';
 	import { Badge, Button, Input, NotFound } from '$lib/components';
 	import { type SubmitFunction } from '@sveltejs/kit';
-	import { Check, Loader2, Search } from 'lucide-svelte';
+	import { Check, Loader2, Search, TrendingDown, TrendingUp } from 'lucide-svelte';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
 
@@ -127,7 +127,7 @@
 								</div>
 								<div class="mt-2 flex flex-row space-x-2">
 									{#if question.answers && question.answers.length > 0}
-										<Badge color="primary">
+										<Badge>
 											<Check class="mr-1 size-3" />
 											Answered
 										</Badge>

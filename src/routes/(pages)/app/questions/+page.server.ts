@@ -34,6 +34,9 @@ export const load = (async ({ locals }) => {
 		.findMany({
 			with: {
 				answers: {
+					with: {
+						assessment: true
+					},
 					where: eq(answer.userId, userId)
 				}
 			},
@@ -86,6 +89,9 @@ export const actions = {
 				questions = await db.query.question.findMany({
 					with: {
 						answers: {
+							with: {
+								assessment: true
+							},
 							where: eq(answer.userId, userId)
 						}
 					},
