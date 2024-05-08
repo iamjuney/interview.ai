@@ -2,22 +2,7 @@ export function color(opacity: string = '1') {
 	return () => `hsl(var(--primary) / ${opacity})`;
 }
 
-export type Data = { id: number; users: number };
-
-const Months = [
-	'January',
-	'February',
-	'March',
-	'April',
-	'May',
-	'June',
-	'July',
-	'August',
-	'September',
-	'October',
-	'November',
-	'December'
-];
+export type Data = { id: number; month: string; users: number };
 
 /**
  * If you want to set color for multiple lines at once, you'll have to define a colors array in your component and reference colors by index in the accessor function.
@@ -52,7 +37,7 @@ export function tooltipTemplate(d: Data) {
         Month
       </span>
       <span class="font-bold text-muted-foreground">
-        ${Months[d.id]}
+        ${d.month}
       </span>
     </div>
     <div class="flex flex-col">

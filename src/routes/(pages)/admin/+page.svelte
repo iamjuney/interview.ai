@@ -8,6 +8,18 @@
 	let { data } = $props();
 	let animate = $state(false);
 
+	let lastMonth = $derived(data.totalActiveUsersEveryMonth[10].users);
+	let thisMonth = $derived(data.totalActiveUsersEveryMonth[11].users);
+	let percentage = $derived(() => {
+		if (lastMonth === 0) {
+			return thisMonth * 100;
+		} else if (thisMonth === 0) {
+			return -lastMonth * 100;
+		} else {
+			return ((thisMonth - lastMonth) / lastMonth) * 100;
+		}
+	});
+
 	$effect(() => {
 		animate = true;
 	});
@@ -94,12 +106,14 @@
 		<div class="mt-4 grid gap-4 md:grid-cols-2">
 			<div class="rounded-xl border bg-background pb-6 shadow">
 				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-					<h3 class="font-medium tracking-tight text-muted-foreground">Active Users</h3>
+					<h3 class="font-medium tracking-tight text-muted-foreground">
+						Active Users for this Month
+					</h3>
 					<Users class="size-6" />
 				</div>
 				<div class="p-6 pt-0">
-					<div class="text-3xl font-bold">30</div>
-					<p class="text-xs text-muted-foreground">+20.1% from last month</p>
+					<div class="text-3xl font-bold">{thisMonth}</div>
+					<p class="text-xs text-muted-foreground">{percentage()}% from last month</p>
 				</div>
 				<div class="h-32 px-6">
 					<LineGraph data={data.totalActiveUsersEveryMonth} />

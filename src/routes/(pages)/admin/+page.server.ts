@@ -4,14 +4,14 @@ import { and, avg, count, eq, gte, lt } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load = (async () => {
-	const year = new Date().getFullYear();
+	const currentYear = new Date().getFullYear();
 	const month = new Date().getMonth();
 	let averageAnswerDuration: number | null = 0;
 
 	const newUsersThisMonth = await db
 		.select({ count: count(user.createdAt) })
 		.from(user)
-		.where(and(gte(user.createdAt, new Date(year, month, 1)), eq(user.role, 'user')));
+		.where(and(gte(user.createdAt, new Date(currentYear, month, 1)), eq(user.role, 'user')));
 
 	const totalCompletedInterviews = await db
 		.select({ count: count(userInterview.id) })
@@ -29,17 +29,20 @@ export const load = (async () => {
 	}
 
 	let totalActiveUsersEveryMonth = [];
-	// get active users each month
-	for (let i = 0; i < 12; i++) {
-		const tempMonth = new Date(year, i, 1);
-		const nextMonth = new Date(year, i + 1, 1);
+
+	// Get active users for each month
+	for (let i = 0; i < getPastTwelveMonths().length; i++) {
+		const tempMonth = getPastTwelveMonths()[i];
+		const nextMonth = getPastTwelveMonths()[i + 1] || new Date(currentYear + 1, 0, 1);
+
+		const readbleTempMonth = tempMonth.toLocaleString('default', { month: 'long' });
 
 		const activeUsers = await db
 			.selectDistinctOn([log.userId])
 			.from(log)
 			.where(and(gte(log.createdAt, tempMonth), lt(log.createdAt, nextMonth)));
 
-		totalActiveUsersEveryMonth.push({ id: i, users: activeUsers.length });
+		totalActiveUsersEveryMonth.push({ id: i, month: readbleTempMonth, users: activeUsers.length });
 	}
 
 	return {
@@ -55,4 +58,16 @@ const readableDuration = (duration: number) => {
 	const minutes = Math.floor((duration % 3600) / 60);
 	const seconds = duration % 60;
 	return ((minutes ? minutes + ' m ' : '') + (seconds ? seconds + ' s' : '')).trim() || '0 s';
+};
+
+const getPastTwelveMonths = () => {
+	const currentYear = new Date().getFullYear();
+	const month = new Date().getMonth();
+	const months = [];
+
+	for (let i = 0; i < 12; i++) {
+		months.push(new Date(currentYear, month - i, 1));
+	}
+
+	return months.reverse();
 };
