@@ -112,9 +112,7 @@
 		<div class="mt-4 grid gap-4 md:grid-cols-2">
 			<div class="rounded-xl border bg-background pb-6 shadow">
 				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
-					<h3 class="font-medium tracking-tight text-muted-foreground">
-						Active Users for this Month
-					</h3>
+					<h3 class="font-medium tracking-tight text-muted-foreground">Active Users</h3>
 					<Users class="size-6" />
 				</div>
 				<div class="p-6 pt-0">
@@ -135,7 +133,7 @@
 			<div class="rounded-xl border bg-background pb-6 shadow">
 				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
 					<h3 class="font-medium tracking-tight text-muted-foreground">
-						Most Practiced Job Skills
+						Most Practiced Job Position
 					</h3>
 					<Library class="size-6" />
 				</div>

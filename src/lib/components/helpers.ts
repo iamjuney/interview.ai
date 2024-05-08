@@ -37,7 +37,7 @@ export function crosshairStrokeWidths<T>(_: T, i: number) {
 export function tooltipTemplate(d: Data) {
 	return `
 <div class="rounded-lg border bg-background p-2 shadow-sm">
-  <div class="grid grid-cols-2 gap-2">
+  <div class="flex gap-2">
     <div class="flex flex-col">
       <span class="text-[0.70rem] uppercase text-muted-foreground">
         Month
@@ -62,7 +62,7 @@ export function tooltipTemplate(d: Data) {
 export function tooltipTemplateForBarGraph(d: DataRecord) {
 	return `
 <div class="rounded-lg border bg-background p-2 shadow-sm">
-  <div class="grid grid-cols-2 gap-2">
+  <div class="flex gap-2">
     <div class="flex flex-col">
       <span class="text-[0.70rem] uppercase text-muted-foreground">
         Position
