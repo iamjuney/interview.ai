@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { Metric, BarChart, LineGraph } from '$lib/components';
-	import { MonitorCheck } from 'lucide-svelte';
+	import { MonitorCheck, Users, BarChart2 } from 'lucide-svelte';
 	import { CldImage } from 'svelte-cloudinary';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
@@ -95,7 +95,7 @@
 			<div class="rounded-xl border bg-background pb-6 shadow">
 				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
 					<h3 class="font-medium tracking-tight text-muted-foreground">Active Users</h3>
-					<MonitorCheck class="size-5" />
+					<Users class="size-6" />
 				</div>
 				<div class="p-6 pt-0">
 					<div class="text-3xl font-bold">30</div>
@@ -110,7 +110,7 @@
 					<h3 class="font-medium tracking-tight text-muted-foreground">
 						Top Job Position Practiced
 					</h3>
-					<MonitorCheck class="size-5" />
+					<BarChart2 class="size-6" />
 				</div>
 				<div class="p-6 pt-0">
 					<div class="text-3xl font-bold">Laravel Developer</div>

@@ -1,3 +1,5 @@
+import { db } from '$lib/db';
+import { log } from '$lib/db/schema';
 import { auth } from '$lib/server/lucia';
 import type { Actions } from '@sveltejs/kit';
 import { fail, redirect } from '@sveltejs/kit';
@@ -5,6 +7,7 @@ import { LuciaError } from 'lucia';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
+import { v4 as uuid4 } from 'uuid';
 
 export const load = (async ({ locals }) => {
 	// let's get the session from the locals
@@ -48,6 +51,11 @@ export const actions = {
 			if (form.data.remember_me) {
 				auth.createSessionCookie(session);
 			}
+
+			await db.insert(log).values({
+				id: uuid4(),
+				userId: key.userId
+			});
 		} catch (e) {
 			if (
 				(e instanceof LuciaError && e.message === 'AUTH_INVALID_KEY_ID') ||

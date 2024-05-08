@@ -2,7 +2,22 @@ export function color(opacity: string = '1') {
 	return () => `hsl(var(--primary) / ${opacity})`;
 }
 
-export type Data = { average: number; today: number; id: number };
+export type Data = { id: number; users: number };
+
+const Months = [
+	'January',
+	'February',
+	'March',
+	'April',
+	'May',
+	'June',
+	'July',
+	'August',
+	'September',
+	'October',
+	'November',
+	'December'
+];
 
 /**
  * If you want to set color for multiple lines at once, you'll have to define a colors array in your component and reference colors by index in the accessor function.
@@ -34,18 +49,18 @@ export function tooltipTemplate(d: Data) {
   <div class="grid grid-cols-2 gap-2">
     <div class="flex flex-col">
       <span class="text-[0.70rem] uppercase text-muted-foreground">
-        Average
+        Month
       </span>
       <span class="font-bold text-muted-foreground">
-        ${d.average}
+        ${Months[d.id]}
       </span>
     </div>
     <div class="flex flex-col">
       <span class="text-[0.70rem] uppercase text-muted-foreground">
-        Today
+        Users
       </span>
       <span class="font-bold text-foreground">
-        ${d.today}
+        ${d.users}
       </span>
     </div>
   </div>

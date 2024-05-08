@@ -49,10 +49,7 @@
 }
 
 @layer base {
-	:root {
-		--vis-tooltip-padding: 0px 5px;
-	}
-
+	/* Font */
 	@font-face {
 		font-family: 'DM Sans';
 		font-weight: 100, 200, 300, 400, 500, 600, 700, 800, 900;
@@ -63,20 +60,41 @@
 	* {
 		@apply border-border;
 	}
+
 	html {
 		scroll-behavior: smooth;
 	}
+
+	/* Background */
 	body {
 		@apply bg-background text-foreground;
 	}
 
-	body::-webkit-scrollbar {
-		width: 5px;
+	/* Scrollbars */
+
+	::-webkit-scrollbar {
+		@apply w-2;
+		@apply h-2;
 	}
 
-	body::-webkit-scrollbar-thumb {
-		background-color: hsl(var(--primary));
+	::-webkit-scrollbar-track {
+		@apply !bg-muted;
 	}
+	::-webkit-scrollbar-thumb {
+		@apply rounded-sm !bg-muted-foreground/30;
+	}
+
+	/* Firefox */
+	/* https://developer.mozilla.org/en-US/docs/Web/CSS/scrollbar-color#browser_compatibility */
+	html {
+		scrollbar-color: hsl(215.4 16.3% 46.9% / 0.3);
+	}
+
+	html.dark {
+		scrollbar-color: hsl(215.4 16.3% 56.9% / 0.3);
+	}
+
+	/* DriverJS */
 
 	.driver-popover.driverjs-theme {
 		min-width: 300px;
@@ -108,5 +126,12 @@
 
 	.driver-popover.driverjs-theme .driver-popover-next-btn {
 		@apply bg-primary px-4 py-2 text-primary-foreground shadow hover:bg-primary/90;
+	}
+
+	/* Unovis Charts */
+	:root {
+		--vis-tooltip-padding: 0px;
+		--vis-tooltip-background-color: 'transparent';
+		--vis-tooltip-border-color: 'transparent';
 	}
 }

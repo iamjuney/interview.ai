@@ -1,6 +1,6 @@
 import { db } from '$lib/db';
-import { answer, user, userInterview } from '$lib/db/schema';
-import { and, count, eq, gte, countDistinct, avg } from 'drizzle-orm';
+import { answer, user, userInterview, log } from '$lib/db/schema';
+import { and, avg, count, eq, gte, lt } from 'drizzle-orm';
 import type { PageServerLoad } from './$types';
 
 export const load = (async () => {
@@ -26,6 +26,20 @@ export const load = (async () => {
 
 	if (averageAnswerDurationQuery[0].value) {
 		averageAnswerDuration = parseInt(averageAnswerDurationQuery[0].value);
+	}
+
+	let totalActiveUsers = 0;
+	// get active users each month
+	for (let i = 0; i < 12; i++) {
+		const tempMonth = new Date(year, i, 1);
+		const nextMonth = new Date(year, i + 1, 1);
+
+		const activeUsers = await db
+			.selectDistinctOn([log.userId])
+			.from(log)
+			.where(and(gte(log.createdAt, tempMonth), lt(log.createdAt, nextMonth)));
+
+		console.log(activeUsers.length);
 	}
 
 	return {

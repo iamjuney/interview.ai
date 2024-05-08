@@ -1,7 +1,7 @@
 <script lang="ts">
-	import { VisGroupedBar, VisXYContainer, VisTooltip } from '@unovis/svelte';
+	import { VisCrosshair, VisGroupedBar, VisTooltip, VisXYContainer } from '@unovis/svelte';
 	import { GroupedBar } from '@unovis/ts';
-	import { color } from '../helpers';
+	import { color, crosshairPointColors, tooltipTemplate } from '../helpers';
 
 	type DataRecord = {
 		id: number;
@@ -65,5 +65,6 @@
 
 <VisXYContainer {data} height={128}>
 	<VisGroupedBar {x} {y} roundedCorners={16} color={color()} />
-	<VisTooltip {triggers} />
+	<VisTooltip />
+	<VisCrosshair template={tooltipTemplate} color={crosshairPointColors} />
 </VisXYContainer>

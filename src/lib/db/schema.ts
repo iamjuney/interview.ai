@@ -186,6 +186,19 @@ export const assessment = pgTable('assessments', {
 	data: jsonb('data').default({})
 });
 
+// logs table
+export const log = pgTable('logs', {
+	id: varchar('id', {
+		length: 36
+	}).primaryKey(),
+	userId: varchar('user_id', {
+		length: 36
+	})
+		.notNull()
+		.references(() => user.id, { onDelete: 'cascade' }),
+	createdAt: timestamp('created_at').defaultNow().notNull()
+});
+
 /** Relations */
 export const userRelation = relations(user, ({ many }) => ({
 	interviews: many(userInterview),
