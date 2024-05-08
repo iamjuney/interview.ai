@@ -174,7 +174,7 @@
 							name="interview_slug"
 							value={interviewSlug}
 							required
-							disabled
+							readonly
 						/>
 					</div>
 				</div>
@@ -229,10 +229,16 @@
 		<div class="w-full md:w-7/12">
 			<div class="mb-5 mt-1">
 				<div class="text-lg font-semibold">Questions</div>
-				<p class="text-muted-foreground">
-					These are the questions that will be asked in the interview. You can edit or delete them
-					below.
-				</p>
+				{#if questions.length === 0}
+					<p class="text-muted-foreground">
+						No questions found. Add a new question to this interview.
+					</p>
+				{:else}
+					<p class="text-muted-foreground">
+						These are the questions that will be asked in the interview. You can edit or delete them
+						below.
+					</p>
+				{/if}
 			</div>
 
 			{#each questions as question}

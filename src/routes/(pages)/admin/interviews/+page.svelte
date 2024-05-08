@@ -16,6 +16,8 @@
 	let isSearching = $state(false);
 	let failedSearchData = $state<Record<string, any>>();
 	let isSubmitting = $state(false);
+	let deleteDialogOpen = $state(false);
+	let selectedInterviewId = $state('');
 	let selectedFilter = $state<string>('All');
 
 	$effect(() => {
@@ -82,12 +84,49 @@
 	};
 </script>
 
+<AlertDialog.Root bind:open={deleteDialogOpen}>
+	<AlertDialog.Trigger />
+	<AlertDialog.Content>
+		<AlertDialog.Header>
+			<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
+			<AlertDialog.Description>
+				This action cannot be undone. This will permanently <strong>delete</strong> this interview and
+				all the data will be lost.
+			</AlertDialog.Description>
+		</AlertDialog.Header>
+		<AlertDialog.Footer>
+			<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
+			<form
+				action="?/delete"
+				use:enhance={() => {
+					isSubmitting = true;
+					return async ({ result }) => {
+						if (result.type === 'redirect') {
+							goto(result.location, { invalidateAll: true });
+						} else {
+							await applyAction(result);
+						}
+					};
+				}}
+				method="post"
+			>
+				<input type="hidden" name="interview_id" value={selectedInterviewId} />
+				<AlertDialog.Action
+					type="submit"
+					class="bg-destructive text-destructive-foreground hover:bg-destructive/80"
+					bind:disabled={isSubmitting}>Continue</AlertDialog.Action
+				>
+			</form>
+		</AlertDialog.Footer>
+	</AlertDialog.Content>
+</AlertDialog.Root>
+
 {#if animate}
 	<div class="container flex flex-col space-y-12 pb-20 md:pt-10" in:fly={flyOptions}>
 		<div class="flex w-full flex-col gap-3">
 			<div class="flex w-full flex-col gap-3 md:flex-row md:items-center md:justify-between">
 				<h2 class="text-3xl font-medium tracking-tight">Interviews</h2>
-				<Button size="lg" href="/admin/interviews">Create Custom Interview</Button>
+				<Button size="lg" href="/admin/interviews/new-interview">Add New Interview</Button>
 			</div>
 		</div>
 
@@ -182,52 +221,18 @@
 										>
 											<Pencil class="size-4" />
 										</Button>
-										<AlertDialog.Root>
-											<AlertDialog.Trigger>
-												<Button
-													class="group cursor-pointer"
-													variant="destructive"
-													size="icon"
-													title="Delete Interview"
-												>
-													<Trash class="size-4" />
-												</Button>
-											</AlertDialog.Trigger>
-											<AlertDialog.Content>
-												<AlertDialog.Header>
-													<AlertDialog.Title>Are you absolutely sure?</AlertDialog.Title>
-													<AlertDialog.Description>
-														This action cannot be undone. This will permanently <strong
-															>delete</strong
-														> this interview and all the data will be lost.
-													</AlertDialog.Description>
-												</AlertDialog.Header>
-												<AlertDialog.Footer>
-													<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
-													<form
-														action="/admin/interviews?/delete"
-														use:enhance={() => {
-															isSubmitting = true;
-															return async ({ result }) => {
-																if (result.type === 'redirect') {
-																	goto(result.location);
-																} else {
-																	await applyAction(result);
-																}
-															};
-														}}
-														method="post"
-													>
-														<input type="hidden" name="interview_id" value={interview.id} />
-														<AlertDialog.Action
-															type="submit"
-															class="bg-destructive text-destructive-foreground hover:bg-destructive/80"
-															bind:disabled={isSubmitting}>Continue</AlertDialog.Action
-														>
-													</form>
-												</AlertDialog.Footer>
-											</AlertDialog.Content>
-										</AlertDialog.Root>
+										<Button
+											on:click={() => {
+												selectedInterviewId = interview.id;
+												deleteDialogOpen = true;
+											}}
+											class="group cursor-pointer"
+											variant="destructive"
+											size="icon"
+											title="Delete Interview"
+										>
+											<Trash class="size-4" />
+										</Button>
 									</div>
 									<div class="absolute bottom-2 left-4 right-4 top-8 flex flex-col gap-3">
 										<div class="flex flex-row items-center">
