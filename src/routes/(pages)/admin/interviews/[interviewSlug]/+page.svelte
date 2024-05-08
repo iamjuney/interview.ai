@@ -1,6 +1,6 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
-	import { goto } from '$app/navigation';
+	import { goto, invalidateAll } from '$app/navigation';
 	import { AlertDialog, Button, Input, Label, Select, Textarea } from '$lib/components';
 	import type { Question } from '$lib/types';
 	import type { SubmitFunction } from '@sveltejs/kit';
@@ -8,6 +8,7 @@
 	import slugify from 'slugify';
 	import { backOut } from 'svelte/easing';
 	import { fly } from 'svelte/transition';
+	import { page } from '$app/stores';
 
 	let { data } = $props();
 	let interview = $state(data.interviewDetails);
@@ -91,12 +92,12 @@
 						<AlertDialog.Footer>
 							<AlertDialog.Cancel>Cancel</AlertDialog.Cancel>
 							<form
-								action="/admin/questions?/delete"
+								action="/admin/interviews/{$page.params.interviewSlug}/questions?/delete"
 								use:enhance={() => {
 									isDeleteQuestionSubmitting = true;
 									return async ({ result }) => {
 										if (result.type === 'redirect') {
-											goto(result.location);
+											goto(result.location, { invalidateAll: true });
 										} else {
 											await applyAction(result);
 										}
@@ -105,6 +106,8 @@
 								method="post"
 							>
 								<input type="hidden" name="question_id" value={q.id} />
+								<input type="hidden" name="interview_slug" value={$page.params.interviewSlug} />
+
 								<AlertDialog.Action
 									type="submit"
 									class="bg-destructive text-destructive-foreground hover:bg-destructive/80"

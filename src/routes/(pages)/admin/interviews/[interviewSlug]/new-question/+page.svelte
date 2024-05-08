@@ -1,6 +1,7 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
 	import { page } from '$app/stores';
+	import { env } from '$env/dynamic/public';
 	import { Button, Input, Label, Textarea } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { ArrowLeft, Loader2, XCircle } from 'lucide-svelte';
@@ -79,10 +80,11 @@
 
 			<form
 				class="max-w-xl"
-				action="/admin/questions?/updateQuestion"
+				action="/admin/interviews/{$page.params.interviewSlug}/questions?/add"
 				method="post"
 				use:enhance={handleNewQuestionSubmit}
 			>
+				<input type="hidden" name="interview_slug" value={$page.params.interviewSlug} />
 				<div class="mt-6 grid gap-3">
 					<Label for="question">Question</Label>
 					<Textarea id="question" class="min-h-24" name="question" bind:value={question} required />
@@ -94,15 +96,28 @@
 				</div>
 
 				<div class="mt-6 grid gap-3">
-					<Label for="videoUrl">Video URL (Auto-generated)</Label>
+					<Label for="video_url">Video URL (Auto-generated)</Label>
 					<div class="flex items-center justify-between gap-3">
-						<Input class="grow" id="videoUrl" name="videoUrl" value={videoUrl} required disabled />
+						<Input
+							class="grow"
+							id="video_url"
+							name="video_url"
+							value={videoUrl}
+							required
+							readonly
+						/>
 						<CldUploadButton
 							class="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-full bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm transition-colors hover:bg-secondary/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-							uploadPreset="<Upload Preset>">Upload video</CldUploadButton
+							uploadPreset={env.PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+							onUpload={(res) => {
+								if (res.event === 'success') {
+                                    const { public_id } = res.info as { public_id: string; };
+                                    videoUrl = public_id;
+								}
+							}}
+							>Upload video</CldUploadButton
 						>
 					</div>
-					<div></div>
 				</div>
 
 				<div class="mt-6">

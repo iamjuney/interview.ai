@@ -1,14 +1,14 @@
 <script lang="ts">
 	import { applyAction, enhance } from '$app/forms';
-	import { Button, Label, Input, Textarea } from '$lib/components';
-	import type { Question } from '$lib/types';
+	import { page } from '$app/stores';
+	import { env } from '$env/dynamic/public';
+	import { Button, Input, Label, Textarea } from '$lib/components';
 	import type { SubmitFunction } from '@sveltejs/kit';
 	import { ArrowLeft, Loader2, XCircle } from 'lucide-svelte';
-	import { backOut } from 'svelte/easing';
-	import { fly } from 'svelte/transition';
-	import { page } from '$app/stores';
 	import slugify from 'slugify';
 	import { CldUploadButton } from 'svelte-cloudinary';
+	import { backOut } from 'svelte/easing';
+	import { fly } from 'svelte/transition';
 
 	let { data } = $props();
 	let animate = $state(false);
@@ -81,11 +81,12 @@
 
 			<form
 				class="max-w-xl"
-				action="/admin/questions?/updateQuestion"
+				action="/admin/interviews/{$page.params.interviewSlug}/questions?/update"
 				method="post"
 				use:enhance={handleUpdateQuestionSubmit}
 			>
 				<input type="hidden" id="question_id" name="question_id" value={data.questionDetails.id} />
+				<input type="hidden" name="interview_slug" value={$page.params.interviewSlug} />
 
 				<div class="mt-6 grid gap-3">
 					<Label for="question">Question</Label>
@@ -94,16 +95,30 @@
 
 				<div class="mt-6 grid gap-3">
 					<Label for="slug">Slug (Auto-generated)</Label>
-					<Textarea id="slug" class="min-h-24" name="slug" value={slug} required disabled />
+					<Textarea id="slug" class="min-h-24" name="slug" value={slug} required readonly />
 				</div>
 
 				<div class="mt-6 grid gap-3">
-					<Label for="videoUrl">Video URL (Auto-generated)</Label>
+					<Label for="video_url">Video URL (Auto-generated)</Label>
 					<div class="flex items-center justify-between gap-3">
-						<Input class="grow" id="videoUrl" name="videoUrl" value={videoUrl} required disabled />
+						<Input
+							class="grow"
+							id="video_url"
+							name="video_url"
+							value={videoUrl}
+							required
+							readonly
+						/>
 						<CldUploadButton
 							class="inline-flex h-9 items-center justify-center whitespace-nowrap rounded-full bg-secondary px-4 py-2 text-sm font-medium text-secondary-foreground shadow-sm transition-colors hover:bg-secondary/80 focus-visible:outline-none focus-visible:ring-1 focus-visible:ring-ring disabled:cursor-not-allowed disabled:opacity-50"
-							uploadPreset="<Upload Preset>">Upload new video</CldUploadButton
+							uploadPreset={env.PUBLIC_CLOUDINARY_UPLOAD_PRESET}
+							onUpload={(res) => {
+								if (res.event === 'success') {
+                                    const { public_id } = res.info as { public_id: string; };
+                                    videoUrl = public_id;
+								}
+							}}
+							>Upload new video</CldUploadButton
 						>
 					</div>
 					<div></div>
