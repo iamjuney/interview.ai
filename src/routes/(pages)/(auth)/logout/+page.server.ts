@@ -12,11 +12,13 @@ export const actions = {
 
 		if (!session || !userId) return fail(401);
 
-		await db.insert(log).values({
-			id: uuidv4(),
-			userId: userId,
-			message: 'User logged out'
-		});
+		if (session.user.role === 'user') {
+			await db.insert(log).values({
+				id: uuidv4(),
+				userId: userId,
+				message: 'User logged out'
+			});
+		}
 
 		// this is how we invalidate the session meang that the session is not valid anymore
 		await auth.invalidateSession(session.sessionId);
