@@ -135,13 +135,13 @@
 			<div class="rounded-xl border bg-background pb-6 shadow">
 				<div class="flex flex-row items-center justify-between space-y-0 p-6 pb-2">
 					<h3 class="font-medium tracking-tight text-muted-foreground">
-						Top 10 Job Position Most Practiced
+						Most Practiced Job Skills
 					</h3>
 					<Library class="size-6" />
 				</div>
 				<div class="p-6 pt-0">
 					<div class="text-3xl font-bold">
-						{data.topJobPositions[0].position} - {data.topJobPositions[0].count}
+						{data.topJobPositions[0].position}
 					</div>
 				</div>
 				<div class="h-32 px-6">
