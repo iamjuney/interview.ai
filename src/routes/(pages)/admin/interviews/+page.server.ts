@@ -1,5 +1,5 @@
 import { db } from '$lib/db';
-import { interview } from '$lib/db/schema';
+import { interview, question } from '$lib/db/schema';
 import type { Interview } from '$lib/types';
 import { fail, redirect } from '@sveltejs/kit';
 import { and, asc, eq, ilike, not, or } from 'drizzle-orm';
@@ -124,6 +124,9 @@ export const actions = {
 		const form = await superValidate(request, z.object({ interview_id: z.string() }));
 
 		try {
+			// delete the questions
+			await db.delete(question).where(eq(question.interviewId, form.data.interview_id));
+
 			// delete the interview
 			await db.delete(interview).where(eq(interview.id, form.data.interview_id));
 		} catch (error) {
