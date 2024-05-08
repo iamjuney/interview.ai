@@ -2,7 +2,7 @@ import { db } from '$lib/db';
 import { answer, log, question, userInterview } from '$lib/db/schema';
 import type { Question } from '$lib/types';
 import { error, fail, redirect } from '@sveltejs/kit';
-import { and, eq, ilike, inArray } from 'drizzle-orm';
+import { and, asc, eq, ilike, inArray } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
 import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
@@ -40,7 +40,8 @@ export const load = (async ({ locals }) => {
 			where: inArray(
 				question.interviewId,
 				all.map((i) => i.interviewId)
-			)
+			),
+			orderBy: asc(question.question)
 		})
 		.prepare('questionQuery');
 
@@ -94,7 +95,8 @@ export const actions = {
 							all.map((i) => i.interviewId)
 						),
 						ilike(question.question, `%${form.data.query}%`)
-					)
+					),
+					orderBy: asc(question.question)
 				});
 			}
 
