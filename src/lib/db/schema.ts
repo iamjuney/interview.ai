@@ -12,6 +12,7 @@ import {
 	uniqueIndex,
 	varchar
 } from 'drizzle-orm/pg-core';
+import { message } from 'sveltekit-superforms/server';
 
 /** Enums */
 
@@ -196,6 +197,7 @@ export const log = pgTable('logs', {
 	})
 		.notNull()
 		.references(() => user.id, { onDelete: 'cascade' }),
+	message: text('message').notNull(),
 	createdAt: timestamp('created_at').defaultNow().notNull()
 });
 

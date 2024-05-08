@@ -7,7 +7,7 @@ import { LuciaError } from 'lucia';
 import { superValidate } from 'sveltekit-superforms/server';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
-import { v4 as uuid4 } from 'uuid';
+import { v4 as uuidv4 } from 'uuid';
 
 export const load = (async ({ locals }) => {
 	// let's get the session from the locals
@@ -53,8 +53,9 @@ export const actions = {
 			}
 
 			await db.insert(log).values({
-				id: uuid4(),
-				userId: key.userId
+				id: uuidv4(),
+				userId: key.userId,
+				message: 'User logged in'
 			});
 		} catch (e) {
 			if (

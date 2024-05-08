@@ -1,9 +1,10 @@
 import { db } from '$lib/db';
-import { answer, question, userInterview } from '$lib/db/schema';
+import { answer, log, question, userInterview } from '$lib/db/schema';
 import type { Question } from '$lib/types';
 import { error, fail, redirect } from '@sveltejs/kit';
-import { and, eq, ilike, inArray, sql } from 'drizzle-orm';
+import { and, eq, ilike, inArray } from 'drizzle-orm';
 import { superValidate } from 'sveltekit-superforms/server';
+import { v4 as uuidv4 } from 'uuid';
 import { z } from 'zod';
 import type { PageServerLoad } from './$types';
 
@@ -132,6 +133,11 @@ export const actions = {
 		try {
 			const answerId = form.data.answer_id;
 			await db.delete(answer).where(eq(answer.id, answerId));
+			await db.insert(log).values({
+				id: uuidv4(),
+				userId: userId,
+				message: 'User deleted answer'
+			});
 		} catch (error) {
 			return fail(500, {
 				message: 'Failed to delete answer'

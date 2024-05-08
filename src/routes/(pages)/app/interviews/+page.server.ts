@@ -1,5 +1,5 @@
 import { db } from '$lib/db';
-import { answer, userInterview, question, user } from '$lib/db/schema';
+import { answer, userInterview, question, user, log } from '$lib/db/schema';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
 import { v4 as uuidv4 } from 'uuid';
@@ -87,6 +87,12 @@ export const actions = {
 				userId,
 				interviewId
 			});
+
+			await db.insert(log).values({
+				id: uuidv4(),
+				userId: userId,
+				message: 'User added interview'
+			});
 		} catch (error) {
 			return fail(500, {
 				message: 'Failed to add interview'
@@ -126,7 +132,7 @@ export const actions = {
 				columns: {
 					id: true
 				},
-				where: eq(question.interviewId, interviewIdQuery!.interviewId)
+				where: eq(question.interviewId, interviewIdQuery.interviewId)
 			});
 
 			// delete all answers associated with the interview
@@ -139,6 +145,12 @@ export const actions = {
 
 			// delete the interview
 			await db.delete(userInterview).where(eq(userInterview.id, userInterviewId));
+
+			await db.insert(log).values({
+				id: uuidv4(),
+				userId: userId,
+				message: 'User deleted interview'
+			});
 
 			// TODO: delete all videos and answers associated with the interview
 		} catch (error) {
