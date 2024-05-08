@@ -102,7 +102,7 @@
 					<p class="text-xs text-muted-foreground">+20.1% from last month</p>
 				</div>
 				<div class="h-32 px-6">
-					<LineGraph />
+					<LineGraph data={data.totalActiveUsersEveryMonth} />
 				</div>
 			</div>
 			<div class="rounded-xl border bg-background pb-6 shadow">

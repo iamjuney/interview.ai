@@ -28,7 +28,7 @@ export const load = (async () => {
 		averageAnswerDuration = parseInt(averageAnswerDurationQuery[0].value);
 	}
 
-	let totalActiveUsers = 0;
+	let totalActiveUsersEveryMonth = [];
 	// get active users each month
 	for (let i = 0; i < 12; i++) {
 		const tempMonth = new Date(year, i, 1);
@@ -39,14 +39,15 @@ export const load = (async () => {
 			.from(log)
 			.where(and(gte(log.createdAt, tempMonth), lt(log.createdAt, nextMonth)));
 
-		console.log(activeUsers.length);
+		totalActiveUsersEveryMonth.push({ id: i, users: activeUsers.length });
 	}
 
 	return {
 		newUsersThisMonth: newUsersThisMonth[0].count,
 		totalCompletedInterviews: totalCompletedInterviews[0].count,
 		totalQuestionsAnswered: totalQuestionsAnswered.length,
-		averageAnswerDuration: readableDuration(averageAnswerDuration)
+		averageAnswerDuration: readableDuration(averageAnswerDuration),
+		totalActiveUsersEveryMonth
 	};
 }) as PageServerLoad;
 

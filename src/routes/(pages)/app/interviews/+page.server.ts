@@ -1,10 +1,10 @@
 import { db } from '$lib/db';
-import { answer, userInterview, question, user, log } from '$lib/db/schema';
+import { answer, log, question, userInterview } from '$lib/db/schema';
+import type { UserInterview } from '$lib/types';
 import { error, fail, redirect } from '@sveltejs/kit';
 import { and, eq } from 'drizzle-orm';
 import { v4 as uuidv4 } from 'uuid';
 import type { PageServerLoad } from './$types';
-import type { Interview, UserInterview } from '$lib/types';
 
 // Check if all questions in an interview have been answered
 function checkInterviews(interviews: UserInterview[]) {

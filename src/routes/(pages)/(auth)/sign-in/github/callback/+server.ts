@@ -1,5 +1,8 @@
 import { auth, githubAuth } from '$lib/server/lucia.js';
 import { OAuthRequestError } from '@lucia-auth/oauth';
+import { db } from '$lib/db';
+import { log } from '$lib/db/schema';
+import { v4 as uuidv4 } from 'uuid';
 
 export const GET = async ({ url, cookies, locals }) => {
 	const storedState = cookies.get('github_oauth_state');
@@ -39,6 +42,11 @@ export const GET = async ({ url, cookies, locals }) => {
 		const session = await auth.createSession({
 			userId: user.userId,
 			attributes: {}
+		});
+		await db.insert(log).values({
+			id: uuidv4(),
+			userId: user.userId,
+			message: 'User logged in'
 		});
 		locals.auth.setSession(session);
 		return new Response(null, {
