@@ -12,7 +12,6 @@ import {
 	uniqueIndex,
 	varchar
 } from 'drizzle-orm/pg-core';
-import { message } from 'sveltekit-superforms/server';
 
 /** Enums */
 

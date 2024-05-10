@@ -63,26 +63,28 @@
 				>
 					{#each features as feature, idx}
 						<div
+							role="tab"
 							class="group relative rounded-full px-4 py-1 text-foreground hover:bg-white/10 lg:rounded-xl lg:p-6 lg:text-white lg:hover:bg-white/5 {activeFeature ===
 								idx && ' lg:bg-white/10 lg:ring-1 lg:ring-inset lg:ring-white/10'}"
 						>
-							<h3>
-								<button
-									class="font-display ui-not-focus-visible:outline-none text-lg"
-									id={`headlessui-tabs-tab-${feature.id}`}
-									role="tab"
-									type="button"
-									aria-selected={activeFeature === idx}
-									tabindex={activeFeature === idx ? 0 : -1}
-									data-headlessui-state={activeFeature === idx ? 'selected' : ''}
-									aria-controls={`headlessui-tabs-panel-${feature.id}`}
-									on:click={() => (activeFeature = idx)}
-								>
-									<span class="absolute inset-0 rounded-full lg:rounded-l-xl lg:rounded-r-none"
-									></span>
+							<button
+								class="font-display ui-not-focus-visible:outline-none text-lg"
+								id={`headlessui-tabs-tab-${feature.id}`}
+								role="tab"
+								type="button"
+								aria-selected={activeFeature === idx}
+								tabindex={activeFeature === idx ? 0 : -1}
+								data-headlessui-state={activeFeature === idx ? 'selected' : ''}
+								aria-controls={`headlessui-tabs-panel-${feature.id}`}
+								on:click={() => (activeFeature = idx)}
+							>
+								<span class="absolute inset-0 rounded-full lg:rounded-l-xl lg:rounded-r-none"
+								></span>
+								<h3>
 									{feature.title}
-								</button>
-							</h3>
+								</h3>
+							</button>
+
 							<p class="mt-2 hidden text-sm text-white lg:block">{feature.description}</p>
 						</div>
 					{/each}
