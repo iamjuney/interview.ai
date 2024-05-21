@@ -8,7 +8,7 @@ dotenv.config({
 export default {
 	schema: './src/lib/db/schema.ts',
 	out: './drizzle',
-	driver: 'pg',
+	dialect: 'postgresql',
 	dbCredentials: {
 		user: process.env.POSTGRES_USER,
 		password: process.env.POSTGRES_PASSWORD,
