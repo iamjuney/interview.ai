@@ -16,7 +16,7 @@
 		} else if (thisMonth === 0) {
 			return -lastMonth * 100;
 		} else {
-			return ((thisMonth - lastMonth) / lastMonth) * 100;
+			return Number((((thisMonth - lastMonth) / lastMonth) * 100).toFixed(2));
 		}
 	});
 
